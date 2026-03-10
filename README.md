@@ -23,5 +23,11 @@ El sistema permitirá:
 - JavaScript
 - PostgreSQL
 
+## Modelo de Navegación
+
+El modelo de navegación del sistema se encuentra en el archivo:
+
+modelo-navegacion.svg
+
 ## Unidad Central del Valle
-Proyecto académico para la asignatura **Ambientes Web**.
+Proyecto Integrador para la asignatura **Ambientes Web**.
