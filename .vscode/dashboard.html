@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JetSky - Mi Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-b from-blue-50 to-white min-h-screen">
+
+  <header class="bg-white shadow-sm">
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
+        <span class="text-3xl font-bold text-[#0F172A]">JetSky</span>
+      </a>
+      <div class="flex items-center gap-4">
+        <span class="text-[#0F172A] font-medium">Hola, Juan</span>
+        <a href="index.html" class="flex items-center gap-2 text-red-600 hover:text-red-700">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          Cerrar Sesión
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-6 py-10">
+    <h1 class="text-4xl font-bold mb-10 text-[#0F172A]">Panel de Usuario</h1>
+
+    <!-- Tabs -->
+    <div class="flex border-b mb-8 overflow-x-auto">
+      <button onclick="showTab(0)" id="tab0" class="tab-btn px-8 py-4 font-semibold border-b-4 border-[#69d7f7] text-[#69d7f7]">Buscar Vuelos</button>
+      <button onclick="showTab(1)" id="tab1" class="tab-btn px-8 py-4 font-semibold text-gray-600">Mis Reservas</button>
+      <button onclick="showTab(2)" id="tab2" class="tab-btn px-8 py-4 font-semibold text-gray-600">Historial</button>
+      <button onclick="showTab(3)" id="tab3" class="tab-btn px-8 py-4 font-semibold text-gray-600">Mi Perfil</button>
+    </div>
+
+    <div id="tabContent">
+
+      <!-- TAB 1: Buscar Vuelos -->
+      <div id="content0">
+        <div class="bg-white rounded-3xl shadow-xl p-10">
+          <form id="searchForm" class="space-y-8">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium mb-2">Origen</label>
+                <select id="origin" class="w-full h-14 border rounded-2xl px-5" required>
+                  <option value="madrid">Madrid (MAD)</option>
+                  <option value="barcelona">Barcelona (BCN)</option>
+                  <option value="sevilla">Sevilla (SVQ)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Destino</label>
+                <select id="destination" class="w-full h-14 border rounded-2xl px-5" required>
+                  <option value="paris">París (CDG)</option>
+                  <option value="london">Londres (LHR)</option>
+                  <option value="rome">Roma (FCO)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+              <div>
+                <label class="block text-sm font-medium mb-2">Fecha</label>
+                <input type="date" id="date" class="w-full h-14 border rounded-2xl px-5" required>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Pasajeros</label>
+                <select id="passengers" class="w-full h-14 border rounded-2xl px-5">
+                  <option value="1">1 Pasajero</option>
+                  <option value="2">2 Pasajeros</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Clase</label>
+                <select id="flightClass" class="w-full h-14 border rounded-2xl px-5">
+                  <option value="economy">Económica</option>
+                  <option value="business">Business</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full bg-[#f89f37] hover:bg-[#e68817] text-white py-5 rounded-2xl text-lg font-semibold">
+              Buscar Vuelos
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB 2: Mis Reservas -->
+      <div id="content1" class="hidden">
+        <h2 class="text-2xl font-bold mb-6">Mis Reservas Activas</h2>
+        <div id="reservationsList" class="space-y-6"></div>
+      </div>
+
+      <!-- TAB 3: Historial -->
+      <div id="content2" class="hidden">
+        <h2 class="text-2xl font-bold mb-6">Historial de Vuelos</h2>
+        <div id="historyList" class="space-y-6"></div>
+      </div>
+
+      <!-- TAB 4: Mi Perfil -->
+      <div id="content3" class="hidden">
+        <div class="bg-white rounded-3xl shadow-xl p-10 max-w-2xl">
+          <h2 class="text-2xl font-bold mb-8">Mi Perfil</h2>
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium mb-2">Nombre Completo</label>
+              <p class="text-lg font-semibold">Juan Pérez</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Email</label>
+              <p class="text-lg font-semibold">juan.perez@ejemplo.com</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Teléfono</label>
+              <p class="text-lg font-semibold">+57 300 123 4567</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Fecha de Nacimiento</label>
+              <p class="text-lg font-semibold">15 de Mayo de 1990</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let reservations = JSON.parse(localStorage.getItem('myReservations')) || [];
+
+    function showTab(n) {
+      for (let i = 0; i < 4; i++) {
+        document.getElementById('content' + i).classList.add('hidden');
+      }
+      document.getElementById('content' + n).classList.remove('hidden');
+      if (n === 1) loadReservations();
+      if (n === 2) loadHistory();
+    }
+
+    // Buscar vuelos → va al mismo flujo que en index.html
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const searchData = {
+        origin: document.getElementById('origin').value,
+        destination: document.getElementById('destination').value,
+        departureDate: document.getElementById('date').value,
+        passengers: document.getElementById('passengers').value,
+        flightClass: document.getElementById('flightClass').value
+      };
+
+      localStorage.setItem('searchData', JSON.stringify(searchData));
+      window.location.href = "results.html";
+    });
+
+    // Cargar Mis Reservas
+    function loadReservations() {
+      const container = document.getElementById('reservationsList');
+      container.innerHTML = '';
+
+      if (reservations.length === 0) {
+        container.innerHTML = `<p class="text-gray-500 text-center py-10">Aún no tienes reservas activas.</p>`;
+        return;
+      }
+
+      reservations.forEach((res, index) => {
+        const div = document.createElement('div');
+        div.className = "bg-white rounded-3xl p-8 shadow flex justify-between items-center";
+        div.innerHTML = `
+          <div>
+            <span class="font-bold text-xl">${res.flightNumber}</span>
+            <span class="ml-4 px-4 py-1 bg-green-100 text-green-700 rounded-full text-sm">${res.status}</span>
+            <p class="mt-2">${res.origin} → ${res.destination} | ${res.date}</p>
+            <p class="text-sm text-gray-600">Asiento: ${res.seat || 'Por asignar'}</p>
+          </div>
+          <div class="text-right">
+            <p class="text-2xl font-bold text-[#f89f37]">$${res.price.toLocaleString('es-CO')}</p>
+            <button onclick="cancelReservation(${index})" class="mt-4 text-red-600 hover:underline text-sm">Cancelar Reserva</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function cancelReservation(index) {
+      if (confirm("¿Estás seguro de cancelar esta reserva?")) {
+        reservations.splice(index, 1);
+        localStorage.setItem('myReservations', JSON.stringify(reservations));
+        loadReservations();
+      }
+    }
+
+    // Cargar Historial (datos de ejemplo)
+    function loadHistory() {
+      const container = document.getElementById('historyList');
+      container.innerHTML = `
+        <div class="bg-white rounded-3xl p-8 shadow">
+          <span class="font-bold">JS-3456</span> 
+          <span class="ml-4 text-green-600">Completado</span>
+          <p class="mt-2">Madrid → Roma | 10 Ene 2026</p>
+        </div>
+        <div class="bg-white rounded-3xl p-8 shadow">
+          <span class="font-bold">JS-7890</span> 
+          <span class="ml-4 text-green-600">Completado</span>
+          <p class="mt-2">Barcelona → Berlín | 05 Feb 2026</p>
+        </div>
+      `;
+    }
+
+    // Inicializar
+    showTab(0);
+    loadReservations();
+  </script>
+</body>
+</html>

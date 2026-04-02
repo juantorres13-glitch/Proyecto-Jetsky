@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JetSky - Registro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-blue-50 min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm">
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
+        <span class="text-3xl font-bold text-[#0F172A]">JetSky</span>
+      </a>
+      <a href="index.html" 
+         class="flex items-center gap-2 bg-[#f89f37] hover:bg-[#e68817] text-white px-6 py-3 rounded-xl font-medium">
+        <i class="fa-solid fa-arrow-left"></i>
+        Volver al Inicio
+      </a>
+    </nav>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="grid lg:grid-cols-2 gap-12 items-start">
+
+      <!-- Lado izquierdo - Imagen y beneficios -->
+      <div class="lg:sticky lg:top-12">
+        <div class="mb-10">
+          <h1 class="text-5xl font-bold text-[#0F172A] mb-4">Únete a JetSky</h1>
+          <p class="text-xl text-gray-600">
+            Crea tu cuenta y comienza a disfrutar de todos nuestros beneficios exclusivos.
+          </p>
+        </div>
+
+        <div class="rounded-3xl overflow-hidden shadow-2xl mb-10">
+          <img src="https://images.unsplash.com/photo-1758669246636-17a5f6d972ec?w=1080" 
+               alt="Terminal de aeropuerto" 
+               class="w-full h-[420px] object-cover">
+        </div>
+
+        <div class="space-y-6">
+          <div class="flex items-start gap-4">
+            <div class="bg-[#69d7f7] text-white w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fa-solid fa-plane"></i>
+            </div>
+            <div>
+              <h3 class="font-semibold text-lg">Reserva Fácil</h3>
+              <p class="text-gray-600">Reserva tus vuelos en minutos</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="bg-[#69d7f7] text-white w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fa-solid fa-plane"></i>
+            </div>
+            <div>
+              <h3 class="font-semibold text-lg">Mejores Precios</h3>
+              <p class="text-gray-600">Ofertas exclusivas para miembros</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="bg-[#69d7f7] text-white w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fa-solid fa-plane"></i>
+            </div>
+            <div>
+              <h3 class="font-semibold text-lg">Programa de Lealtad</h3>
+              <p class="text-gray-600">Acumula puntos en cada vuelo</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario de Registro -->
+      <div class="bg-white rounded-3xl shadow-xl p-10">
+        <h2 class="text-2xl font-bold text-[#0F172A] mb-2">Formulario de Registro</h2>
+        <p class="text-gray-500 mb-8">Completa todos los campos para crear tu cuenta</p>
+
+        <form id="registerForm" class="space-y-8">
+          
+          <!-- Información Personal -->
+          <div>
+            <h3 class="font-semibold text-lg mb-5 text-[#0F172A]">Información Personal</h3>
+            
+            <div class="grid grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-medium mb-2">Nombre *</label>
+                <input type="text" id="firstName" required
+                       class="w-full border border-gray-300 rounded-2xl px-5 py-3 focus:outline-none focus:border-[#69d7f7]">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Apellido *</label>
+                <input type="text" id="lastName" required
+                       class="w-full border border-gray-300 rounded-2xl px-5 py-3 focus:outline-none focus:border-[#69d7f7]">
+              </div>
+            </div>
+
+            <div class="mt-5">
+              <label class="block text-sm font-medium mb-2">Email *</label>
+              <input type="email" id="email" required
+                     class="w-full border border-gray-300 rounded-2xl px-5 py-3 focus:outline-none focus:border-[#69d7f7]">
+            </div>
+
+            <div class="mt-5">
+              <label class="block text-sm font-medium mb-2">Teléfono *</label>
+              <input type="tel" id="phone" required placeholder="+57 300 123 4567"
+                     class="w-full border border-gray-300 rounded-2xl px-5 py-3 focus:outline-none focus:border-[#69d7f7]">
+            </div>
+
+            <div class="grid grid-cols-2 gap-5 mt-5">
+              <div>
+                <label class="block text-sm font-medium mb-2">Fecha de Nacimiento *</label>
+                <input type="date" id="dateOfBirth" required
+                       class="w-full border border-gray-300 rounded-2xl px-5 py-3 focus:outline-none focus:border-[#69d7f7]">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-2">Sexo *</label>
+                <select id="gender" required
+                        class="w-full border border-gray-300 rounded-2xl px-5 py-3 focus:outline-none focus:border-[#69d7f7]">
+                  <option value="">Selecciona</option>
+                  <option value="male">Masculino</option>
+                  <option value="female">Femenino</option>
+                  <option value="other">Otro</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-5">
+              <label class="block text-sm font-medium mb-2">País *</label>
+              <select id="country" required
+                      class="w-full border border-gray-300 rounded-2xl px-5 py-3 focus:outline-none focus:border-[#69d7f7]">
+                <option value="">Selecciona tu país</option>
+                <option value="co">Colombia</option>
+                <option value="es">España</option>
+                <option value="mx">México</option>
+                <option value="ar">Argentina</option>
+                <option value="cl">Chile</option>
+                <option value="pe">Perú</option>
+                <option value="us">Estados Unidos</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Seguridad -->
+          <div>
+            <h3 class="font-semibold text-lg mb-5 text-[#0F172A]">Seguridad</h3>
+            
+            <div>
+              <label class="block text-sm font-medium mb-2">Contraseña *</label>
+              <input type="password" id="password" required minlength="8"
+                     class="w-full border border-gray-300 rounded-2xl px-5 py-3 focus:outline-none focus:border-[#69d7f7]">
+            </div>
+
+            <div class="mt-5">
+              <label class="block text-sm font-medium mb-2">Confirmar Contraseña *</label>
+              <input type="password" id="confirmPassword" required
+                     class="w-full border border-gray-300 rounded-2xl px-5 py-3 focus:outline-none focus:border-[#69d7f7]">
+            </div>
+          </div>
+
+          <!-- Términos -->
+          <div class="space-y-5">
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="acceptTerms" required class="mt-1 w-5 h-5 accent-[#69d7f7]">
+              <label for="acceptTerms" class="text-sm cursor-pointer">
+                Acepto los términos y condiciones *
+              </label>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="newsletter" class="mt-1 w-5 h-5 accent-[#69d7f7]">
+              <label for="newsletter" class="text-sm cursor-pointer">
+                Deseo recibir ofertas y noticias por email
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" 
+                  class="w-full bg-[#f89f37] hover:bg-[#e68817] text-white font-semibold py-4 rounded-2xl text-lg">
+            Crear Mi Cuenta
+          </button>
+
+          <p class="text-center text-sm text-gray-600">
+            ¿Ya tienes cuenta? 
+            <a href="index.html" class="text-[#69d7f7] font-medium hover:underline">Inicia sesión aquí</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (password.length < 8) {
+        alert("La contraseña debe tener al menos 8 caracteres");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Las contraseñas no coinciden");
+        return;
+      }
+
+      alert("¡Registro exitoso! Bienvenido a JetSky.");
+      window.location.href = "dashboard.html";   // Cambia si tienes otro nombre para el dashboard
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JetSky - Detalles del Vuelo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-b from-blue-50 to-white min-h-screen">
+
+  <header class="bg-white shadow-sm">
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
+        <span class="text-3xl font-bold text-[#69d7f7]">JetSky</span>
+      </div>
+      <a href="results.html" class="flex items-center gap-2 text-gray-700 hover:text-black">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Volver a resultados</span>
+      </a>
+    </nav>
+  </header>
+
+  <div class="max-w-5xl mx-auto px-6 py-12">
+    <div class="bg-white rounded-3xl shadow-xl p-10">
+      <h2 class="text-3xl font-bold text-center mb-10 text-[#0F172A]">Resumen de tu Vuelo</h2>
+
+      <div id="flightInfo" class="grid md:grid-cols-2 gap-10 mb-12"></div>
+
+      <div class="border-t pt-8">
+        <h3 class="font-bold text-xl mb-6 text-[#0F172A]">Servicios incluidos en este vuelo</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-check text-green-600 text-xl"></i>
+            <span>Equipaje de mano (10kg)</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-check text-green-600 text-xl"></i>
+            <span>Equipaje de bodega (23kg)</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-check text-green-600 text-xl"></i>
+            <span>Selección de asiento</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-check text-green-600 text-xl"></i>
+            <span>Snacks y bebidas a bordo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 flex justify-end">
+        <button onclick="continueToPassenger()" 
+          class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-5 rounded-2xl text-xl font-semibold flex items-center gap-3">
+          Continuar con la reserva
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const selectedFlight = JSON.parse(localStorage.getItem('selectedFlight') || '{}');
+    const searchData = JSON.parse(localStorage.getItem('searchData') || '{}');
+
+    if (!selectedFlight.id) {
+      window.location.href = 'results.html';
+    }
+
+    // Mostrar información del vuelo
+    const flightInfo = document.getElementById('flightInfo');
+    flightInfo.innerHTML = `
+      <div class="space-y-8">
+        <div class="flex items-center gap-4">
+          <i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
+          <div>
+            <p class="text-sm text-gray-500">Vuelo</p>
+            <p class="text-2xl font-bold">${selectedFlight.flightNumber}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <i class="fa-solid fa-map-marker-alt text-4xl text-[#69d7f7]"></i>
+          <div>
+            <p class="text-sm text-gray-500">Ruta</p>
+            <p class="text-2xl font-bold">${selectedFlight.origin} → ${selectedFlight.destination}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <i class="fa-solid fa-calendar text-4xl text-[#69d7f7]"></i>
+          <div>
+            <p class="text-sm text-gray-500">Fecha</p>
+            <p class="text-2xl font-bold">${selectedFlight.date}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <i class="fa-solid fa-clock text-4xl text-[#69d7f7]"></i>
+          <div>
+            <p class="text-sm text-gray-500">Horario</p>
+            <p class="text-2xl font-bold">${selectedFlight.departureTime} - ${selectedFlight.arrivalTime}</p>
+            <p class="text-gray-600">Duración: ${selectedFlight.duration || '9h 30m'}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <div class="flex items-center gap-4">
+          <i class="fa-solid fa-users text-4xl text-[#69d7f7]"></i>
+          <div>
+            <p class="text-sm text-gray-500">Pasajeros</p>
+            <p class="text-2xl font-bold">${searchData.passengers || 1}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <i class="fa-solid fa-star text-4xl text-[#69d7f7]"></i>
+          <div>
+            <p class="text-sm text-gray-500">Clase</p>
+            <p class="text-2xl font-bold">${selectedFlight.class === 'business' ? 'Business' : 'Económica'}</p>
+          </div>
+        </div>
+
+        <div class="bg-[#f89f37]/10 p-8 rounded-2xl">
+          <p class="text-sm text-gray-600 mb-2">Precio Total Estimado</p>
+          <p class="text-5xl font-bold text-[#f89f37]">
+            $${(selectedFlight.price * (parseInt(searchData.passengers) || 1)).toLocaleString('es-CO')}
+          </p>
+          <p class="text-sm text-gray-500 mt-1">
+            $${selectedFlight.price.toLocaleString('es-CO')} × ${searchData.passengers || 1} pasajero(s)
+          </p>
+        </div>
+      </div>
+    `;
+
+    function continueToPassenger() {
+      localStorage.setItem('selectedFlight', JSON.stringify(selectedFlight));
+      window.location.href = 'passenger.html';
+    }
+  </script>
+</body>
+</html>

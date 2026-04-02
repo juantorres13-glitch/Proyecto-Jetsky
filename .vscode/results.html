@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JetSky - Resultados de Vuelos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-b from-blue-50 to-white min-h-screen">
+
+  <header class="bg-white shadow-sm">
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
+        <span class="text-3xl font-bold text-[#69d7f7]">JetSky</span>
+      </div>
+      <a href="index.html" class="flex items-center gap-2 text-gray-700 hover:text-black">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Nueva búsqueda</span>
+      </a>
+    </nav>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-6 py-10">
+    <h1 class="text-3xl font-bold mb-8 text-center" id="resultsTitle">Vuelos disponibles</h1>
+
+    <div id="flightsContainer" class="space-y-6"></div>
+  </div>
+
+  <script>
+    // Recuperar datos de búsqueda
+    const searchData = JSON.parse(localStorage.getItem('searchData') || '{}');
+
+    if (!searchData.origin || !searchData.destination) {
+      window.location.href = 'index.html';
+    }
+
+    // Actualizar título
+    document.getElementById('resultsTitle').textContent = 
+      `Vuelos de ${searchData.origin.toUpperCase()} a ${searchData.destination.toUpperCase()}`;
+
+    // Generar vuelos de ejemplo
+    function generateFlights() {
+      const basePrice = 450000;
+      const multiplier = searchData.flightClass === 'business' ? 2.5 : 1;
+
+      return [
+        {
+          id: "FL001",
+          flightNumber: "JS-8742",
+          origin: searchData.origin,
+          destination: searchData.destination,
+          date: searchData.departureDate,
+          departureTime: "08:00",
+          arrivalTime: "15:30",
+          duration: "9h 30m",
+          price: Math.floor(basePrice * multiplier),
+          availableSeats: 23,
+          class: searchData.flightClass || "economy"
+        },
+        {
+          id: "FL002",
+          flightNumber: "JS-3198",
+          origin: searchData.origin,
+          destination: searchData.destination,
+          date: searchData.departureDate,
+          departureTime: "14:15",
+          arrivalTime: "21:45",
+          duration: "9h 30m",
+          price: Math.floor((basePrice - 90000) * multiplier),
+          availableSeats: 41,
+          class: searchData.flightClass || "economy"
+        },
+        {
+          id: "FL003",
+          flightNumber: "JS-6521",
+          origin: searchData.origin,
+          destination: searchData.destination,
+          date: searchData.departureDate,
+          departureTime: "22:30",
+          arrivalTime: "06:15",
+          duration: "9h 45m",
+          price: Math.floor((basePrice + 50000) * multiplier),
+          availableSeats: 12,
+          class: searchData.flightClass || "economy"
+        }
+      ];
+    }
+
+    const flights = generateFlights();
+    const container = document.getElementById('flightsContainer');
+
+    flights.forEach(flight => {
+      const card = document.createElement('div');
+      card.className = "bg-white rounded-3xl shadow-xl p-8 hover:shadow-2xl transition-all";
+      card.innerHTML = `
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+          <div class="flex-1">
+            <div class="flex items-center gap-4 mb-4">
+              <i class="fa-solid fa-plane text-3xl text-[#69d7f7]"></i>
+              <div>
+                <span class="font-bold text-2xl">${flight.flightNumber}</span>
+                <span class="ml-3 px-4 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">${flight.class.toUpperCase()}</span>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-8 text-lg">
+              <div>
+                <span class="font-semibold">${flight.origin}</span>
+                <span class="text-[#69d7f7] mx-3">→</span>
+                <span class="font-semibold">${flight.destination}</span>
+              </div>
+              <div class="text-gray-600">
+                ${flight.date} • ${flight.departureTime} - ${flight.arrivalTime}
+              </div>
+            </div>
+            
+            <div class="mt-3 text-gray-600">
+              Duración: ${flight.duration} • Asientos disponibles: <span class="font-medium">${flight.availableSeats}</span>
+            </div>
+          </div>
+
+          <div class="text-right">
+            <p class="text-sm text-gray-500">Desde</p>
+            <p class="text-4xl font-bold text-[#f89f37]">$${flight.price.toLocaleString('es-CO')}</p>
+            <p class="text-sm text-gray-500">COP por persona</p>
+            
+            <button onclick="selectFlight('${flight.id}', ${flight.price}, '${flight.flightNumber}', '${flight.departureTime}', '${flight.arrivalTime}')"
+              class="mt-6 bg-[#f89f37] hover:bg-[#e68817] text-white px-10 py-4 rounded-2xl font-semibold text-lg w-full lg:w-auto">
+              Seleccionar este vuelo
+            </button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    // Función para seleccionar vuelo y pasar a siguiente página
+    function selectFlight(id, price, flightNumber, departureTime, arrivalTime) {
+      const flightData = {
+        id,
+        flightNumber,
+        origin: searchData.origin,
+        destination: searchData.destination,
+        date: searchData.departureDate,
+        departureTime,
+        arrivalTime,
+        price,
+        passengers: parseInt(searchData.passengers),
+        class: searchData.flightClass || "economy"
+      };
+
+      localStorage.setItem('selectedFlight', JSON.stringify(flightData));
+      window.location.href = 'flight-details.html';
+    }
+  </script>
+</body>
+</html>
