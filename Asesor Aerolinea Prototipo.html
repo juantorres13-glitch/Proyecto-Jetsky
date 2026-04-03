@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asesor Aerolínea - Sistema de Gestión</title>
+    <link rel="stylesheet" href="Css/Decoracion.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: #d8f0ff;
+            border: 1px solid #87CEEB;
+            color: #0f4f78;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            background: #b0e5ff;
+            border-color: #5BC0DE;
+        }
+
+        nav button.active {
+            background: #87CEEB;
+            color: white;
+            border-color: #87CEEB;
+        }
+
+        button {
+            background: #87CEEB;
+            color: white;
+            border: 1px solid #87CEEB;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+
+        button:hover {
+            background: #7bc6e8;
+            border-color: #7bc6e8;
+        }
+
+        button.danger {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+
+        button.danger:hover {
+            background: #f15353;
+            border-color: #f15353;
+        }
+
+        button.secondary {
+            background: #e2ecf6;
+            color: #1f2937;
+            border-color: #cbd5e1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow: auto;
+            z-index: 20;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal > div {
+            width: min(100%, 900px);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .action-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #bdd7ed;
+            margin-right: 0.4rem;
+            font-size: 1rem;
+        }
+
+        .action-icon.view {
+            background: #d3efff;
+            color: #0f79b8;
+        }
+
+        .action-icon.delete {
+            background: #ffe1e1;
+            color: #c15353;
+        }
+
+        .seat-map-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(45px, 1fr));
+            gap: 0.45rem;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .seat-selection-panel {
+            border: 1px solid #cce8ff;
+            background: #f6fbff;
+            border-radius: 0.6rem;
+            padding: 1rem;
+            min-width: 260px;
+            max-width: 320px;
+        }
+
+        .seat-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .seat-box:hover:not(.occupied):not(.reserved) {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
+
+        .seat-box.available { background: #9ca3af; color: white; }
+        .seat-box.reserved { background: #ff9933; color: white; cursor: not-allowed; }
+        .seat-box.occupied { background: #5BC0DE; color: white; cursor: not-allowed; }
+        .seat-box.selected { background: #1d4ed8; color: white; }
+
+        .flight-card {
+            transition: all 0.3s ease;
+        }
+
+        .flight-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.32);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal > div {
+            width: min(100%, 760px);
+            max-height: 92vh;
+            overflow: auto;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+            }
+
+            nav button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header style="background: linear-gradient(135deg, #5BC0DE, #87CEEB); color: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem; text-align: center;">
+            <h1 style="margin: 0; font-size: 2rem; font-weight: bold;">✈️ Sistema de Gestión - Asesor Aerolínea</h1>
+            <p style="margin: 0.5rem 0 0 0;">Bienvenido al panel de control para gestionar vuelos, reservas y clientes</p>
+        </header>
+
+        <!-- Navegación -->
+        <nav>
+            <button class="nav-btn active" data-section="panel-asistente">Panel Asistente</button>
+            <button class="nav-btn" data-section="gestionar-reservas">Gestionar Reservas</button>
+            <button class="nav-btn" data-section="gestionar-clientes">Gestionar Clientes</button>
+            <button class="nav-btn" data-section="confirmar-pagos">Confirmar Pagos</button>
+            <button class="nav-btn" data-section="asignar-asientos">Asignar Asientos</button>
+        </nav>
+
+        <!-- PANEL ASISTENTE -->
+        <div id="panel-asistente" class="content-section active space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Panel de Asistente</h2>
+                <p class="text-gray-600 mb-4">Selecciona un vuelo para ver los detalles y gestionar asignaciones</p>
+
+                <!-- Flight Cards -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="flight-card p-6 border-2 border-gray-200 rounded-lg cursor-pointer" data-flight-id="1">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-2xl">✈️</span>
+                            <span class="font-bold text-lg text-[#87CEEB]">JK101</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2 text-gray-700">
+                                <span class="font-semibold">Ruta:</span>
+                                <span class="text-sm">Bogotá → Medellín</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-700">
+                                <span class="font-semibold">Fecha:</span>
+                                <span class="text-sm">2026-03-15 - 08:00</span>
+                            </div>
+                            <div class="mt-3">
+                                <span class="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-700">Programado</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flight-card p-6 border-2 border-gray-200 rounded-lg cursor-pointer" data-flight-id="2">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-2xl">✈️</span>
+                            <span class="font-bold text-lg text-[#87CEEB]">JK202</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2 text-gray-700">
+                                <span class="font-semibold">Ruta:</span>
+                                <span class="text-sm">Medellín → Cartagena</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-700">
+                                <span class="font-semibold">Fecha:</span>
+                                <span class="text-sm">2026-03-15 - 12:30</span>
+                            </div>
+                            <div class="mt-3">
+                                <span class="text-xs px-3 py-1 rounded-full bg-green-100 text-green-700">En vuelo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flight-card p-6 border-2 border-gray-200 rounded-lg cursor-pointer" data-flight-id="3">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-2xl">✈️</span>
+                            <span class="font-bold text-lg text-[#87CEEB]">JK303</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2 text-gray-700">
+                                <span class="font-semibold">Ruta:</span>
+                                <span class="text-sm">Cali → Bogotá</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-700">
+                                <span class="font-semibold">Fecha:</span>
+                                <span class="text-sm">2026-03-15 - 15:45</span>
+                            </div>
+                            <div class="mt-3">
+                                <span class="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-700">Programado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Selected Flight Details -->
+            <div id="flight-details" class="modal">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 id="flight-number-title" class="text-xl font-bold text-[#87CEEB] mb-4">Detalles del Vuelo</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Número de Vuelo</label>
+                                <p id="flight-number" class="text-gray-800"></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Origen</label>
+                                <p id="flight-origin" class="text-gray-800"></p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Pasajeros a Bordo</label>
+                                <p id="flight-passengers" class="text-gray-800"></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Destino</label>
+                                <p id="flight-destination" class="text-gray-800"></p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Fecha</label>
+                                <p id="flight-date" class="text-gray-800"></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Hora de salida</label>
+                                <p id="flight-time" class="text-gray-800"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex gap-4">
+                        <button onclick="manageSeats('${flight.number}')" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Gestionar Asientos</button>
+                        <button onclick="viewReservations('${flight.number}')" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Ver Reservas</button>
+                        <button onclick="document.getElementById('flight-details').classList.remove('show')" class="secondary">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GESTIONAR RESERVAS -->
+        <div id="gestionar-reservas" class="content-section space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Gestionar Reservas</h2>
+
+                    <div class="mb-4">
+                        <label for="reservation-search" class="text-sm font-semibold text-gray-700 mb-2 block">Buscar</label>
+                        <input type="text" id="reservation-search" placeholder="Buscar por vuelo, pasajero o ID..." class="w-full pl-4 pr-4 py-3 border-2 border-gray-300 rounded-lg">
+                    </div>
+
+                <!-- Reservations Table -->
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Vuelo</th>
+                                <th>Pasajero</th>
+                                <th>Asiento</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reservations-tbody">
+                            <!-- Dinámicamente llenado -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Reservation Details Modal -->
+            <div id="reservation-details" class="modal">
+                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-[#87CEEB]">
+                    <h3 id="reservation-title" class="text-xl font-bold text-[#87CEEB] mb-4">Detalles de Reserva</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Número de Vuelo</label>
+                                <p id="res-flight" class="text-gray-800"></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Pasajero</label>
+                                <p id="res-passenger" class="text-gray-800"></p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Asiento</label>
+                                <p id="res-seat" class="text-gray-800"></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Estado</label>
+                                <p id="res-status" class="text-gray-800"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex gap-4">
+                        <button onclick="changeSeat('${selectedReservation.id}')" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Cambiar Asiento</button>
+                        <button onclick="updateStatus('${selectedReservation.id}')" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Actualizar Estado</button>
+                        <button onclick="document.getElementById('reservation-details').classList.remove('show')" class="secondary">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GESTIONAR CLIENTES -->
+        <div id="gestionar-clientes" class="content-section space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Gestionar Clientes</h2>
+                    <button id="add-client-btn" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Agregar Cliente</button>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="mb-4">
+                    <label for="client-search" class="text-sm font-semibold text-gray-700 mb-2 block">Buscar</label>
+                    <input type="text" id="client-search" placeholder="Buscar por nombre, email o documento..." class="w-full pl-4 pr-4 py-3 border-2 border-gray-300 rounded-lg">
+                </div>
+            </div>
+
+            <!-- Add Client Form -->
+            <div id="add-client-form" class="modal">
+                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-[#87CEEB]">
+                    <h3 class="text-xl font-bold text-[#87CEEB] mb-4">Nuevo Cliente</h3>
+                    <div class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre Completo</label>
+                                <input type="text" id="form-name" placeholder="Ingrese nombre completo" class="w-full p-3 border-2 border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Correo Electrónico</label>
+                                <input type="email" id="form-email" placeholder="correo@ejemplo.com" class="w-full p-3 border-2 border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Teléfono</label>
+                                <input type="tel" id="form-phone" placeholder="+57 300 1234567" class="w-full p-3 border-2 border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Documento</label>
+                                <select id="form-doc-type" class="w-full p-3 border-2 border-gray-300 rounded-lg">
+                                    <option value="CC">Cédula de Ciudadanía</option>
+                                    <option value="TI">Tarjeta de Identidad</option>
+                                    <option value="P.P">Pasaporte</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Número de Documento</label>
+                                <input type="text" id="form-doc-number" placeholder="Ingrese número" class="w-full p-3 border-2 border-gray-300 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Número de Cuenta</label>
+                                <input type="text" id="form-account" placeholder="Número de cuenta" class="w-full p-3 border-2 border-gray-300 rounded-lg">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex gap-4">
+                        <button id="save-client-btn" class="bg-[#5BC0DE] text-white px-6 py-2 rounded font-semibold hover:bg-[#4AB0CC]">Guardar Cliente</button>
+                        <button onclick="closeAddClientForm()" class="secondary">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clients Table -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Documento</th>
+                                <th>Vuelos</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clients-tbody">
+                            <!-- Dinámicamente llenado -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Client Details -->
+            <div id="client-details" class="modal">
+                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-[#87CEEB]">
+                    <h3 class="text-xl font-bold text-[#87CEEB] mb-4">Información del Cliente</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Nombre Completo</label>
+                                <input id="client-name" class="w-full p-2 border-2 border-gray-300 rounded" disabled>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Correo Electrónico</label>
+                                <input id="client-email" class="w-full p-2 border-2 border-gray-300 rounded" disabled>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Teléfono</label>
+                                <input id="client-phone" class="w-full p-2 border-2 border-gray-300 rounded" disabled>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Tipo de Documento</label>
+                                <select id="client-doc-type" class="w-full p-2 border-2 border-gray-300 rounded" disabled>
+                                    <option value="CC">Cédula de Ciudadanía</option>
+                                    <option value="TI">Tarjeta de Identidad</option>
+                                    <option value="P.P">Pasaporte</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Número de Documento</label>
+                                <input id="client-doc-number" class="w-full p-2 border-2 border-gray-300 rounded" disabled>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Historial de Vuelos</label>
+                                <p id="client-flights" class="text-gray-800 text-2xl font-bold text-[#87CEEB]"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex gap-4">
+                        <button id="edit-client-btn" onclick="enableClientEdit()" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Editar</button>
+                        <button id="save-client-btn-details" onclick="saveClientDetails()" class="bg-green-500 text-white px-6 py-2 rounded font-semibold hover:bg-green-600 hidden">Guardar Cambios</button>
+                        <button onclick="viewClientHistory(selectedClient.id)" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Ver Historial</button>
+                        <button onclick="closeClientDetails()" class="secondary">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONFIRMAR PAGOS -->
+        <div id="confirmar-pagos" class="content-section space-y-6">
+            <!-- Summary Cards -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-[#5BC0DE]">
+                    <h3 class="text-sm font-semibold text-gray-600 mb-2">Total Pagos</h3>
+                    <p id="total-payments" class="text-3xl font-bold text-gray-800">$0.00</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
+                    <h3 class="text-sm font-semibold text-gray-600 mb-2">Confirmados</h3>
+                    <p id="confirmed-payments" class="text-3xl font-bold text-green-600">$0.00</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500">
+                    <h3 class="text-sm font-semibold text-gray-600 mb-2">Pendientes</h3>
+                    <p id="pending-payments" class="text-3xl font-bold text-orange-600">$0.00</p>
+                </div>
+            </div>
+
+            <!-- Payments Table -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Confirmar Pagos</h2>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID Pago</th>
+                                <th>Reserva</th>
+                                <th>Pasajero</th>
+                                <th>Monto</th>
+                                <th>Método</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payments-tbody">
+                            <!-- Dinámicamente llenado -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Confirmation Modal -->
+            <div id="payment-details" class="modal">
+                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-[#87CEEB]">
+                    <h3 id="payment-title" class="text-xl font-bold text-[#87CEEB] mb-4">Confirmar Pago</h3>
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Pasajero</label>
+                                <p id="payment-passenger" class="text-gray-800"></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">ID Reserva</label>
+                                <p id="payment-reservation" class="text-gray-800"></p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Monto</label>
+                                <p id="payment-amount" class="text-2xl font-bold text-[#87CEEB]"></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-600">Método de Pago</label>
+                                <p id="payment-method" class="text-gray-800"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <button id="confirm-payment-btn" class="bg-green-500 text-white px-6 py-2 rounded font-semibold hover:bg-green-600">Confirmar Pago</button>
+                        <button onclick="document.getElementById('payment-details').classList.remove('show')" class="secondary">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASIGNAR ASIENTOS -->
+        <div id="asignar-asientos" class="content-section space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Asignar Asientos</h2>
+
+                <!-- Flight Selector -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Seleccionar Vuelo</label>
+                    <select id="flight-selector" class="w-full md:w-96 px-4 py-3 border-2 border-gray-300 rounded-lg">
+                        <option value="JK101">JK101 - Bogotá - Medellín</option>
+                        <option value="JK202">JK202 - Medellín - Cartagena</option>
+                        <option value="JK303">JK303 - Cali - Bogotá</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Seat Selection Area -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Mapa de Asientos</h3>
+                <div class="flex flex-wrap lg:flex-nowrap gap-6 items-start">
+                    <div id="seat-map" class="seat-map-grid">
+                        <!-- Dinámicamente llenado -->
+                    </div>
+                    <div id="seat-selection-panel" class="seat-selection-panel">
+                        <h4 class="font-semibold text-[#87CEEB] mb-2">Panel de Asiento</h4>
+                        <p id="selected-seat-info" class="text-gray-700 mb-4">Selecciona un asiento disponible en el plano del avión para ver detalles.</p>
+                        <p><strong>Vuelo:</strong> <span id="selected-seat-flight">N/A</span></p>
+                        <p><strong>Asiento:</strong> <span id="selected-seat-id">-</span></p>
+                        <p><strong>Estado:</strong> <span id="selected-seat-status">-</span></p>
+                        <div class="mt-4 flex gap-2">
+                            <button id="confirm-seat-btn" class="bg-[#87CEEB]" disabled>Confirmar Asiento</button>
+                            <button id="cancel-seat-btn" class="secondary" type="button">Cancelar</button>
+                        </div>
+                        <div class="mt-6">
+                            <h5 class="font-semibold text-gray-800 mb-3">Estado de Asientos</h5>
+                            <div class="flex flex-wrap gap-4">
+                                <div class="flex items-center gap-2">
+                                    <div style="width: 1rem; height: 1rem; background-color: #9ca3af; border-radius: 0.25rem;"></div>
+                                    <span class="text-sm text-gray-700">Disponible</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div style="width: 1rem; height: 1rem; background-color: #5BC0DE; border-radius: 0.25rem;"></div>
+                                    <span class="text-sm text-gray-700">Ocupado</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div style="width: 1rem; height: 1rem; background-color: #FF9933; border-radius: 0.25rem;"></div>
+                                    <span class="text-sm text-gray-700">Reservado</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div style="width: 1rem; height: 1rem; background-color: #1e40af; border-radius: 0.25rem;"></div>
+                                    <span class="text-sm text-gray-700">Seleccionado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let reservations = [
+            { id: 'R001', flightNumber: 'JK101', passenger: 'Juan Pérez', seat: 'A12', date: '2026-03-15', status: 'Confirmada' },
+            { id: 'R002', flightNumber: 'JK202', passenger: 'María García', seat: 'B5', date: '2026-03-15', status: 'Confirmada' },
+            { id: 'R003', flightNumber: 'JK101', passenger: 'Carlos Rodríguez', seat: 'C8', date: '2026-03-15', status: 'Pendiente' },
+            { id: 'R004', flightNumber: 'JK303', passenger: 'Ana Martínez', seat: 'D15', date: '2026-03-15', status: 'Confirmada' }
+        ];
+
+        let clients = [
+            { id: 'C001', name: 'Juan Pérez', email: 'juan.perez@email.com', phone: '+57 300 1234567', documentType: 'CC', documentNumber: '1234567890', flightHistory: 5 },
+            { id: 'C002', name: 'María García', email: 'maria.garcia@email.com', phone: '+57 310 9876543', documentType: 'CC', documentNumber: '9876543210', flightHistory: 3 },
+            { id: 'C003', name: 'Carlos Rodríguez', email: 'carlos.rodriguez@email.com', phone: '+57 320 5555555', documentType: 'P.P', documentNumber: 'AB1234567', flightHistory: 12 },
+            { id: 'C004', name: 'Ana Martínez', email: 'ana.martinez@email.com', phone: '+57 315 7777777', documentType: 'CC', documentNumber: '5555555555', flightHistory: 1 }
+        ];
+
+        let payments = [
+            { id: 'P001', reservationId: 'R001', passenger: 'Juan Pérez', amount: 50.0, method: 'Tarjeta', status: 'Confirmado', date: '2026-03-09' },
+            { id: 'P002', reservationId: 'R003', passenger: 'Carlos Rodríguez', amount: 50.0, method: 'Débito', status: 'Pendiente', date: '2026-03-09' },
+            { id: 'P003', reservationId: 'R002', passenger: 'María García', amount: 50.0, method: 'Crédito', status: 'Confirmado', date: '2026-03-08' },
+            { id: 'P004', reservationId: 'R004', passenger: 'Ana Martínez', amount: 75.0, method: 'Tarjeta', status: 'Pendiente', date: '2026-03-10' },
+            { id: 'P005', reservationId: 'R005', passenger: 'Luis Hernández', amount: 60.0, method: 'Crédito', status: 'Pendiente', date: '2026-03-10' }
+        ];
+
+        const flights = {
+            '1': { number: 'JK101', origin: 'Bogotá', destination: 'Medellín', date: '2026-03-15', time: '08:00', passengerCount: 45 },
+            '2': { number: 'JK202', origin: 'Medellín', destination: 'Cartagena', date: '2026-03-15', time: '12:30', passengerCount: 32 },
+            '3': { number: 'JK303', origin: 'Cali', destination: 'Bogotá', date: '2026-03-15', time: '15:45', passengerCount: 28 }
+        };
+
+        let selectedFlight = null;
+        let selectedReservation = null;
+        let selectedClient = null;
+        let selectedPayment = null;
+
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const sectionId = this.dataset.section;
+                
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                
+                this.classList.add('active');
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Initialize data for section
+                if (sectionId === 'gestionar-reservas') {
+                    renderReservations();
+                } else if (sectionId === 'gestionar-clientes') {
+                    renderClients();
+                } else if (sectionId === 'confirmar-pagos') {
+                    renderPayments();
+                } else if (sectionId === 'asignar-asientos') {
+                    renderSeatMap();
+                }
+            });
+        });
+
+        // Panel Asistente
+        document.querySelectorAll('.flight-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const flightId = this.dataset.flightId;
+                const flight = flights[flightId];
+                selectedFlight = flight;
+                
+                document.querySelectorAll('.flight-card').forEach(c => c.style.borderColor = '#e5e7eb');
+                this.style.borderColor = '#5BC0DE';
+                this.style.backgroundColor = '#eff6ff';
+                
+                document.getElementById('flight-number-title').textContent = `Detalles del Vuelo ${flight.number}`;
+                document.getElementById('flight-number').textContent = flight.number;
+                document.getElementById('flight-origin').textContent = flight.origin;
+                document.getElementById('flight-destination').textContent = flight.destination;
+                document.getElementById('flight-date').textContent = flight.date;
+                document.getElementById('flight-time').textContent = flight.time;
+                document.getElementById('flight-passengers').textContent = `${flight.passengerCount} pasajeros`;
+                
+                document.getElementById('flight-details').classList.add('show');
+            });
+        });
+
+        function manageSeats(flightNumber) {
+            // Navigate to assign seats section
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelector('[data-section="asignar-asientos"]').classList.add('active');
+            document.getElementById('asignar-asientos').classList.add('active');
+            document.getElementById('flight-selector').value = flightNumber;
+            renderSeatMap();
+            document.getElementById('flight-details').classList.remove('show');
+        }
+
+        function viewReservations(flightNumber) {
+            // Navigate to manage reservations section
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelector('[data-section="gestionar-reservas"]').classList.add('active');
+            document.getElementById('gestionar-reservas').classList.add('active');
+            renderReservations(`flightNumber:${flightNumber}`);
+            document.getElementById('flight-details').classList.remove('show');
+        }
+
+        // Gestionar Reservas
+        function renderReservations(filter = '') {
+            const tbody = document.getElementById('reservations-tbody');
+            let filtered = reservations;
+            
+            if (filter.startsWith('flightNumber:')) {
+                const flightNum = filter.split(':')[1];
+                filtered = reservations.filter(r => r.flightNumber === flightNum);
+            } else {
+                filtered = reservations.filter(r => 
+                    r.passenger.toLowerCase().includes(filter.toLowerCase()) ||
+                    r.flightNumber.toLowerCase().includes(filter.toLowerCase()) ||
+                    r.id.toLowerCase().includes(filter.toLowerCase())
+                );
+            }
+
+            tbody.innerHTML = filtered.map(res => `
+                <tr>
+                    <td>${res.id}</td>
+                    <td style="color: #87CEEB; font-weight: 600;">${res.flightNumber}</td>
+                    <td>${res.passenger}</td>
+                    <td>${res.seat}</td>
+                    <td>${res.date}</td>
+                    <td>
+                        <span style="font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: 9999px; ${res.status === 'Confirmada' ? 'background-color: #dcfce7; color: #166534;' : 'background-color: #ffedd5; color: #9a3412;'}">
+                            ${res.status}
+                        </span>
+                    </td>
+                    <td>
+                        <button onclick="viewReservationDetails('${res.id}')" class="action-icon view" title="Ver detalles">👁️</button>
+                        <button onclick="cancelReservation('${res.id}')" class="action-icon delete" title="Eliminar reserva">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function viewReservationDetails(id) {
+            const res = reservations.find(r => r.id === id);
+            if (res) {
+                selectedReservation = res;
+                document.getElementById('reservation-title').textContent = `Detalles de Reserva ${res.id}`;
+                document.getElementById('res-flight').textContent = res.flightNumber;
+                document.getElementById('res-passenger').textContent = res.passenger;
+                document.getElementById('res-seat').textContent = res.seat;
+                document.getElementById('res-status').textContent = res.status;
+                document.getElementById('reservation-details').classList.add('show');
+            }
+        }
+
+        function cancelReservation(id) {
+            if (confirm('¿Está seguro que desea cancelar esta reserva?')) {
+                const res = reservations.find(r => r.id === id);
+                if (res) res.status = 'Cancelada';
+                alert('Reserva cancelada exitosamente');
+                renderReservations();
+            }
+        }
+
+        function changeSeat(id) {
+            alert('Funcionalidad para cambiar asiento próximamente disponible.');
+        }
+
+        function updateStatus(id) {
+            alert('Funcionalidad para actualizar estado próximamente disponible.');
+        }
+
+        document.getElementById('reservation-search')?.addEventListener('input', (e) => {
+            renderReservations(e.target.value);
+        });
+
+        // Gestionar Clientes
+        function renderClients(filter = '') {
+            const tbody = document.getElementById('clients-tbody');
+            const filtered = clients.filter(c => 
+                c.name.toLowerCase().includes(filter.toLowerCase()) ||
+                c.email.toLowerCase().includes(filter.toLowerCase()) ||
+                c.documentNumber.includes(filter)
+            );
+
+            tbody.innerHTML = filtered.map(client => `
+                <tr>
+                    <td>${client.id}</td>
+                    <td style="font-weight: 600;">${client.name}</td>
+                    <td style="color: #4b5563;">${client.email}</td>
+                    <td style="color: #4b5563;">${client.phone}</td>
+                    <td>${client.documentType} ${client.documentNumber}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; color: #87CEEB;">
+                            <span style="font-weight: bold;">Vuelos:</span>
+                            <span style="font-weight: 600; font-size: 0.875rem;">${client.flightHistory}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <button onclick="viewClientDetails('${client.id}')" class="action-icon view" title="Ver cliente">👁️</button>
+                        <button onclick="editClient('${client.id}')" class="action-icon" style="background: #d3efff; color: #006994;" title="Editar cliente">✏️</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function viewClientDetails(id) {
+            const client = clients.find(c => c.id === id);
+            if (client) {
+                selectedClient = client;
+                document.getElementById('client-name').value = client.name;
+                document.getElementById('client-email').value = client.email;
+                document.getElementById('client-phone').value = client.phone;
+                document.getElementById('client-doc-type').value = client.documentType;
+                document.getElementById('client-doc-number').value = client.documentNumber;
+                document.getElementById('client-flights').textContent = client.flightHistory;
+
+                document.getElementById('client-name').disabled = true;
+                document.getElementById('client-email').disabled = true;
+                document.getElementById('client-phone').disabled = true;
+                document.getElementById('client-doc-type').disabled = true;
+                document.getElementById('client-doc-number').disabled = true;
+
+                document.getElementById('edit-client-btn').classList.remove('hidden');
+                document.getElementById('save-client-btn-details').classList.add('hidden');
+
+                document.getElementById('client-details').classList.add('show');
+            }
+        }
+
+        function enableClientEdit() {
+            if (!selectedClient) return;
+            document.getElementById('client-name').disabled = false;
+            document.getElementById('client-email').disabled = false;
+            document.getElementById('client-phone').disabled = false;
+            document.getElementById('client-doc-type').disabled = false;
+            document.getElementById('client-doc-number').disabled = false;
+
+            document.getElementById('edit-client-btn').classList.add('hidden');
+            document.getElementById('save-client-btn-details').classList.remove('hidden');
+        }
+
+        function saveClientDetails() {
+            if (!selectedClient) return;
+            const name = document.getElementById('client-name').value.trim();
+            const email = document.getElementById('client-email').value.trim();
+            const phone = document.getElementById('client-phone').value.trim();
+            const docType = document.getElementById('client-doc-type').value;
+            const docNumber = document.getElementById('client-doc-number').value.trim();
+
+            if (!name || !email || !phone || !docNumber) {
+                alert('Por favor complete todos los campos antes de guardar.');
+                return;
+            }
+
+            selectedClient.name = name;
+            selectedClient.email = email;
+            selectedClient.phone = phone;
+            selectedClient.documentType = docType;
+            selectedClient.documentNumber = docNumber;
+
+            renderClients();
+            document.getElementById('client-name').disabled = true;
+            document.getElementById('client-email').disabled = true;
+            document.getElementById('client-phone').disabled = true;
+            document.getElementById('client-doc-type').disabled = true;
+            document.getElementById('client-doc-number').disabled = true;
+
+            document.getElementById('edit-client-btn').classList.remove('hidden');
+            document.getElementById('save-client-btn-details').classList.add('hidden');
+            alert('Información del cliente actualizada correctamente.');
+        }
+
+        function closeClientDetails() {
+            document.getElementById('client-details').classList.remove('show');
+        }
+
+        function viewClientHistory(id) {
+            const client = clients.find(c => c.id === id);
+            if (!client) return;
+            const message = `Historial de ${client.name}:\n- Vuelo(s) registrados: ${client.flightHistory} \n- Último viaje: 2026-03-15`;
+            alert(message);
+        }
+
+        document.getElementById('add-client-btn')?.addEventListener('click', () => {
+            document.getElementById('add-client-form').classList.add('show');
+        });
+
+        function closeAddClientForm() {
+            document.getElementById('add-client-form').classList.remove('show');
+        }
+
+        document.getElementById('save-client-btn')?.addEventListener('click', () => {
+            const name = document.getElementById('form-name').value;
+            const email = document.getElementById('form-email').value;
+            const phone = document.getElementById('form-phone').value;
+            const docType = document.getElementById('form-doc-type').value;
+            const docNumber = document.getElementById('form-doc-number').value;
+
+            if (!name || !email || !phone || !docNumber) {
+                alert('Por favor complete todos los campos obligatorios');
+                return;
+            }
+
+            const newClient = {
+                id: `C${String(clients.length + 1).padStart(3, '0')}`,
+                name, email, phone, documentType: docType, documentNumber: docNumber, flightHistory: 0
+            };
+
+            clients.push(newClient);
+            alert('Cliente agregado exitosamente');
+            
+            document.getElementById('form-name').value = '';
+            document.getElementById('form-email').value = '';
+            document.getElementById('form-phone').value = '';
+            document.getElementById('form-doc-number').value = '';
+            
+            closeAddClientForm();
+            renderClients();
+        });
+
+        document.getElementById('client-search')?.addEventListener('input', (e) => {
+            renderClients(e.target.value);
+        });
+
+        // Confirmar Pagos
+        function renderPayments() {
+            const tbody = document.getElementById('payments-tbody');
+            tbody.innerHTML = payments.map(payment => `
+                <tr>
+                    <td>${payment.id}</td>
+                    <td style="color: #87CEEB; font-weight: 600;">${payment.reservationId}</td>
+                    <td>${payment.passenger}</td>
+                    <td style="font-weight: 600;">$${payment.amount.toFixed(2)}</td>
+                    <td>${payment.method === 'Débito' ? 'Débito' : payment.method === 'Crédito' ? 'Crédito' : payment.method}</td>
+                    <td>
+                        <span style="font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: 9999px; ${payment.status === 'Confirmado' ? 'background-color: #dcfce7; color: #166534;' : payment.status === 'Pendiente' ? 'background-color: #ffedd5; color: #9a3412;' : 'background-color: #fee2e2; color: #991b1b;'}">
+                            ${payment.status}
+                        </span>
+                    </td>
+                    <td>
+                        ${payment.status === 'Pendiente' ? `<button onclick="confirmPayment('${payment.id}')" style="background-color: #5BC0DE; color: white; padding: 0.25rem 1rem; border-radius: 0.375rem; border: none; cursor: pointer; font-size: 0.875rem; font-weight: 600;">Confirmar</button>` : '<span style="display: flex; align-items: center; gap: 0.5rem; color: #16a34a;"><span style="font-weight: 600; font-size: 0.875rem;">✓ Pagado</span></span>'}
+                    </td>
+                </tr>
+            `).join('');
+
+            updatePaymentSummary();
+        }
+
+        function updatePaymentSummary() {
+            const pending = payments.filter(p => p.status === 'Pendiente').reduce((sum, p) => sum + p.amount, 0);
+            const confirmed = payments.filter(p => p.status === 'Confirmado').reduce((sum, p) => sum + p.amount, 0);
+            const total = pending + confirmed;
+
+            document.getElementById('total-payments').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('confirmed-payments').textContent = `$${confirmed.toFixed(2)}`;
+            document.getElementById('pending-payments').textContent = `$${pending.toFixed(2)}`;
+        }
+
+        function confirmPayment(id) {
+            selectedPayment = payments.find(p => p.id === id);
+            if (selectedPayment) {
+                document.getElementById('payment-title').textContent = `Confirmar Pago ${selectedPayment.id}`;
+                document.getElementById('payment-passenger').textContent = selectedPayment.passenger;
+                document.getElementById('payment-reservation').textContent = selectedPayment.reservationId;
+                document.getElementById('payment-amount').textContent = `$${selectedPayment.amount.toFixed(2)}`;
+                document.getElementById('payment-method').textContent = selectedPayment.method;
+                document.getElementById('payment-details').classList.add('show');
+            }
+        }
+
+        document.getElementById('confirm-payment-btn')?.addEventListener('click', () => {
+            if (selectedPayment) {
+                const payment = payments.find(p => p.id === selectedPayment.id);
+                if (payment) {
+                    payment.status = 'Confirmado';
+                    alert(`Pago ${selectedPayment.id} confirmado exitosamente`);
+                    document.getElementById('payment-details').classList.remove('show');
+                    renderPayments();
+                }
+            }
+        });
+
+        // Asignar Asientos
+        let selectedSeat = null;
+
+        function getRandomSeats(totalSeats, count) {
+            const seats = [];
+            for (let i = 1; i <= 15; i++) {
+                ['A', 'B', 'C', 'D', 'E', 'F'].forEach(col => seats.push(`${col}${i}`));
+            }
+            const shuffled = seats.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        function loadSeatData(flightNumber) {
+            const key = `seats_${flightNumber}`;
+            const data = localStorage.getItem(key);
+            if (data) {
+                return JSON.parse(data);
+            } else {
+                // Generar aleatorios si no existe
+                const occupied = getRandomSeats(90, Math.floor(Math.random() * 20) + 10); // 10-30 ocupados
+                const reserved = getRandomSeats(90, Math.floor(Math.random() * 15) + 5); // 5-20 reservados
+                const seatData = { occupied, reserved };
+                localStorage.setItem(key, JSON.stringify(seatData));
+                return seatData;
+            }
+        }
+
+        function saveSeatData(flightNumber, seatData) {
+            const key = `seats_${flightNumber}`;
+            localStorage.setItem(key, JSON.stringify(seatData));
+        }
+
+        function renderSeatMap() {
+            const seatMap = document.getElementById('seat-map');
+            seatMap.innerHTML = '';
+
+            const rows = 15;
+            const columns = ['A', 'B', 'C', 'D', 'E', 'F'];
+            const flightNumber = document.getElementById('flight-selector').value;
+            const seatData = loadSeatData(flightNumber);
+
+            document.getElementById('selected-seat-flight').textContent = flightNumber;
+            document.getElementById('selected-seat-id').textContent = '-';
+            document.getElementById('selected-seat-status').textContent = 'Ninguno';
+            document.getElementById('selected-seat-info').textContent = 'Selecciona un asiento disponible para confirmar.';
+            document.getElementById('confirm-seat-btn').disabled = true;
+
+            for (let i = 1; i <= rows; i++) {
+                for (let col of columns) {
+                    const seatId = `${col}${i}`;
+                    let status = 'available';
+
+                    if (seatData.occupied.includes(seatId)) status = 'occupied';
+                    else if (seatData.reserved.includes(seatId)) status = 'reserved';
+
+                    const seat = document.createElement('div');
+                    seat.className = `seat-box ${status}`;
+                    seat.textContent = seatId;
+
+                    if (status === 'available') {
+                        seat.addEventListener('click', () => {
+                            selectedSeat = seatId;
+                            document.querySelectorAll('.seat-box').forEach(s => s.classList.remove('selected'));
+                            seat.classList.add('selected');
+
+                            document.getElementById('selected-seat-id').textContent = seatId;
+                            document.getElementById('selected-seat-status').textContent = 'Disponible';
+                            document.getElementById('selected-seat-info').textContent = `Vuelo ${flightNumber} · Asiento ${seatId} seleccionado.`;
+                            document.getElementById('confirm-seat-btn').disabled = false;
+                        });
+                    }
+
+                    seatMap.appendChild(seat);
+                }
+            }
+        }
+
+        document.getElementById('flight-selector')?.addEventListener('change', () => {
+            renderSeatMap();
+        });
+
+        document.getElementById('confirm-seat-btn')?.addEventListener('click', () => {
+            if (!selectedSeat) return;
+            const flightNumber = document.getElementById('flight-selector').value;
+            const seatData = loadSeatData(flightNumber);
+            if (!seatData.reserved.includes(selectedSeat)) {
+                seatData.reserved.push(selectedSeat);
+                saveSeatData(flightNumber, seatData);
+            }
+            alert(`Asiento ${selectedSeat} confirmado en el vuelo ${flightNumber}.`);
+            document.getElementById('selected-seat-info').textContent = `Asiento ${selectedSeat} confirmado.`;
+            document.getElementById('confirm-seat-btn').disabled = true;
+            selectedSeat = null;
+            renderSeatMap();
+        });
+
+        document.getElementById('cancel-seat-btn')?.addEventListener('click', () => {
+            selectedSeat = null;
+            document.getElementById('selected-seat-id').textContent = '-';
+            document.getElementById('selected-seat-status').textContent = 'Ninguno';
+            document.getElementById('selected-seat-info').textContent = 'Selecciona un asiento disponible para confirmar.';
+            document.getElementById('confirm-seat-btn').disabled = true;
+            document.querySelectorAll('.seat-box').forEach(s => s.classList.remove('selected'));
+        });
+
+        // Initialize
+        renderReservations();
+        renderClients();
+        renderPayments();
+        renderSeatMap();
+    </script>
+</body>
+</html>
+
