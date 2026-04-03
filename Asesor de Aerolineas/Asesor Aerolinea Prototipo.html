@@ -5,229 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asesor Aerolínea - Sistema de Gestión</title>
     <link rel="stylesheet" href="Css/Decoracion.css">
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        nav {
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        nav button {
-            background: #d8f0ff;
-            border: 1px solid #87CEEB;
-            color: #0f4f78;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        nav button:hover {
-            background: #b0e5ff;
-            border-color: #5BC0DE;
-        }
-
-        nav button.active {
-            background: #87CEEB;
-            color: white;
-            border-color: #87CEEB;
-        }
-
-        button {
-            background: #87CEEB;
-            color: white;
-            border: 1px solid #87CEEB;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.25s ease;
-        }
-
-        button:hover {
-            background: #7bc6e8;
-            border-color: #7bc6e8;
-        }
-
-        button.danger {
-            background: #ff6b6b;
-            border-color: #ff6b6b;
-        }
-
-        button.danger:hover {
-            background: #f15353;
-            border-color: #f15353;
-        }
-
-        button.secondary {
-            background: #e2ecf6;
-            color: #1f2937;
-            border-color: #cbd5e1;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.35);
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            overflow: auto;
-            z-index: 20;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal > div {
-            width: min(100%, 900px);
-        }
-
-        .content-section {
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        .icon {
-            display: inline-block;
-            width: 1.25rem;
-            height: 1.25rem;
-            margin-right: 0.5rem;
-            vertical-align: middle;
-        }
-
-        .action-icon {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #bdd7ed;
-            margin-right: 0.4rem;
-            font-size: 1rem;
-        }
-
-        .action-icon.view {
-            background: #d3efff;
-            color: #0f79b8;
-        }
-
-        .action-icon.delete {
-            background: #ffe1e1;
-            color: #c15353;
-        }
-
-        .seat-map-grid {
-            display: grid;
-            grid-template-columns: repeat(6, minmax(45px, 1fr));
-            gap: 0.45rem;
-            width: 100%;
-            max-width: 420px;
-        }
-
-        .seat-selection-panel {
-            border: 1px solid #cce8ff;
-            background: #f6fbff;
-            border-radius: 0.6rem;
-            padding: 1rem;
-            min-width: 260px;
-            max-width: 320px;
-        }
-
-        .seat-box {
-            width: 44px;
-            height: 44px;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .seat-box:hover:not(.occupied):not(.reserved) {
-            transform: translateY(-1px);
-            filter: brightness(1.1);
-        }
-
-        .seat-box.available { background: #9ca3af; color: white; }
-        .seat-box.reserved { background: #ff9933; color: white; cursor: not-allowed; }
-        .seat-box.occupied { background: #5BC0DE; color: white; cursor: not-allowed; }
-        .seat-box.selected { background: #1d4ed8; color: white; }
-
-        .flight-card {
-            transition: all 0.3s ease;
-        }
-
-        .flight-card:hover {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .cursor-pointer {
-            cursor: pointer;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 50;
-            backdrop-filter: blur(4px);
-            background: rgba(0, 0, 0, 0.32);
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal > div {
-            width: min(100%, 760px);
-            max-height: 92vh;
-            overflow: auto;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-            }
-
-            nav button {
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -237,126 +14,95 @@
             <p style="margin: 0.5rem 0 0 0;">Bienvenido al panel de control para gestionar vuelos, reservas y clientes</p>
         </header>
 
-        <!-- Navegación -->
-        <nav>
-            <button class="nav-btn active" data-section="panel-asistente">Panel Asistente</button>
-            <button class="nav-btn" data-section="gestionar-reservas">Gestionar Reservas</button>
-            <button class="nav-btn" data-section="gestionar-clientes">Gestionar Clientes</button>
-            <button class="nav-btn" data-section="confirmar-pagos">Confirmar Pagos</button>
-            <button class="nav-btn" data-section="asignar-asientos">Asignar Asientos</button>
-        </nav>
+        <!-- Navegación lateral -->
+        <div class="main-layout">
+            <aside class="sidebar">
+                <button class="nav-btn active" data-section="panel-asistente">Principal</button>
+                <button class="nav-btn" data-section="gestionar-reservas">Gestionar Reservas</button>
+                <button class="nav-btn" data-section="gestionar-clientes">Gestión de Clientes</button>
+                <button class="nav-btn" data-section="confirmar-pagos">Gestión de Pagos</button>
+                <button class="nav-btn" data-section="asignar-asientos">Asignamiento de Asientos</button>
+            </aside>
 
-        <!-- PANEL ASISTENTE -->
+            <div class="main-content">
+                <!-- PANEL ASISTENTE -->
         <div id="panel-asistente" class="content-section active space-y-6">
             <div class="bg-white p-6 rounded-lg shadow-sm">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Panel de Asistente</h2>
                 <p class="text-gray-600 mb-4">Selecciona un vuelo para ver los detalles y gestionar asignaciones</p>
 
-                <!-- Flight Cards -->
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="flight-card p-6 border-2 border-gray-200 rounded-lg cursor-pointer" data-flight-id="1">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-2xl">✈️</span>
-                            <span class="font-bold text-lg text-[#87CEEB]">JK101</span>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-2 text-gray-700">
-                                <span class="font-semibold">Ruta:</span>
-                                <span class="text-sm">Bogotá → Medellín</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-gray-700">
-                                <span class="font-semibold">Fecha:</span>
-                                <span class="text-sm">2026-03-15 - 08:00</span>
-                            </div>
-                            <div class="mt-3">
-                                <span class="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-700">Programado</span>
-                            </div>
-                        </div>
+                <!-- Dashboard rápido -->
+                <div class="dashboard-cards mb-6">
+                    <div class="dashboard-card">
+                        <h4 class="font-semibold text-gray-600">Total de vuelos del día</h4>
+                        <p id="dashboard-total-flights" class="text-3xl font-bold text-[#87CEEB]">0</p>
                     </div>
-
-                    <div class="flight-card p-6 border-2 border-gray-200 rounded-lg cursor-pointer" data-flight-id="2">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-2xl">✈️</span>
-                            <span class="font-bold text-lg text-[#87CEEB]">JK202</span>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-2 text-gray-700">
-                                <span class="font-semibold">Ruta:</span>
-                                <span class="text-sm">Medellín → Cartagena</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-gray-700">
-                                <span class="font-semibold">Fecha:</span>
-                                <span class="text-sm">2026-03-15 - 12:30</span>
-                            </div>
-                            <div class="mt-3">
-                                <span class="text-xs px-3 py-1 rounded-full bg-green-100 text-green-700">En vuelo</span>
-                            </div>
-                        </div>
+                    <div class="dashboard-card">
+                        <h4 class="font-semibold text-gray-600">Total de pasajeros</h4>
+                        <p id="dashboard-total-passengers" class="text-3xl font-bold text-[#87CEEB]">0</p>
                     </div>
-
-                    <div class="flight-card p-6 border-2 border-gray-200 rounded-lg cursor-pointer" data-flight-id="3">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-2xl">✈️</span>
-                            <span class="font-bold text-lg text-[#87CEEB]">JK303</span>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-2 text-gray-700">
-                                <span class="font-semibold">Ruta:</span>
-                                <span class="text-sm">Cali → Bogotá</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-gray-700">
-                                <span class="font-semibold">Fecha:</span>
-                                <span class="text-sm">2026-03-15 - 15:45</span>
-                            </div>
-                            <div class="mt-3">
-                                <span class="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-700">Programado</span>
-                            </div>
-                        </div>
+                    <div class="dashboard-card">
+                        <h4 class="font-semibold text-gray-600">Vuelos retrasados</h4>
+                        <p id="dashboard-delayed-flights" class="text-3xl font-bold text-[#FF9933]">0</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h4 class="font-semibold text-gray-600">Pagos pendientes</h4>
+                        <p id="dashboard-pending-payments" class="text-3xl font-bold text-[#f97316]">0</p>
                     </div>
                 </div>
+
+                <!-- Filtro de vuelos -->
+                <div class="mb-6">
+                    <label class="text-sm font-semibold text-gray-700 mb-2 block">Buscar vuelos</label>
+                    <div class="search-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input id="flight-search" type="text" placeholder="Buscar por código, origen, destino, estado..." class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg" />
+                    </div>
+                </div>
+
+                <!-- Flight Cards -->
+                <div id="flight-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
             </div>
 
-            <!-- Selected Flight Details -->
-            <div id="flight-details" class="modal">
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <h3 id="flight-number-title" class="text-xl font-bold text-[#87CEEB] mb-4">Detalles del Vuelo</h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Número de Vuelo</label>
-                                <p id="flight-number" class="text-gray-800"></p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Origen</label>
-                                <p id="flight-origin" class="text-gray-800"></p>
-                            </div>
-                        </div>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Pasajeros a Bordo</label>
-                                <p id="flight-passengers" class="text-gray-800"></p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Destino</label>
-                                <p id="flight-destination" class="text-gray-800"></p>
-                            </div>
-                        </div>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Fecha</label>
-                                <p id="flight-date" class="text-gray-800"></p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Hora de salida</label>
-                                <p id="flight-time" class="text-gray-800"></p>
-                            </div>
+            <!-- Detalles de Vuelo (Inline abajo) -->
+            <div id="flight-details" class="bg-white p-6 rounded-lg shadow-sm hidden">
+                <h3 id="flight-number-title" class="text-xl font-bold text-[#87CEEB] mb-4">Detalles del Vuelo</h3>
+                <div class="grid md:grid-cols-3 gap-6 mb-4">
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <h4 class="font-semibold text-lg text-gray-700 mb-2">Información general</h4>
+                        <p><strong>Número:</strong> <span id="flight-number" class="text-gray-800"></span></p>
+                        <p><strong>Ruta:</strong> <span id="flight-origin" class="text-gray-800"></span> → <span id="flight-destination" class="text-gray-800"></span></p>
+                        <p><strong>Estado actual:</strong> <span id="flight-status" class="text-gray-800"></span></p>
+                        <div class="mt-2">
+                            <label class="text-sm font-semibold text-gray-600">Cambiar estado</label>
+                            <select id="flight-status-select" class="w-full mt-1 p-2 border-2 border-gray-300 rounded-lg">
+                                <option value="Programado">Programado</option>
+                                <option value="En vuelo">En vuelo</option>
+                                <option value="Retrasado">Retrasado</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                            <button id="update-flight-status-btn" class="primary mt-2">Actualizar estado</button>
                         </div>
                     </div>
-                    <div class="mt-6 flex gap-4">
-                        <button onclick="manageSeats('${flight.number}')" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Gestionar Asientos</button>
-                        <button onclick="viewReservations('${flight.number}')" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Ver Reservas</button>
-                        <button onclick="document.getElementById('flight-details').classList.remove('show')" class="secondary">Cerrar</button>
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <h4 class="font-semibold text-lg text-gray-700 mb-2">Horarios</h4>
+                        <p><strong>Fecha:</strong> <span id="flight-date" class="text-gray-800"></span></p>
+                        <div class="mt-2 flex items-center gap-2">
+                            <strong>Hora:</strong>
+                            <input id="flight-time-input" type="time" class="p-2 border-2 border-gray-300 rounded-lg" />
+                            <button id="update-time-btn" class="primary">Actualizar</button>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Hora actual: <span id="flight-time" class="text-gray-800"></span></p>
                     </div>
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <h4 class="font-semibold text-lg text-gray-700 mb-2">Pasajeros</h4>
+                        <p><strong>Total a bordo:</strong> <span id="flight-passengers" class="text-gray-800"></span></p>
+                    </div>
+                </div>
+                <div class="mt-4 flex gap-4">
+                    <button id="manage-seats-btn" class="primary">Gestionar Asientos</button>
+                    <button id="view-reservations-btn" class="primary">Ver Reservas</button>
+                    <button onclick="document.getElementById('flight-details').classList.add('hidden')" class="cancel">Ocultar</button>
                 </div>
             </div>
         </div>
@@ -419,9 +165,9 @@
                         </div>
                     </div>
                     <div class="mt-6 flex gap-4">
-                        <button onclick="changeSeat('${selectedReservation.id}')" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Cambiar Asiento</button>
-                        <button onclick="updateStatus('${selectedReservation.id}')" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Actualizar Estado</button>
-                        <button onclick="document.getElementById('reservation-details').classList.remove('show')" class="secondary">Cerrar</button>
+                        <button onclick="changeSeat('${selectedReservation.id}')" class="primary">Cambiar Asiento</button>
+                        <button onclick="updateStatus('${selectedReservation.id}')" class="primary">Actualizar Estado</button>
+                        <button onclick="document.getElementById('reservation-details').classList.remove('show')" class="cancel">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -642,11 +388,7 @@
                 <!-- Flight Selector -->
                 <div class="mb-6">
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Seleccionar Vuelo</label>
-                    <select id="flight-selector" class="w-full md:w-96 px-4 py-3 border-2 border-gray-300 rounded-lg">
-                        <option value="JK101">JK101 - Bogotá - Medellín</option>
-                        <option value="JK202">JK202 - Medellín - Cartagena</option>
-                        <option value="JK303">JK303 - Cali - Bogotá</option>
-                    </select>
+                    <select id="flight-selector" class="w-full md:w-96 px-4 py-3 border-2 border-gray-300 rounded-lg"></select>
                 </div>
             </div>
 
@@ -692,7 +434,10 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div> <!-- cerrar asignar-asientos -->
+    </div> <!-- cerrar main-content -->
+</div> <!-- cerrar main-layout -->
+</div> <!-- cerrar container -->
 
     <script>
         // Data storage
@@ -719,15 +464,149 @@
         ];
 
         const flights = {
-            '1': { number: 'JK101', origin: 'Bogotá', destination: 'Medellín', date: '2026-03-15', time: '08:00', passengerCount: 45 },
-            '2': { number: 'JK202', origin: 'Medellín', destination: 'Cartagena', date: '2026-03-15', time: '12:30', passengerCount: 32 },
-            '3': { number: 'JK303', origin: 'Cali', destination: 'Bogotá', date: '2026-03-15', time: '15:45', passengerCount: 28 }
+            '1': { id: '1', number: 'JK101', origin: 'Bogotá', destination: 'Medellín', date: '2026-04-10', time: '07:30', passengerCount: 50, type: 'Nacional', status: 'Programado' },
+            '2': { id: '2', number: 'JK202', origin: 'Medellín', destination: 'Cartagena', date: '2026-04-10', time: '10:15', passengerCount: 44, type: 'Nacional', status: 'En vuelo' },
+            '3': { id: '3', number: 'JK303', origin: 'Cali', destination: 'Bogotá', date: '2026-04-11', time: '12:40', passengerCount: 38, type: 'Nacional', status: 'Retrasado' },
+            '4': { id: '4', number: 'JK404', origin: 'Barranquilla', destination: 'Cali', date: '2026-04-11', time: '15:50', passengerCount: 47, type: 'Nacional', status: 'Programado' },
+            '5': { id: '5', number: 'JK505', origin: 'Bogotá', destination: 'Cancún', date: '2026-04-12', time: '20:20', passengerCount: 165, type: 'Internacional', status: 'Programado' },
+            '6': { id: '6', number: 'JK606', origin: 'Medellín', destination: 'Punta Cana', date: '2026-04-12', time: '22:00', passengerCount: 152, type: 'Internacional', status: 'Programado' },
+            '7': { id: '7', number: 'JK707', origin: 'Cali', destination: 'Nueva York', date: '2026-04-13', time: '06:45', passengerCount: 180, type: 'Internacional', status: 'En vuelo' },
+            '8': { id: '8', number: 'JK808', origin: 'Cartagena', destination: 'Sao Paulo', date: '2026-04-13', time: '13:30', passengerCount: 158, type: 'Internacional', status: 'Retrasado' },
+            '9': { id: '9', number: 'JK909', origin: 'Pereira', destination: 'Lima', date: '2026-04-14', time: '09:20', passengerCount: 142, type: 'Internacional', status: 'Programado' }
         };
 
         let selectedFlight = null;
         let selectedReservation = null;
         let selectedClient = null;
         let selectedPayment = null;
+
+        function getStatusBadge(status) {
+            if (status === 'En vuelo') return `<span class="status-pill status-en-vuelo">● En vuelo</span>`;
+            if (status === 'Retrasado') return `<span class="status-pill status-retrasado">● Retrasado</span>`;
+            return `<span class="status-pill status-programado">● Programado</span>`;
+        }
+
+        function updateDashboard() {
+            const flightsArr = Object.values(flights);
+            const totalFlights = flightsArr.length;
+            const totalPassengers = flightsArr.reduce((sum, f) => sum + f.passengerCount, 0);
+            const delayedFlights = flightsArr.filter(f => f.status === 'Retrasado').length;
+            const pendingPayments = payments.filter(p => p.status === 'Pendiente').length;
+
+            document.getElementById('dashboard-total-flights').textContent = totalFlights;
+            document.getElementById('dashboard-total-passengers').textContent = totalPassengers;
+            document.getElementById('dashboard-delayed-flights').textContent = delayedFlights;
+            document.getElementById('dashboard-pending-payments').textContent = pendingPayments;
+        }
+
+        function renderFlightCards(filter = '') {
+            const container = document.getElementById('flight-cards');
+            const search = filter.trim().toLowerCase();
+            const flightsArray = Object.values(flights).filter(flight => {
+                if (!search) return true;
+                return (
+                    flight.number.toLowerCase().includes(search) ||
+                    flight.origin.toLowerCase().includes(search) ||
+                    flight.destination.toLowerCase().includes(search) ||
+                    flight.status.toLowerCase().includes(search)
+                );
+            });
+
+            container.innerHTML = flightsArray.map(flight => `
+                <div class="flight-card cursor-pointer status-${flight.status.toLowerCase().replace(' ', '-')}" data-flight-id="${flight.id}">
+                    <div class="flex justify-between items-center mb-3">
+                        <div>
+                            <div class="text-lg font-extrabold text-[#0f4f78]">${flight.number}</div>
+                            <div class="text-xs text-gray-500">${flight.type}</div>
+                        </div>
+                        <div class="${flight.status.toLowerCase().replace(' ', '-')} status-pill">${flight.status}</div>
+                    </div>
+                    <div class="space-y-1 text-gray-700">
+                        <div><strong>Ruta:</strong> ${flight.origin} → ${flight.destination}</div>
+                        <div><strong>Fecha y hora:</strong> ${flight.date} · ${flight.time}</div>
+                        <div><strong>Pasajeros:</strong> ${flight.passengerCount}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            container.querySelectorAll('.flight-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const flightId = card.dataset.flightId;
+                    showFlightDetails(flightId);
+                });
+            });
+
+            updateDashboard();
+        }
+
+        function populateFlightSelector() {
+            const selector = document.getElementById('flight-selector');
+            selector.innerHTML = Object.values(flights).map(flight => `<option value="${flight.number}">${flight.number} - ${flight.origin} - ${flight.destination}</option>`).join('');
+        }
+
+        function showFlightDetails(flightId) {
+            const flight = flights[flightId];
+            if (!flight) return;
+            selectedFlight = flight;
+
+            // Highlight selected card
+            document.querySelectorAll('.flight-card').forEach(c => {
+                c.classList.remove('selected', 'status-programado', 'status-en-vuelo', 'status-retrasado', 'status-cancelado');
+                const cardId = c.dataset.flightId;
+                const status = flights[cardId]?.status || 'Programado';
+                c.classList.add(`status-${status.toLowerCase().replace(' ', '-')}`);
+            });
+
+            const card = document.querySelector(`.flight-card[data-flight-id="${flightId}"]`);
+            if (card) {
+                card.classList.add('selected');
+            }
+
+            document.getElementById('flight-number-title').textContent = `Detalles del Vuelo ${flight.number}`;
+            document.getElementById('flight-number').textContent = flight.number;
+            document.getElementById('flight-origin').textContent = flight.origin;
+            document.getElementById('flight-destination').textContent = flight.destination;
+            document.getElementById('flight-status').textContent = flight.status;
+            document.getElementById('flight-date').textContent = flight.date;
+            document.getElementById('flight-time').textContent = flight.time;
+            document.getElementById('flight-passengers').textContent = `${flight.passengerCount} pasajeros`;
+            document.getElementById('flight-time-input').value = flight.time;
+            document.getElementById('flight-status-select').value = flight.status;
+
+            document.getElementById('flight-details').classList.remove('hidden');
+        }
+
+        document.getElementById('manage-seats-btn').addEventListener('click', () => {
+            if (selectedFlight) manageSeats(selectedFlight.id);
+        });
+
+        document.getElementById('view-reservations-btn').addEventListener('click', () => {
+            if (selectedFlight) viewReservations(selectedFlight.number);
+        });
+
+        document.getElementById('update-time-btn').addEventListener('click', () => {
+            if (!selectedFlight) return;
+            const newTime = document.getElementById('flight-time-input').value;
+            if (!newTime) {
+                alert('Ingrese una hora válida.');
+                return;
+            }
+            selectedFlight.time = newTime;
+            document.getElementById('flight-time').textContent = newTime;
+            renderFlightCards();
+            updateDashboard();
+            alert(`Hora de vuelo actualizada a ${newTime}.`);
+        });
+
+        document.getElementById('update-flight-status-btn').addEventListener('click', () => {
+            if (!selectedFlight) return;
+            const newStatus = document.getElementById('flight-status-select').value;
+            selectedFlight.status = newStatus;
+            document.getElementById('flight-status').textContent = newStatus;
+            renderFlightCards();
+            showFlightDetails(selectedFlight.id);
+            updateDashboard();
+        });
 
         // Navigation
         document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -741,7 +620,9 @@
                 document.getElementById(sectionId).classList.add('active');
                 
                 // Initialize data for section
-                if (sectionId === 'gestionar-reservas') {
+                if (sectionId === 'panel-asistente') {
+                    renderFlightCards();
+                } else if (sectionId === 'gestionar-reservas') {
                     renderReservations();
                 } else if (sectionId === 'gestionar-clientes') {
                     renderClients();
@@ -753,38 +634,21 @@
             });
         });
 
-        // Panel Asistente
-        document.querySelectorAll('.flight-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const flightId = this.dataset.flightId;
-                const flight = flights[flightId];
-                selectedFlight = flight;
-                
-                document.querySelectorAll('.flight-card').forEach(c => c.style.borderColor = '#e5e7eb');
-                this.style.borderColor = '#5BC0DE';
-                this.style.backgroundColor = '#eff6ff';
-                
-                document.getElementById('flight-number-title').textContent = `Detalles del Vuelo ${flight.number}`;
-                document.getElementById('flight-number').textContent = flight.number;
-                document.getElementById('flight-origin').textContent = flight.origin;
-                document.getElementById('flight-destination').textContent = flight.destination;
-                document.getElementById('flight-date').textContent = flight.date;
-                document.getElementById('flight-time').textContent = flight.time;
-                document.getElementById('flight-passengers').textContent = `${flight.passengerCount} pasajeros`;
-                
-                document.getElementById('flight-details').classList.add('show');
-            });
-        });
+        // Panel Asistente se maneja con renderFlightCards y showFlightDetails()
 
-        function manageSeats(flightNumber) {
+        function manageSeats(flightId) {
+            const flight = flights[flightId];
+            if (!flight) return;
+
             // Navigate to assign seats section
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.querySelector('[data-section="asignar-asientos"]').classList.add('active');
             document.getElementById('asignar-asientos').classList.add('active');
-            document.getElementById('flight-selector').value = flightNumber;
+
+            document.getElementById('flight-selector').value = flight.number;
             renderSeatMap();
-            document.getElementById('flight-details').classList.remove('show');
+            document.getElementById('flight-details').classList.add('hidden');
         }
 
         function viewReservations(flightNumber) {
@@ -794,7 +658,7 @@
             document.querySelector('[data-section="gestionar-reservas"]').classList.add('active');
             document.getElementById('gestionar-reservas').classList.add('active');
             renderReservations(`flightNumber:${flightNumber}`);
-            document.getElementById('flight-details').classList.remove('show');
+            document.getElementById('flight-details').classList.add('hidden');
         }
 
         // Gestionar Reservas
@@ -865,6 +729,10 @@
 
         document.getElementById('reservation-search')?.addEventListener('input', (e) => {
             renderReservations(e.target.value);
+        });
+
+        document.getElementById('flight-search')?.addEventListener('input', (e) => {
+            renderFlightCards(e.target.value);
         });
 
         // Gestionar Clientes
@@ -1162,7 +1030,20 @@
             if (!seatData.reserved.includes(selectedSeat)) {
                 seatData.reserved.push(selectedSeat);
                 saveSeatData(flightNumber, seatData);
+
+                // Aumentar contador de pasajeros en ese vuelo
+                const flight = Object.values(flights).find(f => f.number === flightNumber);
+                if (flight) {
+                    flight.passengerCount += 1;
+                    if (selectedFlight && selectedFlight.number === flightNumber) {
+                        selectedFlight.passengerCount = flight.passengerCount;
+                        document.getElementById('flight-passengers').textContent = `${flight.passengerCount} pasajeros`;
+                    }
+                }
+
+                renderFlightCards();
             }
+
             alert(`Asiento ${selectedSeat} confirmado en el vuelo ${flightNumber}.`);
             document.getElementById('selected-seat-info').textContent = `Asiento ${selectedSeat} confirmado.`;
             document.getElementById('confirm-seat-btn').disabled = true;
@@ -1180,6 +1061,8 @@
         });
 
         // Initialize
+        renderFlightCards();
+        populateFlightSelector();
         renderReservations();
         renderClients();
         renderPayments();

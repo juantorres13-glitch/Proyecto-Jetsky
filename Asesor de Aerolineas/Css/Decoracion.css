@@ -259,6 +259,423 @@
   border-radius: 0.375rem;
 }
 
+/* Estilos movidos desde Asesor Aerolinea Prototipo.html */
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0.5rem 1rem 1rem;
+    box-sizing: border-box;
+    background: #f5f7fa;
+    color: #1f2937;
+}
+
+html, body {
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    font-size: 16px;
+}
+
+body {
+    font-size: 1.05rem;
+}
+
+h2, h3, h4 {
+    font-size: 1.25rem;
+}
+
+p, label, input, select, button {
+    font-size: 1rem;
+}
+
+.main-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 1.5rem;
+    align-items: flex-start;
+    width: 100%;
+    min-height: calc(100vh - 120px);
+}
+
+.sidebar {
+    background: #ffffff;
+    border: 1px solid #dfe4ea;
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    padding: 1rem;
+    position: sticky;
+    top: 1rem;
+    height: fit-content;
+}
+
+.sidebar button {
+    background: #f8fafc;
+    border: 1px solid #dfe4ea;
+    color: #1f2937;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+}
+
+.sidebar button.active {
+    background: #1f4e79;
+    color: #ffffff;
+    border-color: #1f4e79;
+    box-shadow: 0 8px 16px rgba(31, 78, 121, 0.24);
+}
+
+.sidebar button,
+.nav-btn {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    background: #e2ecf6;
+    border: 1px solid #cbd5e1;
+    color: #0f4f78;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.sidebar button.active,
+.nav-btn.active {
+    background: #3b82f6;
+    color: #ffffff;
+    border-color: #3b82f6;
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.24);
+}
+
+.sidebar button.active {
+    background: #87CEEB;
+    color: #ffffff;
+    border-color: #87CEEB;
+    box-shadow: 0 8px 18px rgba(22, 163, 198, 0.22);
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+nav button {
+    background: #d8f0ff;
+    border: 1px solid #87CEEB;
+    color: #0f4f78;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+button.primary {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: white;
+}
+
+button.primary:hover {
+    background: #16a34a;
+    border-color: #16a34a;
+}
+
+button.blue {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+button.blue:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+button.cancel {
+    background: #e5e7eb;
+    border-color: #d1d5db;
+    color: #374151;
+}
+
+button.cancel:hover {
+    background: #d1d5db;
+}
+
+nav button:hover {
+    background: #b0e5ff;
+    border-color: #5BC0DE;
+}
+
+nav button.active {
+    background: #87CEEB;
+    color: white;
+    border-color: #87CEEB;
+}
+
+button {
+    background: #87CEEB;
+    color: white;
+    border: 1px solid #87CEEB;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+button:hover {
+    background: #7bc6e8;
+    border-color: #7bc6e8;
+}
+
+button.danger {
+    background: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+button.danger:hover {
+    background: #f15353;
+    border-color: #f15353;
+}
+
+button.secondary {
+    background: #e2ecf6;
+    color: #1f2937;
+    border-color: #cbd5e1;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow: auto;
+    z-index: 20;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal > div {
+    width: min(100%, 900px);
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.icon {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.action-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #bdd7ed;
+    margin-right: 0.4rem;
+    font-size: 1rem;
+}
+
+.action-icon.view {
+    background: #d3efff;
+    color: #0f79b8;
+}
+
+.action-icon.delete {
+    background: #ffe1e1;
+    color: #c15353;
+}
+
+.seat-map-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(45px, 1fr));
+    gap: 0.45rem;
+    width: 100%;
+    max-width: 420px;
+}
+
+#flight-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    #flight-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    #flight-cards {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
+
+.seat-selection-panel {
+    border: 1px solid #cce8ff;
+    background: #f6fbff;
+    border-radius: 0.6rem;
+    padding: 1rem;
+    min-width: 260px;
+    max-width: 320px;
+}
+
+.seat-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.seat-box:hover:not(.occupied):not(.reserved) {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+}
+
+.seat-box.available { background: #9ca3af; color: white; }
+.seat-box.reserved { background: #ff9933; color: white; cursor: not-allowed; }
+.seat-box.occupied { background: #5BC0DE; color: white; cursor: not-allowed; }
+.seat-box.selected { background: #1d4ed8; color: white; }
+
+.flight-card {
+    padding: 1.2rem;
+    border: 1px solid #d8dde4;
+    border-radius: 1rem;
+    box-shadow: 0 8px 15px rgba(15, 23, 42, 0.08);
+    transition: all 0.25s ease;
+    background: #ffffff;
+    position: relative;
+    border-left: 8px solid transparent;
+}
+
+.flight-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.18);
+    border-color: #9fb3c9;
+}
+
+.flight-card.selected {
+    border-color: #1f4e79;
+    background: #eef5ff;
+    box-shadow: 0 10px 24px rgba(31, 78, 121, 0.30);
+    border-left: 8px solid #1f4e79;
+}
+
+.flight-card.status-programado { border-left-color: #3b82f6; }
+.flight-card.status-en-vuelo { border-left-color: #22c55e; }
+.flight-card.status-retrasado { border-left-color: #f97316; }
+.flight-card.status-cancelado { border-left-color: #ef4444; }
+
+.status-pill {
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.25rem 0.85rem;
+    border-radius: 999px;
+    background: #e5e7eb;
+    color: #334155;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+.status-pill.programado { background: #dbeafe; color: #1d4ed8; }
+.status-pill.en-vuelo { background: #dcfce7; color: #166534; }
+.status-pill.retrasado { background: #ffedd5; color: #c2410c; }
+.status-pill.cancelado { background: #fee2e2; color: #991b1b; }
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.dashboard-card {
+    background: #ffffff;
+    border: 1px solid #d9e1ea;
+    border-radius: 0.9rem;
+    padding: 1rem;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.09);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.32);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal > div {
+    width: min(100%, 760px);
+    max-height: 92vh;
+    overflow: auto;
+}
+
+.text-right {
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+    }
+
+    nav button {
+        width: 100%;
+    }
+}
+
+
 .border-2 {
   border-width: 2px;
 }
