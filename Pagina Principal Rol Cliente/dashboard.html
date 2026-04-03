@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetSky - Sección de Usuario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root { --primary: #F7931E; }
+        .active {
+            color: #F7931E;
+            border-bottom: 2px solid #F7931E;
+        }
+        .search-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(103, 232, 249, 0.45);
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+        .dashboard-input {
+            width: 100%;
+            height: 3rem;
+            padding: 0 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 1rem;
+            background: #ffffff;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .dashboard-input:focus {
+            outline: none;
+            border-color: #F7931E;
+            box-shadow: 0 0 0 3px rgba(247, 147, 30, 0.15);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+
+    <header class="bg-white shadow-sm">
+        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-plane text-[#69d7f7] text-2xl"></i>
+                <span class="text-2xl font-bold text-[#69d7f7]">JetSky</span>
+            </div>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="home.html" class="text-gray-700 hover:text-[#F7931E] transition">Inicio</a>
+                <a href="dashboard.html" class="text-[#F7931E] font-medium">Mi Cuenta</a>
+                <a href="#" class="text-gray-700 hover:text-[#F7931E] transition">Cerrar Sesión</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-[#0F172A]">Sección de Usuario</h1>
+
+        <!-- Tabs -->
+        <div class="flex border-b mb-8">
+            <button onclick="switchTab(0)" class="tab-btn active px-8 py-4 font-medium">Buscar Vuelos</button>
+            <button onclick="switchTab(1)" class="tab-btn px-8 py-4 font-medium">Mis Reservas</button>
+            <button onclick="switchTab(2)" class="tab-btn px-8 py-4 font-medium">Historial</button>
+            <button onclick="switchTab(3)" class="tab-btn px-8 py-4 font-medium">Mi Perfil</button>
+        </div>
+
+        <!-- CONTENIDO TABS -->
+
+        <!-- TAB 0: BUSCAR VUELOS -->
+        <div class="tab-content">
+        <div class="search-card max-w-5xl rounded-3xl p-8">
+            <h2 class="text-2xl font-bold text-[#0F172A]">Buscar Vuelos</h2>
+            <p class="text-gray-500 mb-6">Encuentra el vuelo perfecto para tu proximo viaje</p>
+
+            <div class="flex flex-wrap gap-4 mb-6">
+                <button type="button" onclick="setTripType('roundtrip')" id="btn-round" class="px-6 py-3 rounded-2xl font-semibold bg-[#69d7f7] text-white">Ida y vuelta</button>
+                <button type="button" onclick="setTripType('oneway')" id="btn-oneway" class="px-6 py-3 rounded-2xl font-semibold bg-gray-100 text-gray-600">Solo ida</button>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                    <label class="text-sm font-medium block mb-1">Origen</label>
+                    <input class="dashboard-input" placeholder="Ciudad de origen">
+                </div>
+                <div>
+                    <label class="text-sm font-medium block mb-1">Destino</label>
+                    <input class="dashboard-input" placeholder="Ciudad de destino">
+                </div>
+                <div>
+                    <label class="text-sm font-medium block mb-1">Ida</label>
+                    <input type="date" class="dashboard-input">
+                </div>
+                <div id="returnContainer">
+                    <label class="text-sm font-medium block mb-1">Vuelta</label>
+                    <input type="date" class="dashboard-input">
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-4 mt-6">
+                <div>
+                    <label class="text-sm font-medium block mb-1">Pasajeros</label>
+                    <select class="dashboard-input">
+                        <option>1 Pasajero</option>
+                        <option>2 Pasajeros</option>
+                        <option>3 Pasajeros</option>
+                        <option>4 Pasajeros</option>
+                        <option>5+ Pasajeros</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-sm font-medium block mb-1">Clase</label>
+                    <select class="dashboard-input">
+                        <option>Economica</option>
+                        <option>Premium</option>
+                        <option>Business</option>
+                        <option>Primera Clase</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button class="w-full h-12 bg-[#f89f37] hover:bg-[#e68817] text-white rounded-2xl flex items-center justify-center gap-2 font-semibold transition-colors">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- TAB 1: MIS RESERVAS -->
+        <div class="tab-content hidden">
+        <div class="bg-white p-6 rounded-xl shadow">
+            <h2 class="text-xl font-bold">Mis Reservas</h2>
+            <p class="text-gray-500">Aquí aparecerán tus reservas.</p>
+        </div>
+        </div>
+
+        <!-- TAB 2: HISTORIAL -->
+        <div class="tab-content hidden">
+        <div class="bg-white p-6 rounded-xl shadow">
+            <h2 class="text-xl font-bold">Historial</h2>
+            <p class="text-gray-500">Aquí verás tus vuelos anteriores.</p>
+        </div>
+        </div>
+
+        <!-- TAB 3: PERFIL -->
+        <div id="tab-perfil" class="tab-content hidden">
+            <div class="bg-white p-6 rounded-xl shadow">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-3xl text-orange-500"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xs font-medium text-gray-700 mb-1">Mi Perfil</h2>
+                        <p class="text-sm text-gray-500">Actualiza tus datos personales</p>
+                    </div>
+                </div>
+
+           <form id="formPerfil" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <!-- Nombre -->
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                <i class="fas fa-user mr-1 text-orange-500"></i> Nombre completo
+                </label>
+                <input type="text" id="perfil-nombre" 
+                class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm
+                        focus:outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+
+            <!-- Correo -->
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                <i class="fas fa-envelope mr-1 text-orange-500"></i> Correo electrónico
+                </label>
+                <input type="email" id="perfil-correo" 
+                class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm
+                        focus:outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+
+            <!-- Teléfono -->
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                <i class="fas fa-phone mr-1 text-orange-500"></i> Teléfono
+                </label>
+                <input type="tel" id="perfil-tel" 
+                class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm
+                        focus:outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+
+            <!-- Fecha -->
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                <i class="fas fa-calendar-alt mr-1 text-orange-500"></i> Fecha de nacimiento
+                </label>
+                <input type="date" id="perfil-fecha"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm
+                                focus:outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+
+            <!-- Botón -->
+            <button type="button" onclick="guardarPerfil()"
+                class="md:col-span-2 w-full bg-orange-500 hover:bg-orange-600
+                    text-white font-medium py-2 rounded-lg transition
+                    flex items-center justify-center gap-2 mt-2">
+                <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+
+            </form>
+     </div>
+
+        <!-- Contenido de cada tab (se muestra/oculta con JS) -->
+        <!-- Tab 0: Buscar vuelos (igual que en home pero más compacto) -->
+        <!-- Tab 1: Mis Reservas (cards estáticas + botones) -->
+        <!-- Tab 2: Historial -->
+        <!-- Tab 3: Formulario perfil -->
+
+        <!-- Dialogs (modales) se implementan con divs + display none / flex -->
+    </div>
+
+  
+    <script>
+  const STORAGE_KEY = 'jetskyUserProfile';
+
+  function switchTab(index) {
+    const tabs = document.querySelectorAll('.tab-content');
+    const buttons = document.querySelectorAll('.tab-btn');
+
+    tabs.forEach(tab => tab.classList.add('hidden'));
+    buttons.forEach(btn => btn.classList.remove('active'));
+
+    tabs[index].classList.remove('hidden');
+    buttons[index].classList.add('active');
+  }
+
+  function obtenerPerfilGuardado() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function setTripType(type) {
+    const returnContainer = document.getElementById('returnContainer');
+    const btnRound = document.getElementById('btn-round');
+    const btnOneway = document.getElementById('btn-oneway');
+
+    if (!returnContainer || !btnRound || !btnOneway) {
+      return;
+    }
+
+    if (type === 'oneway') {
+      returnContainer.style.display = 'none';
+      btnOneway.classList.add('bg-[#69d7f7]', 'text-white');
+      btnOneway.classList.remove('bg-gray-100', 'text-gray-600');
+      btnRound.classList.remove('bg-[#69d7f7]', 'text-white');
+      btnRound.classList.add('bg-gray-100', 'text-gray-600');
+    } else {
+      returnContainer.style.display = 'block';
+      btnRound.classList.add('bg-[#69d7f7]', 'text-white');
+      btnRound.classList.remove('bg-gray-100', 'text-gray-600');
+      btnOneway.classList.remove('bg-[#69d7f7]', 'text-white');
+      btnOneway.classList.add('bg-gray-100', 'text-gray-600');
+    }
+  }
+
+  function llenarPerfil(perfil) {
+    document.getElementById('perfil-nombre').value = perfil.nombreCompleto || '';
+    document.getElementById('perfil-correo').value = perfil.email || '';
+    document.getElementById('perfil-tel').value = perfil.phone || '';
+    document.getElementById('perfil-fecha').value = perfil.dateOfBirth || '';
+  }
+
+  function guardarPerfil() {
+    const perfilActual = obtenerPerfilGuardado();
+    const perfilActualizado = {
+      ...perfilActual,
+      nombreCompleto: document.getElementById('perfil-nombre').value.trim(),
+      email: document.getElementById('perfil-correo').value.trim(),
+      phone: document.getElementById('perfil-tel').value.trim(),
+      dateOfBirth: document.getElementById('perfil-fecha').value
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(perfilActualizado));
+    alert('Tus cambios se guardaron correctamente.');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    llenarPerfil(obtenerPerfilGuardado());
+    setTripType('roundtrip');
+  });
+</script>
+
+        </body>
+    </html>
