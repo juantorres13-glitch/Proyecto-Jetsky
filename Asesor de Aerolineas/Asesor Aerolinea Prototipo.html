@@ -175,76 +175,35 @@
 
         <!-- GESTIONAR CLIENTES -->
         <div id="gestionar-clientes" class="content-section space-y-6">
+            <!-- Header + Search + Filters -->
             <div class="bg-white p-6 rounded-lg shadow-sm">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                     <h2 class="text-2xl font-bold text-gray-800">Gestionar Clientes</h2>
-                    <button id="add-client-btn" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Agregar Cliente</button>
+                    <button id="add-client-btn" class="btn-primary-sm">+ Nuevo Cliente</button>
                 </div>
 
-                <!-- Search Bar -->
-                <div class="mb-4">
-                    <label for="client-search" class="text-sm font-semibold text-gray-700 mb-2 block">Buscar</label>
-                    <input type="text" id="client-search" placeholder="Buscar por nombre, email o documento..." class="w-full pl-4 pr-4 py-3 border-2 border-gray-300 rounded-lg">
-                </div>
-            </div>
-
-            <!-- Add Client Form -->
-            <div id="add-client-form" class="modal">
-                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-[#87CEEB]">
-                    <h3 class="text-xl font-bold text-[#87CEEB] mb-4">Nuevo Cliente</h3>
-                    <div class="space-y-6">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre Completo</label>
-                                <input type="text" id="form-name" placeholder="Ingrese nombre completo" class="w-full p-3 border-2 border-gray-300 rounded-lg">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Correo Electrónico</label>
-                                <input type="email" id="form-email" placeholder="correo@ejemplo.com" class="w-full p-3 border-2 border-gray-300 rounded-lg">
-                            </div>
-                        </div>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Teléfono</label>
-                                <input type="tel" id="form-phone" placeholder="+57 300 1234567" class="w-full p-3 border-2 border-gray-300 rounded-lg">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Documento</label>
-                                <select id="form-doc-type" class="w-full p-3 border-2 border-gray-300 rounded-lg">
-                                    <option value="CC">Cédula de Ciudadanía</option>
-                                    <option value="TI">Tarjeta de Identidad</option>
-                                    <option value="P.P">Pasaporte</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Número de Documento</label>
-                                <input type="text" id="form-doc-number" placeholder="Ingrese número" class="w-full p-3 border-2 border-gray-300 rounded-lg">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Número de Cuenta</label>
-                                <input type="text" id="form-account" placeholder="Número de cuenta" class="w-full p-3 border-2 border-gray-300 rounded-lg">
-                            </div>
-                        </div>
+                <!-- Search Bar + Filtros -->
+                <div class="search-filter-container">
+                    <div class="search-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="client-search" placeholder="Buscar por nombre, email o documento..." class="search-input">
                     </div>
-                    <div class="mt-6 flex gap-4">
-                        <button id="save-client-btn" class="bg-[#5BC0DE] text-white px-6 py-2 rounded font-semibold hover:bg-[#4AB0CC]">Guardar Cliente</button>
-                        <button onclick="closeAddClientForm()" class="secondary">Cancelar</button>
-                    </div>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" id="frequent-filter">
+                        <span>⭐ Solo clientes frecuentes</span>
+                    </label>
                 </div>
             </div>
 
             <!-- Clients Table -->
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <div class="overflow-x-auto">
-                    <table>
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="table-wrapper">
+                    <table class="clients-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Email</th>
-                                <th>Teléfono</th>
+                                <th>Cliente</th>
+                                <th>Contacto</th>
                                 <th>Documento</th>
                                 <th>Vuelos</th>
                                 <th>Acciones</th>
@@ -257,50 +216,64 @@
                 </div>
             </div>
 
-            <!-- Client Details -->
-            <div id="client-details" class="modal">
-                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-[#87CEEB]">
-                    <h3 class="text-xl font-bold text-[#87CEEB] mb-4">Información del Cliente</h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Nombre Completo</label>
-                                <input id="client-name" class="w-full p-2 border-2 border-gray-300 rounded" disabled>
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Correo Electrónico</label>
-                                <input id="client-email" class="w-full p-2 border-2 border-gray-300 rounded" disabled>
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Teléfono</label>
-                                <input id="client-phone" class="w-full p-2 border-2 border-gray-300 rounded" disabled>
-                            </div>
+            <!-- Add/Edit Client Form - Colapsable -->
+            <div id="add-client-form" class="client-form-container hidden">
+                <div class="form-header">
+                    <div class="form-title-row">
+                        <div>
+                            <h3 id="form-title">Nuevo Cliente</h3>
+                            <p id="form-subtitle">Completa los datos para registrar un nuevo cliente</p>
                         </div>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Tipo de Documento</label>
-                                <select id="client-doc-type" class="w-full p-2 border-2 border-gray-300 rounded" disabled>
-                                    <option value="CC">Cédula de Ciudadanía</option>
-                                    <option value="TI">Tarjeta de Identidad</option>
-                                    <option value="P.P">Pasaporte</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Número de Documento</label>
-                                <input id="client-doc-number" class="w-full p-2 border-2 border-gray-300 rounded" disabled>
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Historial de Vuelos</label>
-                                <p id="client-flights" class="text-gray-800 text-2xl font-bold text-[#87CEEB]"></p>
-                            </div>
-                        </div>
+                        <button type="button" id="close-form-btn" class="close-btn">✕</button>
                     </div>
-                    <div class="mt-6 flex gap-4">
-                        <button id="edit-client-btn" onclick="enableClientEdit()" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Editar</button>
-                        <button id="save-client-btn-details" onclick="saveClientDetails()" class="bg-green-500 text-white px-6 py-2 rounded font-semibold hover:bg-green-600 hidden">Guardar Cambios</button>
-                        <button onclick="viewClientHistory(selectedClient.id)" class="bg-[#87CEEB] text-white px-6 py-2 rounded font-semibold hover:bg-[#7BC6E8]">Ver Historial</button>
-                        <button onclick="closeClientDetails()" class="secondary">Cerrar</button>
+                </div>
+                <form id="client-form" class="client-form-grid">
+                    <div class="form-group">
+                        <label for="form-name">Nombre Completo *</label>
+                        <input type="text" id="form-name" placeholder="Ej: Juan Carlos Rodríguez" required>
                     </div>
+                    <div class="form-group">
+                        <label for="form-phone">Teléfono *</label>
+                        <input type="tel" id="form-phone" placeholder="+57 300 1234567" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-email">Correo Electrónico *</label>
+                        <input type="email" id="form-email" placeholder="correo@ejemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-doc-number">Número de Documento *</label>
+                        <input type="text" id="form-doc-number" placeholder="Ej: 1234567890" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-doc-type">Tipo de Documento *</label>
+                        <select id="form-doc-type" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="P.P">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="form-account">Número de Cuenta</label>
+                        <input type="text" id="form-account" placeholder="Ej: 4532-1234-5678">
+                    </div>
+                    <div class="form-group">
+                        <label for="form-flights">Vuelos registrados</label>
+                        <input type="number" id="form-flights" min="0" step="1" value="0" placeholder="Ej: 6">
+                        <small style="color:#64748b; margin-top:0.25rem; display:block;">Ingresa la cantidad de vuelos. 6 o más marca cliente frecuente.</small>
+                    </div>
+                    <div class="form-group" style="align-items: flex-start; justify-content: flex-start;">
+                        <label for="form-frequent" style="margin-bottom: 0.75rem;">Cliente frecuente</label>
+                        <label style="display:flex; align-items:center; gap:0.5rem; font-weight:600; color:#1f2937;">
+                            <input type="checkbox" id="form-frequent">
+                            Marcar como cliente frecuente manualmente
+                        </label>
+                    </div>
+                    <input type="hidden" id="form-client-id">
+                </form>
+                <div class="form-actions">
+                    <button type="button" id="save-client-btn" class="btn btn-primary">Guardar Cliente</button>
+                    <button type="button" id="cancel-client-btn" class="btn btn-secondary">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -736,153 +709,240 @@
         });
 
         // Gestionar Clientes
-        function renderClients(filter = '') {
+        // GESTIONAR CLIENTES - Sistema Completo
+        let selectedClientId = null;
+
+        // Inicializar clientes desde localStorage o dados por defecto
+        function initClients() {
+            const stored = localStorage.getItem('clients');
+            if (stored) {
+                clients = JSON.parse(stored).map(client => ({
+                    ...client,
+                    isFrequent: client.isFrequent || false
+                }));
+            } else {
+                // Datos iniciales (C003 tiene 12 vuelos - es cliente frecuente)
+                clients = [
+                    { id: 'C001', name: 'Juan Pérez', email: 'juan.perez@email.com', phone: '+57 300 1234567', documentType: 'CC', documentNumber: '1234567890', account: '4532-1111-1111', flightHistory: 5, isFrequent: false },
+                    { id: 'C002', name: 'María García', email: 'maria.garcia@email.com', phone: '+57 310 9876543', documentType: 'CC', documentNumber: '9876543210', account: '4532-2222-2222', flightHistory: 3, isFrequent: false },
+                    { id: 'C003', name: 'Carlos Rodríguez', email: 'carlos.rodriguez@email.com', phone: '+57 320 5555555', documentType: 'P.P', documentNumber: 'AB1234567', account: '4532-3333-3333', flightHistory: 12, isFrequent: false },
+                    { id: 'C004', name: 'Ana Martínez', email: 'ana.martinez@email.com', phone: '+57 315 7777777', documentType: 'CC', documentNumber: '5555555555', account: '4532-4444-4444', flightHistory: 1, isFrequent: false }
+                ];
+                saveClients();
+            }
+        }
+
+        // Guardar clientes en localStorage
+        function saveClients() {
+            localStorage.setItem('clients', JSON.stringify(clients));
+        }
+
+        // Renderizar tabla de clientes con todas las características
+        function renderClients(filter = '', frequentOnly = false) {
             const tbody = document.getElementById('clients-tbody');
-            const filtered = clients.filter(c => 
-                c.name.toLowerCase().includes(filter.toLowerCase()) ||
-                c.email.toLowerCase().includes(filter.toLowerCase()) ||
-                c.documentNumber.includes(filter)
-            );
+            let filtered = clients;
 
-            tbody.innerHTML = filtered.map(client => `
-                <tr>
-                    <td>${client.id}</td>
-                    <td style="font-weight: 600;">${client.name}</td>
-                    <td style="color: #4b5563;">${client.email}</td>
-                    <td style="color: #4b5563;">${client.phone}</td>
-                    <td>${client.documentType} ${client.documentNumber}</td>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 0.5rem; color: #87CEEB;">
-                            <span style="font-weight: bold;">Vuelos:</span>
-                            <span style="font-weight: 600; font-size: 0.875rem;">${client.flightHistory}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <button onclick="viewClientDetails('${client.id}')" class="action-icon view" title="Ver cliente">👁️</button>
-                        <button onclick="editClient('${client.id}')" class="action-icon" style="background: #d3efff; color: #006994;" title="Editar cliente">✏️</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function viewClientDetails(id) {
-            const client = clients.find(c => c.id === id);
-            if (client) {
-                selectedClient = client;
-                document.getElementById('client-name').value = client.name;
-                document.getElementById('client-email').value = client.email;
-                document.getElementById('client-phone').value = client.phone;
-                document.getElementById('client-doc-type').value = client.documentType;
-                document.getElementById('client-doc-number').value = client.documentNumber;
-                document.getElementById('client-flights').textContent = client.flightHistory;
-
-                document.getElementById('client-name').disabled = true;
-                document.getElementById('client-email').disabled = true;
-                document.getElementById('client-phone').disabled = true;
-                document.getElementById('client-doc-type').disabled = true;
-                document.getElementById('client-doc-number').disabled = true;
-
-                document.getElementById('edit-client-btn').classList.remove('hidden');
-                document.getElementById('save-client-btn-details').classList.add('hidden');
-
-                document.getElementById('client-details').classList.add('show');
-            }
-        }
-
-        function enableClientEdit() {
-            if (!selectedClient) return;
-            document.getElementById('client-name').disabled = false;
-            document.getElementById('client-email').disabled = false;
-            document.getElementById('client-phone').disabled = false;
-            document.getElementById('client-doc-type').disabled = false;
-            document.getElementById('client-doc-number').disabled = false;
-
-            document.getElementById('edit-client-btn').classList.add('hidden');
-            document.getElementById('save-client-btn-details').classList.remove('hidden');
-        }
-
-        function saveClientDetails() {
-            if (!selectedClient) return;
-            const name = document.getElementById('client-name').value.trim();
-            const email = document.getElementById('client-email').value.trim();
-            const phone = document.getElementById('client-phone').value.trim();
-            const docType = document.getElementById('client-doc-type').value;
-            const docNumber = document.getElementById('client-doc-number').value.trim();
-
-            if (!name || !email || !phone || !docNumber) {
-                alert('Por favor complete todos los campos antes de guardar.');
-                return;
+            // Aplicar filtro de búsqueda
+            if (filter.trim()) {
+                filtered = filtered.filter(c => 
+                    c.name.toLowerCase().includes(filter.toLowerCase()) ||
+                    c.email.toLowerCase().includes(filter.toLowerCase()) ||
+                    c.documentNumber.includes(filter)
+                );
             }
 
-            selectedClient.name = name;
-            selectedClient.email = email;
-            selectedClient.phone = phone;
-            selectedClient.documentType = docType;
-            selectedClient.documentNumber = docNumber;
+            // Aplicar filtro de clientes frecuentes
+            if (frequentOnly) {
+                filtered = filtered.filter(c => c.flightHistory > 5 || c.isFrequent);
+            }
 
-            renderClients();
-            document.getElementById('client-name').disabled = true;
-            document.getElementById('client-email').disabled = true;
-            document.getElementById('client-phone').disabled = true;
-            document.getElementById('client-doc-type').disabled = true;
-            document.getElementById('client-doc-number').disabled = true;
-
-            document.getElementById('edit-client-btn').classList.remove('hidden');
-            document.getElementById('save-client-btn-details').classList.add('hidden');
-            alert('Información del cliente actualizada correctamente.');
+            tbody.innerHTML = filtered.map(client => {
+                const isFrequent = client.flightHistory > 5 || client.isFrequent;
+                const frequentBadge = isFrequent ? '⭐' : '';
+                
+                return `
+                    <tr>
+                        <td>${client.id}</td>
+                        <td>
+                            <div class="client-name">
+                                ${client.name}
+                                ${frequentBadge ? `<span class="client-frequent-badge">${frequentBadge}</span>` : ''}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-cell">
+                                <div>${client.phone}</div>
+                                <div class="contact-email">
+                                    <a href="mailto:${client.email}" title="Enviar email">${client.email}</a>
+                                    <a href="mailto:${client.email}" class="email-icon" title="Enviar email">✉️</a>
+                                    <a href="https://wa.me/${client.phone.replace(/\D/g, '')}" target="_blank" class="whatsapp-icon" title="Enviar WhatsApp">💬</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${client.documentType} ${client.documentNumber}</td>
+                        <td>
+                            <div class="flight-badge">
+                                🛫 ${client.flightHistory}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" onclick="editClient('${client.id}')" title="Editar cliente">✏️</button>
+                                <button class="action-btn" onclick="toggleFrequent('${client.id}')" title="Alternar cliente frecuente">${isFrequent ? '⭐' : '☆'}</button>
+                                <button class="action-btn delete" onclick="deleteClient('${client.id}')" title="Eliminar cliente">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
 
-        function closeClientDetails() {
-            document.getElementById('client-details').classList.remove('show');
+        // Mostrar formulario para agregar nuevo cliente
+        function showAddClientForm() {
+            selectedClientId = null;
+            document.getElementById('form-title').textContent = 'Nuevo Cliente';
+            document.getElementById('form-subtitle').textContent = 'Completa los datos para registrar un nuevo cliente';
+            document.getElementById('client-form').reset();
+            document.getElementById('form-client-id').value = '';
+            document.getElementById('form-frequent').checked = false;
+            document.getElementById('add-client-form').classList.remove('hidden');
+            document.getElementById('form-name').focus();
         }
 
-        function viewClientHistory(id) {
+        // Cerrar formulario
+        function closeAddClientForm() {
+            document.getElementById('add-client-form').classList.add('hidden');
+            selectedClientId = null;
+        }
+
+        // Editar cliente
+        function editClient(id) {
             const client = clients.find(c => c.id === id);
             if (!client) return;
-            const message = `Historial de ${client.name}:\n- Vuelo(s) registrados: ${client.flightHistory} \n- Último viaje: 2026-03-15`;
-            alert(message);
+
+            selectedClientId = id;
+            document.getElementById('form-title').textContent = 'Editar Cliente';
+            document.getElementById('form-subtitle').textContent = `Modificación de datos para: ${client.name}`;
+            
+            document.getElementById('form-name').value = client.name;
+            document.getElementById('form-phone').value = client.phone;
+            document.getElementById('form-email').value = client.email;
+            document.getElementById('form-doc-number').value = client.documentNumber;
+            document.getElementById('form-doc-type').value = client.documentType;
+            document.getElementById('form-account').value = client.account || '';
+            document.getElementById('form-flights').value = client.flightHistory ?? 0;
+            document.getElementById('form-frequent').checked = Boolean(client.isFrequent);
+            document.getElementById('form-client-id').value = id;
+
+            document.getElementById('add-client-form').classList.remove('hidden');
+            document.getElementById('form-name').focus();
         }
 
-        document.getElementById('add-client-btn')?.addEventListener('click', () => {
-            document.getElementById('add-client-form').classList.add('show');
-        });
-
-        function closeAddClientForm() {
-            document.getElementById('add-client-form').classList.remove('show');
-        }
-
-        document.getElementById('save-client-btn')?.addEventListener('click', () => {
-            const name = document.getElementById('form-name').value;
-            const email = document.getElementById('form-email').value;
-            const phone = document.getElementById('form-phone').value;
+        // Guardar cliente (nuevo o editar)
+        function saveClient() {
+            const name = document.getElementById('form-name').value.trim();
+            const phone = document.getElementById('form-phone').value.trim();
+            const email = document.getElementById('form-email').value.trim();
+            const docNumber = document.getElementById('form-doc-number').value.trim();
             const docType = document.getElementById('form-doc-type').value;
-            const docNumber = document.getElementById('form-doc-number').value;
+            const account = document.getElementById('form-account').value.trim();
+            let flightHistory = parseInt(document.getElementById('form-flights').value, 10);
+            if (Number.isNaN(flightHistory) || flightHistory < 0) {
+                flightHistory = 0;
+            }
 
-            if (!name || !email || !phone || !docNumber) {
-                alert('Por favor complete todos los campos obligatorios');
+            // Validar campos obligatorios
+            if (!name || !phone || !email || !docNumber || !docType) {
+                alert('Por favor complete todos los campos obligatorios (marcados con *)');
                 return;
             }
 
-            const newClient = {
-                id: `C${String(clients.length + 1).padStart(3, '0')}`,
-                name, email, phone, documentType: docType, documentNumber: docNumber, flightHistory: 0
-            };
+            // Validar email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor ingrese un email válido');
+                return;
+            }
 
-            clients.push(newClient);
-            alert('Cliente agregado exitosamente');
-            
-            document.getElementById('form-name').value = '';
-            document.getElementById('form-email').value = '';
-            document.getElementById('form-phone').value = '';
-            document.getElementById('form-doc-number').value = '';
-            
+            const clientId = document.getElementById('form-client-id').value;
+
+            const manualFrequent = document.getElementById('form-frequent').checked;
+            if (clientId) {
+                // Editar cliente existente
+                const client = clients.find(c => c.id === clientId);
+                if (client) {
+                    client.name = name;
+                    client.phone = phone;
+                    client.email = email;
+                    client.documentNumber = docNumber;
+                    client.documentType = docType;
+                    client.account = account;
+                    client.flightHistory = flightHistory;
+                    client.isFrequent = manualFrequent;
+                    alert('Cliente actualizado exitosamente');
+                }
+            } else {
+                // Crear nuevo cliente
+                const newId = `C${String(clients.length + 1).padStart(3, '0')}`;
+                clients.push({
+                    id: newId,
+                    name,
+                    phone,
+                    email,
+                    documentNumber: docNumber,
+                    documentType: docType,
+                    account,
+                    flightHistory,
+                    isFrequent: manualFrequent
+                });
+                alert('Cliente agregado exitosamente');
+            }
+
+            saveClients();
             closeAddClientForm();
             renderClients();
+        }
+
+        function toggleFrequent(id) {
+            const client = clients.find(c => c.id === id);
+            if (!client) return;
+            client.isFrequent = !client.isFrequent;
+            saveClients();
+            renderClients(document.getElementById('client-search').value, document.getElementById('frequent-filter').checked);
+        }
+
+        // Eliminar cliente con confirmación
+        function deleteClient(id) {
+            const client = clients.find(c => c.id === id);
+            if (!client) return;
+
+            if (confirm(`¿Está seguro que desea eliminar al cliente "${client.name}"? Esta acción no se puede deshacer.`)) {
+                clients = clients.filter(c => c.id !== id);
+                saveClients();
+                renderClients();
+                alert('Cliente eliminado exitosamente');
+            }
+        }
+
+        // Event listeners para formulario
+        document.getElementById('add-client-btn')?.addEventListener('click', showAddClientForm);
+        document.getElementById('close-form-btn')?.addEventListener('click', closeAddClientForm);
+        document.getElementById('cancel-client-btn')?.addEventListener('click', closeAddClientForm);
+        document.getElementById('save-client-btn')?.addEventListener('click', saveClient);
+
+        // Búsqueda en tiempo real
+        document.getElementById('client-search')?.addEventListener('input', (e) => {
+            const frequentOnly = document.getElementById('frequent-filter').checked;
+            renderClients(e.target.value, frequentOnly);
         });
 
-        document.getElementById('client-search')?.addEventListener('input', (e) => {
-            renderClients(e.target.value);
+        // Filtro de clientes frecuentes
+        document.getElementById('frequent-filter')?.addEventListener('change', (e) => {
+            const searchValue = document.getElementById('client-search').value;
+            renderClients(searchValue, e.target.checked);
         });
+
+        // Inicializar clientes al cargar
 
         // Confirmar Pagos
         function renderPayments() {
@@ -1064,6 +1124,7 @@
         renderFlightCards();
         populateFlightSelector();
         renderReservations();
+        initClients();
         renderClients();
         renderPayments();
         renderSeatMap();
