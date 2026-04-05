@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -143,7 +143,7 @@
                 <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#69d7f7] focus:outline-none focus:ring-2 focus:ring-[#69d7f7]">
                     Cuenta
                 </button>
-                <a href="register.html"><button class="bg-[#f89f37] hover:bg-[#e68817] text-white px-6 py-3 rounded-xl font-medium">Registrarse</button></a>
+                <a id="registerLink" href="register.html"><button class="bg-[#f89f37] hover:bg-[#e68817] text-white px-6 py-3 rounded-xl font-medium">Registrarse</button></a>
             </div>
         </nav>
     </header>
@@ -181,6 +181,68 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="flightDetailsModal" class="account-modal hidden">
+      <div class="account-modal-panel">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-[#0F172A]">Detalles del vuelo</h2>
+            <p class="text-sm text-gray-500">Revisa la información antes de reservar.</p>
+          </div>
+          <button id="closeFlightDetailsModal" type="button" class="text-gray-500 hover:text-[#69d7f7] text-xl">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="space-y-4 text-gray-700">
+          <div class="account-field">
+            <p class="text-xs uppercase tracking-widest text-gray-400">Vuelo</p>
+            <p id="detailFlightNumber" class="font-semibold">JS-0000</p>
+          </div>
+          <div class="account-field">
+            <p class="text-xs uppercase tracking-widest text-gray-400">Ruta</p>
+            <p id="detailRoute" class="font-semibold">Bogotá → París</p>
+          </div>
+          <div class="account-field grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-widest text-gray-400">Fecha</p>
+              <p id="detailDate" class="font-semibold">01/01/2026</p>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-widest text-gray-400">Hora</p>
+              <p id="detailTime" class="font-semibold">08:00</p>
+            </div>
+          </div>
+          <div class="account-field grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-widest text-gray-400">Duración</p>
+              <p id="detailDuration" class="font-semibold">3h 30m</p>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-widest text-gray-400">Clase</p>
+              <p id="detailClass" class="font-semibold">Económica</p>
+            </div>
+          </div>
+          <div class="account-field grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-widest text-gray-400">Avión</p>
+              <p id="detailAircraft" class="font-semibold">Airbus A320</p>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-widest text-gray-400">Precio</p>
+              <p id="detailPrice" class="font-semibold text-[#f89f37]">$450.000</p>
+            </div>
+          </div>
+          <div class="account-field">
+            <p class="text-xs uppercase tracking-widest text-gray-400">Asientos disponibles</p>
+            <p id="detailSeatsAvailable" class="font-semibold">20</p>
+          </div>
+          <div class="mt-6 text-right">
+            <p id="detailModalHint" class="text-sm text-gray-500 mb-4">Puedes ver los detalles del vuelo aunque no estés registrado.</p>
+            <button id="detailActionButton" type="button" class="w-full bg-[#f89f37] hover:bg-[#e68817] text-white px-6 py-3 rounded-2xl font-semibold">Reservar</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Hero + Search -->
@@ -408,7 +470,7 @@
         </div>
 
         </div>
-        <a href="register.html">
+        <a class="registerAction" href="register.html">
         <button class="bg-orange-400 hover:bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold">
         Crear Mi Cuenta
         </button>
@@ -633,7 +695,7 @@
       <p class="text-lg mb-6 text-gray-600">
         Regístrate y recibe 10% de descuento adicional en tu primer paquete turístico
       </p>
-      <a href="register.html">
+      <a class="registerAction" href="register.html">
         <button class="bg-[#f89f37] hover:bg-[#e68817] text-white px-8 py-3 rounded-lg font-semibold">
         Registrarme Ahora
         </button>
@@ -653,19 +715,100 @@
         tailwind.config = { theme: { extend: { colors: { primary: '#F7931E' } } } };
 
         // Función generateFlightResults (exacta al original)
+        let currentFlightResults = [];
+        const classLabels = { economy: 'Económica', premium: 'Premium', business: 'Business', first: 'Primera Clase' };
+
         function generateFlightResults(origin, destination, date, flightClass) {
             const basePrice = 450000;
             const multipliers = { economy: 1, premium: 1.5, business: 2.5, first: 4 };
+            const departureTimes = ['08:00', '10:30', '13:15', '18:45'];
+            const arrivalTimes = ['11:15', '14:40', '16:00', '23:05'];
+            const durations = ['3h 15m', '4h 10m', '2h 45m', '4h 20m'];
+            const aircrafts = ['Airbus A320', 'Boeing 737 MAX', 'Airbus A330', 'Boeing 787 Dreamliner'];
+            const seatsAvailable = [18, 12, 9, 22];
+            const routeOrigin = origin || 'Bogotá';
+            const routeDestination = destination || 'París';
             const multiplier = multipliers[flightClass] || 1;
-            
+
             return [
-                { id: "FLIGHT001", flightNumber: "JS-4782", origin: origin || "Bogotá", destination: destination || "París", date, departureTime: "08:00", price: Math.floor(basePrice * multiplier) },
-                { id: "FLIGHT002", flightNumber: "JS-9123", origin: origin || "Bogotá", destination: destination || "París", date, departureTime: "12:30", price: Math.floor((basePrice - 80000) * multiplier) },
-                // ... (se repiten los 4 vuelos del original)
+                {
+                    id: 'FLIGHT001', flightNumber: 'JS-4782', origin: routeOrigin, destination: routeDestination, date,
+                    departureTime: departureTimes[0], arrivalTime: arrivalTimes[0], duration: durations[0], aircraft: aircrafts[0],
+                    seatsAvailable: seatsAvailable[0], seatClass: classLabels[flightClass] || 'Económica',
+                    price: Math.floor(basePrice * multiplier)
+                },
+                {
+                    id: 'FLIGHT002', flightNumber: 'JS-9123', origin: routeOrigin, destination: routeDestination, date,
+                    departureTime: departureTimes[1], arrivalTime: arrivalTimes[1], duration: durations[1], aircraft: aircrafts[1],
+                    seatsAvailable: seatsAvailable[1], seatClass: classLabels[flightClass] || 'Económica',
+                    price: Math.floor((basePrice - 80000) * multiplier)
+                },
+                {
+                    id: 'FLIGHT003', flightNumber: 'JS-2035', origin: routeOrigin, destination: routeDestination, date,
+                    departureTime: departureTimes[2], arrivalTime: arrivalTimes[2], duration: durations[2], aircraft: aircrafts[2],
+                    seatsAvailable: seatsAvailable[2], seatClass: classLabels[flightClass] || 'Económica',
+                    price: Math.floor((basePrice + 50000) * multiplier)
+                },
+                {
+                    id: 'FLIGHT004', flightNumber: 'JS-5501', origin: routeOrigin, destination: routeDestination, date,
+                    departureTime: departureTimes[3], arrivalTime: arrivalTimes[3], duration: durations[3], aircraft: aircrafts[3],
+                    seatsAvailable: seatsAvailable[3], seatClass: classLabels[flightClass] || 'Económica',
+                    price: Math.floor((basePrice + 120000) * multiplier)
+                }
             ];
         }
 
-        // Evento del formulario
+        function isUserLoggedIn() {
+            return Boolean(loadAccountInfo());
+        }
+
+        function toggleFlightDetails(flightId) {
+            const details = document.getElementById(`flightDetails-${flightId}`);
+            if (details) {
+                details.classList.toggle('hidden');
+            }
+        }
+
+        function showFlightDetailsModal(flight) {
+            const modal = document.getElementById('flightDetailsModal');
+            document.getElementById('detailFlightNumber').textContent = flight.flightNumber;
+            document.getElementById('detailRoute').textContent = `${flight.origin} → ${flight.destination}`;
+            document.getElementById('detailDate').textContent = flight.date;
+            document.getElementById('detailTime').textContent = `${flight.departureTime} - ${flight.arrivalTime}`;
+            document.getElementById('detailDuration').textContent = flight.duration;
+            document.getElementById('detailClass').textContent = flight.seatClass;
+            document.getElementById('detailAircraft').textContent = flight.aircraft;
+            document.getElementById('detailPrice').textContent = `$${flight.price.toLocaleString('es-CO')}`;
+            document.getElementById('detailSeatsAvailable').textContent = `${flight.seatsAvailable} asientos disponibles`;
+
+            const actionButton = document.getElementById('detailActionButton');
+            const hintText = document.getElementById('detailModalHint');
+            const profile = loadAccountInfo();
+
+            if (profile) {
+                actionButton.textContent = 'Reservar ahora';
+                hintText.textContent = 'Ya estás registrado. Completa la reserva en el siguiente paso.';
+                actionButton.onclick = () => {
+                    alert('Reserva completada. ¡Gracias por volar con JetSky!');
+                    closeFlightDetails();
+                };
+            } else {
+                actionButton.textContent = 'Registrarse para reservar';
+                hintText.textContent = 'Puedes ver los detalles sin estar registrado. Regístrate para reservar.';
+                actionButton.onclick = () => {
+                    window.location.href = 'register.html';
+                };
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function reserveFlight(flightId) {
+            const flight = currentFlightResults.find(item => item.id === flightId);
+            if (!flight) return;
+            showFlightDetailsModal(flight);
+        }
+
         document.getElementById('searchForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const origin = document.getElementById('origin').value;
@@ -678,26 +821,41 @@
                 return;
             }
 
-            const results = generateFlightResults(origin, destination, date, flightClass);
+            currentFlightResults = generateFlightResults(origin, destination, date, flightClass);
             const container = document.getElementById('flightsContainer');
             container.innerHTML = '';
 
-            results.forEach(flight => {
+            currentFlightResults.forEach(flight => {
+                const totalPrice = flight.price * (parseInt(document.getElementById('passengers').value, 10) || 1);
                 const cardHTML = `
-                <div class="bg-white border-2 border-gray-200 hover:border-[#69d7f7] rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">✈️</span>
-                            <span class="font-bold text-xl">${flight.flightNumber}</span>
+                <div class="bg-white rounded-3xl shadow-lg p-6 cursor-pointer hover:border-[#69d7f7] border border-transparent">
+                    <div class="flex flex-col md:flex-row justify-between gap-4">
+                        <div>
+                            <p class="font-bold text-xl text-[#0F172A]">${flight.flightNumber}</p>
+                            <p class="text-gray-600">${flight.origin} → ${flight.destination}</p>
+                            <p class="text-sm text-gray-500 mt-2">${flight.date} • ${flight.departureTime} - ${flight.arrivalTime}</p>
                         </div>
-                        <p class="text-gray-600 mt-2">${flight.origin} → ${flight.destination}</p>
-                        <p class="text-sm text-gray-500">${flight.date} • ${flight.departureTime}</p>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-[#f89f37]">$${flight.price.toLocaleString('es-CO')}</p>
+                            <p class="text-sm text-gray-500">Por pasajero</p>
+                        </div>
                     </div>
-                    <div class="text-right">
-                        <p class="text-3xl font-bold text-[#f89f37]">$${flight.price.toLocaleString('es-CO')}</p>
-                        <p class="text-xs text-gray-500">COP por persona</p>
-                        <button onclick="alert('Redirigiendo a registro...'); window.location='register.html'" 
-                                class="mt-4 bg-[#f89f37] hover:bg-[#e68817] text-white px-8 py-3 rounded-2xl">Reservar ahora</button>
+                    <div class="grid sm:grid-cols-2 gap-4 mt-6 text-sm text-gray-600">
+                        <div class="space-y-2">
+                            <p><strong>Clase:</strong> ${flight.seatClass}</p>
+                            <p><strong>Duración:</strong> ${flight.duration}</p>
+                        </div>
+                        <div class="space-y-2 text-right sm:text-left">
+                            <p><strong>Avión:</strong> ${flight.aircraft}</p>
+                            <p><strong>Asientos:</strong> ${flight.seatsAvailable} disponibles</p>
+                        </div>
+                    </div>
+                    <div class="mt-5 border-t pt-4 flex justify-between items-center text-sm text-gray-500">
+                        <span>${parseInt(document.getElementById('passengers').value, 10) || 1} pasajero(s)</span>
+                        <span class="font-semibold text-[#0F172A]">Total: $${totalPrice.toLocaleString('es-CO')}</span>
+                    </div>
+                    <div class="mt-4">
+                        <button onclick="reserveFlight('${flight.id}')" class="w-full bg-[#f89f37] hover:bg-[#e68817] text-white py-2 rounded-lg font-semibold">Reservar</button>
                     </div>
                 </div>`;
                 container.innerHTML += cardHTML;
@@ -754,6 +912,7 @@
         // Inicializa el estado de botones al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
             setTripType('roundtrip');
+            updateHeaderForAccount();
         });
 
         // Lógica de selector de roles dentro del área de Perfil
@@ -802,6 +961,9 @@
         const accountEmail = document.getElementById('accountEmail');
         const accountPhone = document.getElementById('accountPhone');
         const accountRole = document.getElementById('accountRole');
+        const registerLink = document.getElementById('registerLink');
+        const flightDetailsModal = document.getElementById('flightDetailsModal');
+        const closeFlightDetailsModal = document.getElementById('closeFlightDetailsModal');
 
         function loadAccountInfo() {
             const savedProfile = localStorage.getItem('jetskyUserProfile');
@@ -810,6 +972,18 @@
                 return JSON.parse(savedProfile);
             } catch (error) {
                 return null;
+            }
+        }
+
+        function updateHeaderForAccount() {
+            // Mantener el botón de registro visible para nuevos usuarios.
+            // Si el usuario ya está registrado, igual puede ver la opción de crear otra cuenta.
+            return;
+        }
+
+        function closeFlightDetails() {
+            if (flightDetailsModal) {
+                flightDetailsModal.classList.add('hidden');
             }
         }
 
@@ -831,6 +1005,9 @@
         closeAccountModal.addEventListener('click', () => {
             accountModal.classList.add('hidden');
         });
+        if (closeFlightDetailsModal) {
+            closeFlightDetailsModal.addEventListener('click', closeFlightDetails);
+        }
 
         document.addEventListener('click', (event) => {
             if (!profileToggle.contains(event.target) && !roleDropdown.contains(event.target)) {

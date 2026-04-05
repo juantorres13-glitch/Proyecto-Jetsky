@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetSky - Vuela a cualquier destino</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        :root { --primary: #F7931E; --secondary: #69d7f7; --dark: #0F172A; }
+
+        /* FLUJO GENERAL */
+        .section { display: none; } .section.active { display: block; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); z-index: 40; display: flex; align-items: center; justify-content: center; }
+        .modal-overlay.hidden { display: none; }
+
+        /* FILTROS CATÁLOGO */
+        .catalog-filter-active { color: var(--secondary); }
+        .catalog-hidden { display: none; }
+
+        /* PERFIL Y ROLES */
+        .role-dropdown, .account-modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.48); display: flex; align-items: center; justify-content: center; z-index: 60; }
+        .role-dropdown.dropdown-mode { position: absolute; right: 0; top: 100%; inset: auto; background: white; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12); width: 14rem; margin-top: 0.75rem; }
+        .role-dropdown.hidden, .account-modal-overlay.hidden { display: none; }
+
+        .role-option { width: 100%; text-align: left; padding: 0.85rem 1rem; font-size: 0.95rem; color: var(--dark); background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+        .role-option:hover, .role-option-active { background: #eff6ff; }
+
+        .role-badge { background: #dbeafe; color: #1d4ed8; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 9999px; }
+
+        .account-modal { width: 100%; max-width: 32rem; background: white; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18); }
+        .account-field { background: #f8fafc; border-radius: 1rem; padding: 1rem; }
+
+        /* RESULTADOS Y DETALLES */
+        .flight-card { background: white; border: 2px solid #e5e7eb; border-radius: 1rem; padding: 1.5rem; cursor: pointer; transition: all 0.3s; }
+        .flight-card:hover { border-color: var(--secondary); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+
+        /* ASIENTOS */
+        .seat-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; }
+        .seat { width: 42px; height: 42px; border-radius: 0.5rem; border: 2px solid #d1d5db; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; transition: all 0.2s; }
+        .seat.available { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .seat.available:hover { scale: 1.1; background: #a7f3d0; }
+        .seat.occupied { background: #e5e7eb; border-color: #9ca3af; cursor: not-allowed; }
+        .seat.selected { background: var(--secondary); border-color: #0891b2; color: white; scale: 1.15; }
+
+        /* FORMA DE PAGO */
+        .payment-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .payment-summary { position: sticky; top: 2rem; background: #f8fafc; border-radius: 1rem; padding: 1.5rem; }
+
+        /* PASOS */
+        .step-indicator { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .step-number { width: 40px; height: 40px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--dark); }
+        .step-number.active { background: var(--secondary); color: white; }
+        .step-line { flex: 1; height: 2px; background: #e5e7eb; margin: 0 1rem; }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+
+    <!-- HEADER CON NAVEGACIÓN -->
+    <header class="bg-white shadow-sm">
+        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-plane text-[#69d7f7] text-2xl"></i>
+                <span class="text-2xl font-bold text-[#69d7f7]">JetSky</span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-10">
+                <button type="button" onclick="filterCatalogSection('alojamiento')" data-section-filter="alojamiento" class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium">
+                    <i class="fas fa-hotel text-base"></i>Alojamiento
+                </button>
+                <button type="button" onclick="filterCatalogSection('paquetes')" data-section-filter="paquetes" class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium">
+                   <i class="fas fa-suitcase"></i>Paquetes
+                </button>
+                <button type="button" onclick="filterCatalogSection('ofertas')" data-section-filter="ofertas" class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium">
+                    <i class="fas fa-fire"></i>Ofertas
+                </button>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <button id="profileToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium flex items-center gap-2 hover:border-[#69d7f7]" aria-expanded="false">
+                        <span id="activeRoleLabel" class="font-semibold">Cliente</span>
+                        <i class="fa-solid fa-chevron-down text-sm"></i>
+                    </button>
+                    <div id="roleDropdown" class="role-dropdown hidden dropdown-mode">
+                        <button type="button" class="role-option role-option-active" data-role="Cliente">
+                            <span>Cliente</span>
+                            <span class="role-badge">Activo</span>
+                        </button>
+                        <button type="button" class="role-option" data-role="Asesor de aerolínea">
+                            <span>Asesor</span>
+                        </button>
+                        <button type="button" class="role-option" data-role="Administrativo">
+                            <span>Admin</span>
+                        </button>
+                    </div>
+                </div>
+                <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#69d7f7]">Cuenta</button>
+                <button onclick="goToSection('register')" class="bg-[#f89f37] hover:bg-[#e68817] text-white px-6 py-3 rounded-xl font-medium">Registrarse</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MODAL DE CUENTA -->
+    <div id="accountModalOverlay" class="account-modal-overlay hidden">
+        <div class="account-modal">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-[#0F172A]">Mi cuenta</h2>
+                    <p class="text-sm text-gray-500">Tus datos guardados en JetSky.</p>
+                </div>
+                <button onclick="closeAccountModal()" class="text-gray-500 hover:text-[#69d7f7] text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="account-field">
+                    <p class="text-xs uppercase text-gray-400">Nombre</p>
+                    <p id="accountName" class="font-semibold">Usuario</p>
+                </div>
+                <div class="account-field">
+                    <p class="text-xs uppercase text-gray-400">Email</p>
+                    <p id="accountEmail" class="font-semibold">usuario@ejemplo.com</p>
+                </div>
+                <div class="account-field">
+                    <p class="text-xs uppercase text-gray-400">Teléfono</p>
+                    <p id="accountPhone" class="font-semibold">+57 000 000 0000</p>
+                </div>
+                <div class="account-field flex items-center justify-between">
+                    <div>
+                        <p class="text-xs uppercase text-gray-400">Rol</p>
+                        <p id="accountRole" class="font-semibold">Cliente</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-[#dbeafe] text-[#1d4ed8] text-sm font-semibold">Activo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN: INICIO (HOME) -->
+    <section id="home" class="section active relative py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h1 class="text-5xl md:text-6xl font-bold leading-tight">Vuela a Cualquier<br><span class="text-[#69d7f7]">Destino Soñado</span></h1>
+                <p class="text-xl text-gray-600 mt-4">Descubre el mundo con JetSky. Más de 200 destinos esperándote.</p>
+            </div>
+
+            <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl p-8">
+                <form id="searchForm" onsubmit="searchFlights(event)">
+                    <div class="flex gap-4 mb-6">
+                        <button type="button" onclick="setTripType('roundtrip')" id="btn-round" class="px-6 py-3 rounded-2xl font-semibold bg-[#69d7f7] text-white">Ida y vuelta</button>
+                        <button type="button" onclick="setTripType('oneway')" id="btn-oneway" class="px-6 py-3 rounded-2xl font-semibold bg-gray-100 text-gray-600">Solo ida</button>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            <label class="text-sm font-medium block mb-1">Origen</label>
+                            <select id="origin" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
+                                <option value="">Ciudad de origen</option>
+                                <option value="bogota">Bogotá (BOG)</option>
+                                <option value="cali">Cali (CLO)</option>
+                                <option value="medellin">Medellín (MDE)</option>
+                                <option value="madrid">Madrid (MAD)</option>
+                                <option value="barcelona">Barcelona (BCN)</option>
+                                <option value="newyork">Nueva York (JFK)</option>
+                                <option value="rome">Río de Janeiro (GIG)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium block mb-1">Destino</label>
+                            <select id="destination" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
+                                <option value="">Ciudad de destino</option>
+                                 <option value="rome">Cartagena (CTG)</option>
+                                <option value="paris">París (CDG)</option>
+                                <option value="london">Londres (LHR)</option>
+                                <option value="tokyo">Tokio (HND)</option>
+                                <option value="dubai">Dubái (DXB)</option>
+                                <option value="sydney">Madrid(MAD)</option>
+                                <option value="newyork">Roma (FCO)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium block mb-1">Ida</label>
+                            <input id="departureDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
+                        </div>
+                        <div id="returnContainer">
+                            <label class="text-sm font-medium block mb-1">Vuelta</label>
+                            <input id="returnDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-4 mt-6">
+                        <div>
+                            <label class="text-sm font-medium block mb-1">Pasajeros</label>
+                            <select id="passengers" class="w-full h-12 px-4 border rounded-2xl">
+                                <option value="1">1 Pasajero</option>
+                                <option value="2">2 Pasajeros</option>
+                                <option value="3">3 Pasajeros</option>
+                                <option value="4">4 Pasajeros</option>
+                                <option value="5">5+ Pasajeros</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium block mb-1">Clase</label>
+                            <select id="flightClass" class="w-full h-12 px-4 border rounded-2xl">
+                                <option value="economy">Económica</option>
+                                <option value="premium">Premium</option>
+                                <option value="business">Business</option>
+                                <option value="first">Primera Clase</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" class="w-full h-12 bg-[#f89f37] hover:bg-[#e68817] text-white rounded-2xl flex items-center justify-center gap-2 font-semibold">
+                                <i class="fa-solid fa-magnifying-glass"></i>Buscar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: RESULTADOS DE VUELOS -->
+    <section id="results" class="section py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <button onclick="goToSection('home')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
+                <i class="fa-solid fa-arrow-left"></i>Volver a búsqueda
+            </button>
+            <h2 class="text-3xl font-bold mb-6 text-[#0F172A]">Vuelos disponibles</h2>
+            <div id="flightsContainer" class="space-y-4"></div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: DETALLES DEL VUELO -->
+    <section id="flight-details" class="section py-12">
+        <div class="max-w-5xl mx-auto px-4">
+            <button onclick="goToSection('results')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
+                <i class="fa-solid fa-arrow-left"></i>Volver a resultados
+            </button>
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-center mb-10 text-[#0F172A]">Resumen de tu Vuelo</h2>
+                <div id="detailsInfo" class="grid md:grid-cols-2 gap-10 mb-12"></div>
+                <div class="border-t pt-8">
+                    <h3 class="font-bold text-xl mb-6 text-[#0F172A]">Servicios incluidos</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Equipaje de mano (10kg)</span></div>
+                        <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Equipaje de bodega (23kg)</span></div>
+                        <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Selección de asiento</span></div>
+                        <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Snacks y bebidas</span></div>
+                    </div>
+                </div>
+                <div class="mt-12 flex justify-between">
+                    <button onclick="goToSection('results')" class="px-8 py-3 border border-gray-300 rounded-2xl">Cancelar</button>
+                    <button onclick="goToSection('seats')" class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-3 rounded-2xl font-semibold">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: SELECCIÓN DE ASIENTOS -->
+    <section id="seats" class="section py-12">
+        <div class="max-w-5xl mx-auto px-4">
+            <button onclick="goToSection('flight-details')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
+                <i class="fa-solid fa-arrow-left"></i>Volver
+            </button>
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-center mb-8 text-[#0F172A]">Selecciona tus asientos</h2>
+                <div class="mb-6">
+                    <div class="flex justify-center gap-12 mb-8">
+                        <div class="flex items-center gap-2"><div class="w-6 h-6 bg-[#d1fae5] border-2 border-[#10b981] rounded"></div><span>Disponible</span></div>
+                        <div class="flex items-center gap-2"><div class="w-6 h-6 bg-[#e5e7eb] border-2 border-[#9ca3af] rounded"></div><span>Ocupado</span></div>
+                        <div class="flex items-center gap-2"><div class="w-6 h-6 bg-[#69d7f7] border-2 border-[#0891b2] rounded"></div><span>Seleccionado</span></div>
+                    </div>
+                </div>
+                <div id="seatsGrid" class="flex justify-center mb-8"></div>
+                <div class="text-center mb-8">
+                    <p class="text-lg font-semibold">Asientos seleccionados: <span id="selectedSeatsCount">0</span>/<span id="totalPassengers">1</span></p>
+                </div>
+                <div class="flex justify-between">
+                    <button onclick="goToSection('flight-details')" class="px-8 py-3 border border-gray-300 rounded-2xl">Atrás</button>
+                    <button onclick="continueToPassenger()" class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-3 rounded-2xl font-semibold">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: DATOS DEL PASAJERO -->
+    <section id="passenger" class="section py-12">
+        <div class="max-w-3xl mx-auto px-4">
+            <button onclick="goToSection('seats')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
+                <i class="fa-solid fa-arrow-left"></i>Volver
+            </button>
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-center mb-8 text-[#0F172A]">Información del Pasajero</h2>
+                <form id="passengerForm" onsubmit="savePassenger(event)">
+                    <div class="space-y-4">
+                        <input type="text" id="passengerName" placeholder="Nombre completo" class="w-full px-4 py-3 border rounded-lg" required>
+                        <input type="email" id="passengerEmail" placeholder="Email" class="w-full px-4 py-3 border rounded-lg" required>
+                        <input type="tel" id="passengerPhone" placeholder="Teléfono" class="w-full px-4 py-3 border rounded-lg" required>
+                        <input type="text" id="passengerDocument" placeholder="Número de documento" class="w-full px-4 py-3 border rounded-lg" required>
+                    </div>
+                    <div class="flex justify-between mt-8">
+                        <button type="button" onclick="goToSection('seats')" class="px-8 py-3 border border-gray-300 rounded-2xl">Atrás</button>
+                        <button type="submit" class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-3 rounded-2xl font-semibold">Continuar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: PAGO -->
+    <section id="payment" class="section py-12">
+        <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8">
+            <div class="md:col-span-2">
+                <button onclick="goToSection('passenger')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
+                    <i class="fa-solid fa-arrow-left"></i>Volver
+                </button>
+                <div class="bg-white rounded-3xl shadow-xl p-8">
+                    <h2 class="text-3xl font-bold mb-8 text-[#0F172A]">Forma de Pago</h2>
+                    <form id="paymentForm" onsubmit="processPayment(event)">
+                        <div class="space-y-4">
+                            <input type="text" id="cardNumber" placeholder="Número de tarjeta" maxlength="19" class="w-full px-4 py-3 border rounded-lg" required>
+                            <input type="text" id="cardName" placeholder="Nombre en la tarjeta" class="w-full px-4 py-3 border rounded-lg" required>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" id="cardExpiry" placeholder="MM/AA" class="px-4 py-3 border rounded-lg" required>
+                                <input type="text" id="cardCvv" placeholder="CVV" maxlength="3" class="px-4 py-3 border rounded-lg" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full mt-6 bg-[#f89f37] hover:bg-[#e68817] text-white py-3 rounded-2xl font-semibold">Pagar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="payment-summary">
+                <h3 class="font-bold text-lg mb-4">Resumen</h3>
+                <div id="summaryDetails" class="space-y-2 text-sm mb-4 pb-4 border-b">
+                    <p><strong>Vuelo:</strong> <span id="summaryFlight">-</span></p>
+                    <p><strong>Ruta:</strong> <span id="summaryRoute">-</span></p>
+                    <p><strong>Pasajeros:</strong> <span id="summaryPassengers">1</span></p>
+                    <p><strong>Asientos:</strong> <span id="summarySeats">-</span></p>
+                </div>
+                <p class="text-xl font-bold">Total: $<span id="totalPrice">0</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: CONFIRMACIÓN -->
+    <section id="confirmation" class="section py-12">
+        <div class="max-w-3xl mx-auto px-4">
+            <div class="bg-white rounded-3xl shadow-xl p-12 text-center">
+                <div class="mb-8">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-check text-4xl text-green-600"></i>
+                    </div>
+                    <h2 class="text-4xl font-bold text-green-600 mb-2">¡Reserva Confirmada!</h2>
+                    <p class="text-xl text-gray-600">Código: <strong id="confirmationCode">-</strong></p>
+                </div>
+                <div id="confirmationDetails" class="space-y-4 mb-8 pb-8 border-b text-left"></div>
+                <div class="bg-blue-50 rounded-lg p-4 mb-8">
+                    <p class="text-sm text-gray-600">Te hemos enviado un correo de confirmación a <strong id="confirmEmail">-</strong></p>
+                </div>
+                <button onclick="goToSection('home')" class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-3 rounded-2xl font-semibold">Volver al Inicio</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: REGISTRO (REUTILIZAR SI EXISTE) -->
+    <section id="register" class="section py-12">
+        <div class="max-w-3xl mx-auto px-4">
+            <button onclick="goToSection('home')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
+                <i class="fa-solid fa-arrow-left"></i>Volver
+            </button>
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold mb-6 text-[#0F172A]">Crear Mi Cuenta</h2>
+                <form id="registerForm" onsubmit="registerUser(event)">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <input type="text" id="regFirstName" placeholder="Nombre" class="px-4 py-3 border rounded-lg" required>
+                        <input type="text" id="regLastName" placeholder="Apellido" class="px-4 py-3 border rounded-lg" required>
+                    </div>
+                    <input type="email" id="regEmail" placeholder="Email" class="w-full px-4 py-3 border rounded-lg mt-4" required>
+                    <input type="tel" id="regPhone" placeholder="Teléfono" class="w-full px-4 py-3 border rounded-lg mt-4" required>
+                    <div class="grid md:grid-cols-2 gap-4 mt-4">
+                        <input type="password" id="regPassword" placeholder="Contraseña (min 8 caracteres)" class="px-4 py-3 border rounded-lg" required>
+                        <input type="password" id="regPasswordConfirm" placeholder="Confirmar contraseña" class="px-4 py-3 border rounded-lg" required>
+                    </div>
+                    <div class="flex items-center gap-2 mt-4">
+                        <input type="checkbox" id="regTerms" required>
+                        <label for="regTerms" class="text-sm">Acepto términos y condiciones</label>
+                    </div>
+                    <button type="submit" class="w-full mt-6 bg-[#f89f37] hover:bg-[#e68817] text-white py-3 rounded-2xl font-semibold">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ===== VARIABLES GLOBALES =====
+        let currentFlight = {}, selectedSeats = [], searchData = {}, tripType = 'roundtrip';
+        const roleNames = {'Cliente':'Cliente', 'Asesor de aerolínea':'Asesor', 'Administrativo':'Admin'};
+
+        // ===== NAVEGACIÓN SECCIONES =====
+        function goToSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // ===== BÚSQUEDA DE VUELOS =====
+        function searchFlights(e) {
+            e.preventDefault();
+            searchData = {
+                origin: document.getElementById('origin').value,
+                destination: document.getElementById('destination').value,
+                date: document.getElementById('departureDate').value,
+                passengers: parseInt(document.getElementById('passengers').value, 10) || 1,
+                class: document.getElementById('flightClass').value
+            };
+            localStorage.setItem('searchData', JSON.stringify(searchData));
+
+            const flights = generateFlights(searchData.origin, searchData.destination, searchData.date, searchData.class);
+            renderFlights(flights);
+            goToSection('results');
+        }
+
+        function generateFlights(origin, dest, date, cls) {
+            const basePrice = 450000;
+            const multipliers = {economy:1, premium:1.5, business:2.5, first:4};
+            const durations = ['6h 30m', '6h 15m', '6h 20m'];
+            const aircrafts = ['Airbus A320', 'Boeing 737 MAX', 'Airbus A330'];
+            const seatClass = {economy:'Económica', premium:'Premium', business:'Business', first:'Primera Clase'}[cls] || 'Económica';
+            const m = multipliers[cls] || 1;
+            return [
+                {id:1, flightNumber:'JS-4782', origin, destination:dest, date, departureTime:'08:00', arrivalTime:'14:30', duration:durations[0], aircraft:aircrafts[0], seatClass, price:Math.floor(basePrice * m), seats:15},
+                {id:2, flightNumber:'JS-9123', origin, destination:dest, date, departureTime:'12:30', arrivalTime:'18:45', duration:durations[1], aircraft:aircrafts[1], seatClass, price:Math.floor((basePrice-80000) * m), seats:8},
+                {id:3, flightNumber:'JS-5614', origin, destination:dest, date, departureTime:'18:00', arrivalTime:'00:20', duration:durations[2], aircraft:aircrafts[2], seatClass, price:Math.floor((basePrice-50000) * m), seats:20}
+            ];
+        }
+
+        function renderFlights(flights) {
+            const container = document.getElementById('flightsContainer');
+            container.innerHTML = flights.map(f => {
+                const totalPrice = f.price * (searchData.passengers || 1);
+                return `
+                <div class="flight-card bg-white rounded-3xl shadow-lg p-6 cursor-pointer hover:border-[#69d7f7] border border-transparent" onclick="selectFlight(${f.id}, '${f.flightNumber}', '${f.origin}', '${f.destination}', ${f.price})">
+                    <div class="flex flex-col md:flex-row justify-between gap-4">
+                        <div>
+                            <p class="font-bold text-xl text-[#0F172A]">${f.flightNumber}</p>
+                            <p class="text-gray-600">${f.origin} → ${f.destination}</p>
+                            <p class="text-sm text-gray-500 mt-2">${f.date} • ${f.departureTime} - ${f.arrivalTime}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-[#f89f37]">$${f.price.toLocaleString('es-CO')}</p>
+                            <p class="text-sm text-gray-500">Por pasajero</p>
+                        </div>
+                    </div>
+                    <div class="grid sm:grid-cols-2 gap-4 mt-6 text-sm text-gray-600">
+                        <div class="space-y-2">
+                            <p><strong>Clase:</strong> ${f.seatClass}</p>
+                            <p><strong>Duración:</strong> ${f.duration}</p>
+                        </div>
+                        <div class="space-y-2 text-right sm:text-left">
+                            <p><strong>Avión:</strong> ${f.aircraft}</p>
+                            <p><strong>Asientos:</strong> ${f.seats} disponibles</p>
+                        </div>
+                    </div>
+                    <div class="mt-5 border-t pt-4 flex justify-between items-center text-sm text-gray-500">
+                        <span>${searchData.passengers} pasajero(s)</span>
+                        <span class="font-semibold text-[#0F172A]">Total: $${totalPrice.toLocaleString('es-CO')}</span>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function selectFlight(id, number, origin, dest, price) {
+            currentFlight = {id, flightNumber: number, origin, destination: dest, price};
+            localStorage.setItem('selectedFlight', JSON.stringify(currentFlight));
+
+            const totalPrice = price * (searchData.passengers || 1);
+            const info = `
+            <div>
+                <div class="flex items-center gap-4"><i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
+                <div><p class="text-sm text-gray-500">Vuelo</p><p class="text-2xl font-bold">${number}</p></div></div>
+                <div class="flex items-center gap-4 mt-4"><i class="fa-solid fa-map-marker-alt text-4xl text-[#69d7f7]"></i>
+                <div><p class="text-sm text-gray-500">Ruta</p><p class="text-2xl font-bold">${origin} → ${dest}</p></div></div>
+            </div>
+            <div class="bg-blue-50 rounded-2xl p-6">
+                <p class="text-base text-gray-500">Precio por pasajero</p>
+                <p class="text-3xl font-bold text-[#f89f37]">$${price.toLocaleString('es-CO')}</p>
+                <p class="text-sm text-gray-600 mt-2">${searchData.passengers} pasajero(s)</p>
+                <p class="text-sm font-semibold text-[#0F172A] mt-2">Total: $${totalPrice.toLocaleString('es-CO')}</p>
+            </div>
+            `;
+            document.getElementById('detailsInfo').innerHTML = info;
+            goToSection('flight-details');
+        }
+
+        // ===== ASIENTOS =====
+        function initSeats() {
+            const total = parseInt(searchData.passengers || 1);
+            document.getElementById('totalPassengers').textContent = total;
+            const seatsHTML = [];
+            const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+            const occupied = [2, 5, 8, 12, 15];
+
+            for(let i = 1; i <= 20; i++) {
+                seatsHTML.push('<div class="flex justify-center gap-1 mb-1">');
+                for(let j = 0; j < 7; j++) {
+                    const seatId = rows[j] + i;
+                    const isOccupied = occupied.includes(i) && j === 2;
+                    seatsHTML.push(`<button type="button" class="seat ${isOccupied ? 'occupied' : 'available'}" data-seat="${seatId}" onclick="selectSeat(this)">${rows[j]}</button>`);
+                }
+                seatsHTML.push('</div>');
+            }
+            document.getElementById('seatsGrid').innerHTML = seatsHTML.join('');
+        }
+
+        function selectSeat(btn) {
+            const total = parseInt(document.getElementById('totalPassengers').textContent);
+            if(btn.classList.contains('occupied')) return;
+
+            btn.classList.toggle('selected');
+            const seatId = btn.dataset.seat;
+            selectedSeats = Array.from(document.querySelectorAll('.seat.selected')).map(s => s.dataset.seat);
+            document.getElementById('selectedSeatsCount').textContent = selectedSeats.length;
+
+            if(selectedSeats.length > total) {
+                btn.classList.remove('selected');
+                selectedSeats = selectedSeats.slice(0, -1);
+                document.getElementById('selectedSeatsCount').textContent = selectedSeats.length;
+                alert(`Solo puedes seleccionar ${total} asiento(s)`);
+            }
+        }
+
+        function continueToPassenger() {
+            const total = parseInt(document.getElementById('totalPassengers').textContent);
+            if(selectedSeats.length !== total) {
+                alert('Selecciona todos los asientos');
+                return;
+            }
+            localStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
+            goToSection('passenger');
+        }
+
+        // ===== PASAJERO =====
+        function savePassenger(e) {
+            e.preventDefault();
+            const passenger = {
+                name: document.getElementById('passengerName').value,
+                email: document.getElementById('passengerEmail').value,
+                phone: document.getElementById('passengerPhone').value,
+                document: document.getElementById('passengerDocument').value
+            };
+            localStorage.setItem('passengerData', JSON.stringify(passenger));
+
+            const total = currentFlight.price * searchData.passengers;
+            document.getElementById('summaryFlight').textContent = currentFlight.flightNumber;
+            document.getElementById('summaryRoute').textContent = `${currentFlight.origin} → ${currentFlight.destination}`;
+            document.getElementById('summaryPassengers').textContent = searchData.passengers;
+            document.getElementById('summarySeats').textContent = selectedSeats.join(', ');
+            document.getElementById('totalPrice').textContent = total.toLocaleString('es-CO');
+            goToSection('payment');
+        }
+
+        // ===== PAGO =====
+        function processPayment(e) {
+            e.preventDefault();
+            const confirmCode = 'JET' + Math.random().toString().slice(2, 8);
+            const passenger = JSON.parse(localStorage.getItem('passengerData') || '{}');
+
+            document.getElementById('confirmationCode').textContent = confirmCode;
+            document.getElementById('confirmEmail').textContent = passenger.email || '-';
+
+            const details = `
+            <p><strong>Vuelo:</strong> ${currentFlight.flightNumber}</p>
+            <p><strong>Ruta:</strong> ${currentFlight.origin} → ${currentFlight.destination}</p>
+            <p><strong>Asientos:</strong> ${selectedSeats.join(', ')}</p>
+            <p><strong>Pasajero:</strong> ${passenger.name || '-'}</p>
+            <p class="text-xl font-bold mt-4">Total: $${(currentFlight.price * searchData.passengers).toLocaleString('es-CO')}</p>
+            `;
+            document.getElementById('confirmationDetails').innerHTML = details;
+            goToSection('confirmation');
+        }
+
+        // ===== REGISTRO =====
+        function registerUser(e) {
+            e.preventDefault();
+            const pwd = document.getElementById('regPassword').value;
+            const pwdConfirm = document.getElementById('regPasswordConfirm').value;
+            if(pwd !== pwdConfirm || pwd.length < 8) {
+                alert('Las contraseñas no coinciden o son muy cortas');
+                return;
+            }
+
+            const profile = {
+                nombreCompleto: document.getElementById('regFirstName').value + ' ' + document.getElementById('regLastName').value,
+                email: document.getElementById('regEmail').value,
+                phone: document.getElementById('regPhone').value
+            };
+            localStorage.setItem('jetskyUserProfile', JSON.stringify(profile));
+            alert('¡Registro exitoso!');
+            goToSection('home');
+        }
+
+        // ===== ROLES Y PERFIL =====
+        document.getElementById('profileToggle').addEventListener('click', () => {
+            const isOpen = document.getElementById('roleDropdown').classList.contains('hidden');
+            document.getElementById('roleDropdown').classList.toggle('hidden', !isOpen);
+        });
+
+        document.querySelectorAll('.role-option').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const role = btn.dataset.role;
+                document.getElementById('activeRoleLabel').textContent = roleNames[role];
+                document.querySelectorAll('.role-option').forEach(b => b.classList.remove('role-option-active'));
+                document.querySelectorAll('.role-badge').forEach(b => b.remove());
+                btn.classList.add('role-option-active');
+                const badge = document.createElement('span');
+                badge.className = 'role-badge';
+                badge.textContent = 'Activo';
+                btn.appendChild(badge);
+                document.getElementById('roleDropdown').classList.add('hidden');
+            });
+        });
+
+        function loadAccountInfo() {
+            const profile = JSON.parse(localStorage.getItem('jetskyUserProfile') || 'null');
+            if(!profile) {
+                window.location.href = 'register.html';
+                return;
+            }
+            document.getElementById('accountName').textContent = profile.nombreCompleto || '-';
+            document.getElementById('accountEmail').textContent = profile.email || '-';
+            document.getElementById('accountPhone').textContent = profile.phone || '-';
+            document.getElementById('accountRole').textContent = document.getElementById('activeRoleLabel').textContent;
+            document.getElementById('accountModalOverlay').classList.remove('hidden');
+        }
+
+        function closeAccountModal() { document.getElementById('accountModalOverlay').classList.add('hidden'); }
+        document.getElementById('accountToggle').addEventListener('click', loadAccountInfo);
+
+        // ===== UTILIDADES =====
+        function setTripType(type) {
+            tripType = type;
+            const ret = document.getElementById('returnContainer');
+            ret.style.display = type === 'oneway' ? 'none' : 'block';
+        }
+
+        function filterCatalogSection(id) {
+            console.log('Catálogo:', id); // Placeholder para futuro
+        }
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', () => {
+            setTripType('roundtrip');
+            document.getElementById('seats').addEventListener('click', initSeats, {once: true});
+        });
+
+        // Cerrar selectors con clic fuera
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('#profileToggle') && !e.target.closest('#roleDropdown')) {
+                document.getElementById('roleDropdown').classList.add('hidden');
+            }
+            if(!e.target.closest('#accountToggle') && !e.target.closest('#accountModalOverlay')) {
+                document.getElementById('accountModalOverlay').classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
