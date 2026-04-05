@@ -21,6 +21,80 @@
         .catalog-hidden {
             display: none;
         }
+
+        /* Perfil y cambio de roles */
+        .role-dropdown {
+            position: absolute;
+            right: 0;
+            margin-top: 0.75rem;
+            width: 14rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+            z-index: 50;
+        }
+
+        .role-option {
+            width: 100%;
+            text-align: left;
+            padding: 0.85rem 1rem;
+            font-size: 0.95rem;
+            color: #0f172a;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .role-option:hover,
+        .role-option-active {
+            background: #eff6ff;
+            color: #0f172a;
+        }
+
+        .role-badge {
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+        }
+
+        .account-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.48);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            z-index: 60;
+        }
+
+        .account-modal.hidden {
+            display: none;
+        }
+
+        .account-modal-panel {
+            width: 100%;
+            max-width: 32rem;
+            background: #ffffff;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18);
+        }
+
+        .account-field {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -48,11 +122,66 @@
                 </button>
             </div>
             <div class="flex items-center gap-4">
-                <a href="register.html"><button class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium">Perfil</button></a>
+                <div class="relative">
+                    <button id="profileToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium flex items-center gap-2 hover:border-[#69d7f7] focus:outline-none focus:ring-2 focus:ring-[#69d7f7]" aria-expanded="false" aria-haspopup="menu">
+                        <span id="activeRoleLabel" class="font-semibold">Cliente</span>
+                        <i class="fa-solid fa-chevron-down text-sm"></i>
+                    </button>
+                    <div id="roleDropdown" class="role-dropdown hidden">
+                        <button type="button" class="role-option role-option-active" data-role="Cliente">
+                            <span>Cliente</span>
+                            <span class="role-badge">Activo</span>
+                        </button>
+                        <button type="button" class="role-option" data-role="Asesor de aerolínea">
+                            <span>Asesor</span>
+                        </button>
+                        <button type="button" class="role-option" data-role="Administrativo">
+                            <span>Admin</span>
+                        </button>
+                    </div>
+                </div>
+                <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#69d7f7] focus:outline-none focus:ring-2 focus:ring-[#69d7f7]">
+                    Cuenta
+                </button>
                 <a href="register.html"><button class="bg-[#f89f37] hover:bg-[#e68817] text-white px-6 py-3 rounded-xl font-medium">Registrarse</button></a>
             </div>
         </nav>
     </header>
+
+    <div id="accountModal" class="account-modal hidden">
+        <div class="account-modal-panel">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-[#0F172A]">Mi cuenta</h2>
+                    <p class="text-sm text-gray-500">Tus datos guardados en JetSky.</p>
+                </div>
+                <button id="closeAccountModal" type="button" class="text-gray-500 hover:text-[#69d7f7] text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-4 text-gray-700">
+                <div class="account-field">
+                    <p class="text-xs uppercase tracking-widest text-gray-400">Nombre completo</p>
+                    <p id="accountName" class="font-semibold">Usuario</p>
+                </div>
+                <div class="account-field">
+                    <p class="text-xs uppercase tracking-widest text-gray-400">Correo</p>
+                    <p id="accountEmail" class="font-semibold">usuario@ejemplo.com</p>
+                </div>
+                <div class="account-field">
+                    <p class="text-xs uppercase tracking-widest text-gray-400">Teléfono</p>
+                    <p id="accountPhone" class="font-semibold">+57 300 000 0000</p>
+                </div>
+                <div class="account-field flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-gray-400">Rol actual</p>
+                        <p id="accountRole" class="font-semibold">Cliente</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-[#dbeafe] text-[#1d4ed8] text-sm font-semibold">Activo</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero + Search -->
     <section class="relative py-12">
@@ -148,11 +277,11 @@
     </section>
 
   
-   <!-- Características -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-  <h2 class="text-3xl font-bold text-center mb-12 text-[#0F172A]">
-    ¿Por Qué Elegir JetSky?
-  </h2>
+          <!-- Características -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 class="text-3xl font-bold text-center mb-12 text-[#0F172A]">
+        ¿Por Qué Elegir JetSky?
+        </h2>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 
@@ -625,6 +754,93 @@
         // Inicializa el estado de botones al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
             setTripType('roundtrip');
+        });
+
+        // Lógica de selector de roles dentro del área de Perfil
+        const profileToggle = document.getElementById('profileToggle');
+        const roleDropdown = document.getElementById('roleDropdown');
+        const activeRoleLabel = document.getElementById('activeRoleLabel');
+        const roleButtons = document.querySelectorAll('.role-option');
+
+        const roleNames = {
+            'Cliente': 'Cliente',
+            'Asesor de aerolínea': 'Asesor',
+            'Administrativo': 'Admin'
+        };
+
+        profileToggle.addEventListener('click', () => {
+            const isOpen = !roleDropdown.classList.contains('hidden');
+            roleDropdown.classList.toggle('hidden', isOpen);
+            profileToggle.setAttribute('aria-expanded', String(!isOpen));
+        });
+
+        roleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const role = button.getAttribute('data-role');
+                activeRoleLabel.textContent = roleNames[role] || role;
+
+                roleButtons.forEach(btn => {
+                    btn.classList.remove('role-option-active');
+                    const badge = btn.querySelector('.role-badge');
+                    if (badge) badge.remove();
+                });
+
+                button.classList.add('role-option-active');
+                const badge = document.createElement('span');
+                badge.className = 'role-badge';
+                badge.textContent = 'Activo';
+                button.appendChild(badge);
+                roleDropdown.classList.add('hidden');
+                profileToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        const accountToggle = document.getElementById('accountToggle');
+        const accountModal = document.getElementById('accountModal');
+        const closeAccountModal = document.getElementById('closeAccountModal');
+        const accountName = document.getElementById('accountName');
+        const accountEmail = document.getElementById('accountEmail');
+        const accountPhone = document.getElementById('accountPhone');
+        const accountRole = document.getElementById('accountRole');
+
+        function loadAccountInfo() {
+            const savedProfile = localStorage.getItem('jetskyUserProfile');
+            if (!savedProfile) return null;
+            try {
+                return JSON.parse(savedProfile);
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function openAccountModal() {
+            const profile = loadAccountInfo();
+            if (!profile) {
+                window.location.href = 'register.html';
+                return;
+            }
+
+            accountName.textContent = profile.nombreCompleto || `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || 'Cliente';
+            accountEmail.textContent = profile.email || 'No disponible';
+            accountPhone.textContent = profile.phone || 'No disponible';
+            accountRole.textContent = activeRoleLabel.textContent || 'Cliente';
+            accountModal.classList.remove('hidden');
+        }
+
+        accountToggle.addEventListener('click', openAccountModal);
+        closeAccountModal.addEventListener('click', () => {
+            accountModal.classList.add('hidden');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!profileToggle.contains(event.target) && !roleDropdown.contains(event.target)) {
+                roleDropdown.classList.add('hidden');
+                profileToggle.setAttribute('aria-expanded', 'false');
+            }
+
+            if (!accountModal.contains(event.target) && !accountToggle.contains(event.target)) {
+                accountModal.classList.add('hidden');
+            }
         });
     </script>
 </body>
