@@ -266,13 +266,13 @@
                             <label class="text-sm font-medium block mb-1">Origen</label>
                             <select id="origin" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
                                 <option value="">Ciudad de origen</option>
-                                <option value="bogota">Bogotá (BOG)</option>
-                                <option value="cali">Cali (CLO)</option>
-                                <option value="medellin">Medellín (MDE)</option>
-                                <option value="madrid">Madrid (MAD)</option>
-                                <option value="barcelona">Barcelona (BCN)</option>
-                                <option value="newyork">Nueva York (JFK)</option>
-                                <option value="rome">Río de Janeiro (GIG)</option>
+                                <option value="Bogotá">Bogotá (BOG)</option>
+                                <option value="Cali">Cali (CLO)</option>
+                                <option value="Medellín">Medellín (MDE)</option>
+                                <option value="Madrid">Madrid (MAD)</option>
+                                <option value="Barcelona">Barcelona (BCN)</option>
+                                <option value="Nueva York">Nueva York (JFK)</option>
+                                <option value="Río de Janeiro">Río de Janeiro (GIG)</option>
                                 <!-- más opciones según original -->
                             </select>
                         </div>
@@ -280,13 +280,13 @@
                             <label class="text-sm font-medium block mb-1">Destino</label>
                             <select id="destination" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
                                 <option value="">Ciudad de destino</option>
-                                <option value="rome">Cartagena (CTG)</option>
-                                <option value="paris">París (CDG)</option>
-                                <option value="london">Londres (LHR)</option>
-                                <option value="tokyo">Tokio (HND)</option>
-                                <option value="dubai">Dubái (DXB)</option>
-                                <option value="sydney">Madrid(MAD)</option>
-                                <option value="newyork">Roma (FCO)</option>
+                                <option value="Cartagena">Cartagena (CTG)</option>
+                                <option value="París">París (CDG)</option>
+                                <option value="Londres">Londres (LHR)</option>
+                                <option value="Tokio">Tokio (HND)</option>
+                                <option value="Dubái">Dubái (DXB)</option>
+                                <option value="Madrid">Madrid (MAD)</option>
+                                <option value="Roma">Roma (FCO)</option>
                                 <!-- más opciones -->
                             </select>
                         </div>
@@ -806,7 +806,18 @@
         function reserveFlight(flightId) {
             const flight = currentFlightResults.find(item => item.id === flightId);
             if (!flight) return;
-            showFlightDetailsModal(flight);
+
+            const searchData = {
+                origin: document.getElementById('origin').value,
+                destination: document.getElementById('destination').value,
+                date: document.getElementById('departureDate').value,
+                passengers: parseInt(document.getElementById('passengers').value, 10) || 1,
+                class: document.getElementById('flightClass').value
+            };
+
+            localStorage.setItem('homeSearchData', JSON.stringify(searchData));
+            localStorage.setItem('homeSelectedFlight', JSON.stringify(flight));
+            window.location.href = 'index-integrated.html';
         }
 
         document.getElementById('searchForm').addEventListener('submit', function(e) {
