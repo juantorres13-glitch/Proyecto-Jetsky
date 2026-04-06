@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Gestión</title>
+  <link rel="stylesheet" href="CssAdmin/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <header class="top-header">
+      <button class="btn btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        Crear
+      </button>
+    </header>
+
+    <div class="main-layout">
+      
+      <aside class="sidebar">
+        <button class="nav-item active" onclick="cambiarPestana('clientes', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="nav-text">Clientes</span>
+        </button>
+        
+        <button class="nav-item" onclick="cambiarPestana('reservas', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.2-1.1.6L3 8l6 4-3 3-3.5-.5L1 16l4.5 2L10 21l1.5-1.5-.5-3.5 3-3 4 6l1.2-.7c.4-.2.7-.6.6-1.1Z"/></svg>
+          <span class="nav-text">Reservas</span>
+        </button>
+        
+        <button class="nav-item" onclick="cambiarPestana('tiquetes', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+          <span class="nav-text">Tiquetes</span>
+        </button>
+
+        <button class="nav-item" onclick="cambiarPestana('paquetes', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          <span class="nav-text">Paquetes</span>
+        </button>
+
+        <button class="nav-item" onclick="cambiarPestana('ubicacion', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span class="nav-text">Ubicación</span>
+        </button>
+
+        <button class="nav-item" onclick="cambiarPestana('reportes', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          <span class="nav-text">Reportes</span>
+        </button>
+      </aside>
+
+      <main class="content-area">
+        
+        <div id="clientes" class="tab-content active">
+          <h1 class="page-title">Gestión de Clientes</h1>
+          <p class="page-subtitle">Administra la información de tus clientes</p>
+          </div>
+
+        <div id="reservas" class="tab-content">
+          <h1 class="page-title">Gestión de Reservas</h1>
+          <p class="page-subtitle">Administra las reservas de viajes</p>
+        </div>
+
+        <div id="tiquetes" class="tab-content">
+          <h1 class="page-title">Gestión de Tiquetes</h1>
+          <p class="page-subtitle">Administra los tiquetes aéreos</p>
+        </div>
+
+        <div id="paquetes" class="tab-content">
+          <h1 class="page-title">Gestión de Paquetes Turísticos</h1>
+          <p class="page-subtitle">Administra los paquetes de viaje disponibles</p>
+        </div>
+
+        <div id="ubicacion" class="tab-content">
+          <h1 class="page-title">Gestión de Ubicaciones</h1>
+          <p class="page-subtitle">Administra las oficinas y puntos de atención</p>
+        </div>
+
+        <div id="reportes" class="tab-content">
+          <h1 class="page-title">Reportes y Análisis</h1>
+          <p class="page-subtitle">Visualiza las métricas y estadísticas del negocio</p>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function cambiarPestana(idSeccion, elementoBoton) {
+      // 1. Quitar la clase 'active' de todos los botones
+      const botones = document.querySelectorAll('.nav-item');
+      botones.forEach(boton => boton.classList.remove('active'));
+
+      // 2. Agregar la clase 'active' al botón clickeado
+      elementoBoton.classList.add('active');
+
+      // 3. Ocultar todos los contenidos
+      const contenidos = document.querySelectorAll('.tab-content');
+      contenidos.forEach(contenido => contenido.classList.remove('active'));
+
+      // 4. Mostrar el contenido correspondiente
+      document.getElementById(idSeccion).classList.add('active');
+    }
+  </script>
+</body>
+</html>
