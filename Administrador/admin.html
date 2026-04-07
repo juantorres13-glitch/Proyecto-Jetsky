@@ -34,7 +34,7 @@
         </button>
         
         <button class="nav-item" onclick="cargarSeccion('tiquetes', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
           <span class="nav-text">Tiquetes</span>
         </button>
 
@@ -63,6 +63,7 @@
   <script src="js/clientes.js"></script>
   <script src="js/reservas.js"></script>
   <script src="js/tiquetes.js"></script>
+  <script src="js/paquetes.js"></script>
   
   <script>
     async function cargarSeccion(nombreArchivo, elementoBoton) {
@@ -93,6 +94,9 @@
           if (typeof renderReservas === 'function') renderReservas();
         } else if (nombreArchivo === 'tiquetes') {
           if (typeof renderTiquetes === 'function') renderTiquetes();
+        } else if (nombreArchivo === 'paquetes') {
+          // Aquí agregamos la condición para que ejecute el JS de paquetes
+          if (typeof renderPaquetes === 'function') renderPaquetes();
         }
 
       } catch (error) {
