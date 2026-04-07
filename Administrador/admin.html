@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel de Gestión</title>
   <link rel="stylesheet" href="css/style.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -34,7 +36,7 @@
         </button>
         
         <button class="nav-item" onclick="cargarSeccion('tiquetes', this)">
-          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
           <span class="nav-text">Tiquetes</span>
         </button>
 
@@ -65,10 +67,10 @@
   <script src="js/tiquetes.js"></script>
   <script src="js/paquetes.js"></script>
   <script src="js/ubicacion.js"></script>
+  <script src="js/reportes.js"></script> 
   
   <script>
     async function cargarSeccion(nombreArchivo, elementoBoton) {
-      // 1. Quitar la clase active a todos los botones y ponérsela al que le dimos clic
       const botones = document.querySelectorAll('.nav-item');
       botones.forEach(boton => boton.classList.remove('active'));
       elementoBoton.classList.add('active');
@@ -77,31 +79,22 @@
       contenedor.innerHTML = '<p class="text-muted" style="text-align:center; padding:2rem;">Cargando...</p>';
 
       try {
-        // 2. Traer el archivo HTML correspondiente
         const respuesta = await fetch(`${nombreArchivo}.html`);
         
         if (!respuesta.ok) {
           throw new Error(`Error HTTP: ${respuesta.status}`);
         }
         
-        // 3. Pegar el HTML en la pantalla
         const html = await respuesta.text();
         contenedor.innerHTML = html; 
 
-        // 4. Ejecutar la función JS correspondiente para dibujar las tarjetas
-        if (nombreArchivo === 'clientes') {
-          if (typeof renderClientes === 'function') renderClientes();
-        } else if (nombreArchivo === 'reservas') {
-          if (typeof renderReservas === 'function') renderReservas();
-        } else if (nombreArchivo === 'tiquetes') {
-          if (typeof renderTiquetes === 'function') renderTiquetes();
-        } else if (nombreArchivo === 'paquetes') {
-          // Aquí agregamos la condición para que ejecute el JS de paquetes
-          if (typeof renderPaquetes === 'function') renderPaquetes();
-        } else if (nombreArchivo === 'ubicacion') {
-          // Acá es donde llamamos la función de ubicaciones
-          if (typeof renderUbicaciones === 'function') renderUbicaciones();
-        }
+        // Enrutador final completo
+        if (nombreArchivo === 'clientes' && typeof renderClientes === 'function') renderClientes();
+        else if (nombreArchivo === 'reservas' && typeof renderReservas === 'function') renderReservas();
+        else if (nombreArchivo === 'tiquetes' && typeof renderTiquetes === 'function') renderTiquetes();
+        else if (nombreArchivo === 'paquetes' && typeof renderPaquetes === 'function') renderPaquetes();
+        else if (nombreArchivo === 'ubicacion' && typeof renderUbicaciones === 'function') renderUbicaciones();
+        else if (nombreArchivo === 'reportes' && typeof renderReportes === 'function') renderReportes();
 
       } catch (error) {
         console.error('Pille el error acá:', error);
@@ -109,18 +102,14 @@
           <div style="color: #991b1b; background: #fef2f2; padding: 2rem; border: 1px solid #fecaca; border-radius: 8px;">
             <h3 style="margin-bottom:0.5rem;">🚨 Error al cargar la pestaña</h3>
             <p>No se pudo cargar el archivo <b>${nombreArchivo}.html</b></p>
-            <p style="font-size:0.875rem; margin-top:1rem; opacity:0.8;">Asegúrese de que el archivo existe en la carpeta y que está corriendo el Live Server.</p>
           </div>
         `;
       }
     }
 
-    // Cuando la página carga por primera vez, simular un clic en el botón de Clientes
     window.addEventListener('DOMContentLoaded', () => {
       const btnClientes = document.getElementById('btn-clientes');
-      if(btnClientes) {
-        cargarSeccion('clientes', btnClientes);
-      }
+      if(btnClientes) cargarSeccion('clientes', btnClientes);
     });
   </script>
 </body>
