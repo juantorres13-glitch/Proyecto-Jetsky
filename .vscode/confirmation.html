@@ -1,24 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- ================= CONFIGURACIÓN GENERAL ================= -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Título -->
   <title>JetSky - Reserva Confirmada</title>
+
+  <!-- Librerías -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body class="bg-gradient-to-b from-blue-50 to-white min-h-screen">
 
+  <!-- ================= HEADER ================= -->
   <header class="bg-white shadow-sm">
     <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
       <div class="flex items-center gap-3">
         <i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
         <span class="text-3xl font-bold text-[#69d7f7]">JetSky</span>
       </div>
+
+      <!-- Volver al inicio -->
       <a href="index.html" class="text-[#69d7f7] font-medium">Volver al inicio</a>
     </nav>
   </header>
 
+  <!-- ================= CONTENIDO PRINCIPAL ================= -->
   <div class="max-w-4xl mx-auto px-6 py-16">
     <div class="bg-white rounded-3xl shadow-2xl p-12 text-center">
       
@@ -27,28 +39,34 @@
         <i class="fa-solid fa-check-circle text-6xl text-green-600"></i>
       </div>
 
+      <!-- Mensaje -->
       <h1 class="text-4xl font-bold text-[#0F172A] mb-3">¡Reserva Confirmada!</h1>
       <p class="text-xl text-gray-600 mb-10">Tu vuelo ha sido reservado exitosamente</p>
 
+      <!-- Código de reserva -->
       <div class="bg-gradient-to-r from-[#69d7f7] to-[#4dc4e6] text-white rounded-2xl p-8 mb-10">
         <p class="text-sm opacity-90 mb-1">Código de Reserva</p>
         <p id="bookingId" class="text-4xl font-bold tracking-widest"></p>
       </div>
 
+      <!-- ================= DETALLES ================= -->
       <div class="grid md:grid-cols-2 gap-10 text-left">
-        <!-- Detalles del Vuelo -->
+
+        <!-- Vuelo -->
         <div>
           <h3 class="font-bold text-lg mb-4 text-[#0F172A]">Detalles del Vuelo</h3>
           <div id="flightDetails" class="space-y-3 text-sm"></div>
         </div>
 
-        <!-- Información del Pasajero -->
+        <!-- Pasajero -->
         <div>
           <h3 class="font-bold text-lg mb-4 text-[#0F172A]">Pasajero</h3>
           <div id="passengerDetails" class="space-y-3 text-sm"></div>
         </div>
+
       </div>
 
+      <!-- Confirmación email -->
       <div class="mt-12 bg-blue-50 p-6 rounded-2xl">
         <div class="flex items-start gap-4">
           <i class="fa-solid fa-envelope text-2xl text-[#69d7f7] mt-1"></i>
@@ -59,6 +77,7 @@
         </div>
       </div>
 
+      <!-- Botones -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center mt-12">
         <a href="index.html" 
            class="px-10 py-5 bg-[#69d7f7] hover:bg-[#4dc4e6] text-white rounded-2xl font-semibold text-lg">
@@ -69,22 +88,28 @@
           Ir a Mi Panel
         </a>
       </div>
+
     </div>
   </div>
 
+  <!-- ================= LÓGICA ================= -->
   <script>
+
+    // ================= RECUPERAR DATOS =================
     const confirmation = JSON.parse(localStorage.getItem('bookingConfirmation') || '{}');
     const searchData = JSON.parse(localStorage.getItem('searchData') || '{}');
 
+    // Validación
     if (!confirmation.bookingId) {
       window.location.href = 'index.html';
     }
 
-    // Mostrar Código de Reserva
+    // ================= MOSTRAR CÓDIGO =================
     document.getElementById('bookingId').textContent = confirmation.bookingId;
 
-    // Detalles del Vuelo
+    // ================= DETALLES DEL VUELO =================
     const flightDiv = document.getElementById('flightDetails');
+
     flightDiv.innerHTML = `
       <div class="flex justify-between">
         <span class="text-gray-600">Vuelo:</span>
@@ -108,8 +133,9 @@
       </div>
     `;
 
-    // Información del Pasajero
+    // ================= DATOS DEL PASAJERO =================
     const passengerDiv = document.getElementById('passengerDetails');
+
     passengerDiv.innerHTML = `
       <div class="flex justify-between">
         <span class="text-gray-600">Nombre:</span>
@@ -131,12 +157,13 @@
       </div>
     `;
 
-    // Email enviado
+    // ================= MENSAJE EMAIL =================
     document.getElementById('emailSent').textContent = 
       `Hemos enviado los detalles a ${confirmation.passenger.email || 'tu correo registrado'}. Revisa tu bandeja de entrada.`;
 
-    // Limpiar localStorage al finalizar (opcional)
-    // localStorage.clear(); // Descomenta si quieres limpiar todo al confirmar
+    // ================= MEJORA =================
+    // Mejora: Confirmación final de reserva y visualización completa del ticket del usuario
+
   </script>
 </body>
 </html>
