@@ -11,11 +11,11 @@
   <div class="container">
     <header class="top-header">
       <button class="btn btn-outline">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
         Atrás
       </button>
       <button class="btn btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
         Crear
       </button>
     </header>
@@ -55,47 +55,64 @@
       </aside>
 
       <main id="main-content" class="content-area">
-        </main>
+        <p class="text-muted">Cargando panel...</p>
+      </main>
     </div>
   </div>
 
+  <script src="js/clientes.js"></script>
+  <script src="js/reservas.js"></script>
+  <script src="js/tiquetes.js"></script>
+  
   <script>
-    // Función asíncrona para cargar los archivos HTML
     async function cargarSeccion(nombreArchivo, elementoBoton) {
-      // 1. Actualizar el estado visual del menú
+      // 1. Quitar la clase active a todos los botones y ponérsela al que le dimos clic
       const botones = document.querySelectorAll('.nav-item');
       botones.forEach(boton => boton.classList.remove('active'));
       elementoBoton.classList.add('active');
 
       const contenedor = document.getElementById('main-content');
-      contenedor.innerHTML = '<p class="text-muted">Cargando...</p>';
+      contenedor.innerHTML = '<p class="text-muted" style="text-align:center; padding:2rem;">Cargando...</p>';
 
-      // 2. Hacer la petición del archivo
       try {
+        // 2. Traer el archivo HTML correspondiente
         const respuesta = await fetch(`${nombreArchivo}.html`);
         
         if (!respuesta.ok) {
-          throw new Error('No se pudo cargar el archivo');
+          throw new Error(`Error HTTP: ${respuesta.status}`);
         }
         
+        // 3. Pegar el HTML en la pantalla
         const html = await respuesta.text();
-        contenedor.innerHTML = html; // Inyectar el HTML
+        contenedor.innerHTML = html; 
+
+        // 4. Ejecutar la función JS correspondiente para dibujar las tarjetas
+        if (nombreArchivo === 'clientes') {
+          if (typeof renderClientes === 'function') renderClientes();
+        } else if (nombreArchivo === 'reservas') {
+          if (typeof renderReservas === 'function') renderReservas();
+        } else if (nombreArchivo === 'tiquetes') {
+          if (typeof renderTiquetes === 'function') renderTiquetes();
+        }
+
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Pille el error acá:', error);
         contenedor.innerHTML = `
-          <div style="color: red; padding: 2rem; border: 1px solid red; border-radius: 8px;">
-            <h3>Error de carga</h3>
-            <p>No se pudo cargar <b>${nombreArchivo}.html</b>.</p>
-            <p>¿Estás usando un servidor local (como Live Server en VS Code)? Las peticiones 'fetch' no funcionan si abres el archivo localmente con doble clic (file://).</p>
+          <div style="color: #991b1b; background: #fef2f2; padding: 2rem; border: 1px solid #fecaca; border-radius: 8px;">
+            <h3 style="margin-bottom:0.5rem;">🚨 Error al cargar la pestaña</h3>
+            <p>No se pudo cargar el archivo <b>${nombreArchivo}.html</b></p>
+            <p style="font-size:0.875rem; margin-top:1rem; opacity:0.8;">Asegúrese de que el archivo existe en la carpeta y que está corriendo el Live Server.</p>
           </div>
         `;
       }
     }
 
-    // Cargar clientes por defecto al abrir la página
+    // Cuando la página carga por primera vez, simular un clic en el botón de Clientes
     window.addEventListener('DOMContentLoaded', () => {
       const btnClientes = document.getElementById('btn-clientes');
-      cargarSeccion('clientes', btnClientes);
+      if(btnClientes) {
+        cargarSeccion('clientes', btnClientes);
+      }
     });
   </script>
 </body>
