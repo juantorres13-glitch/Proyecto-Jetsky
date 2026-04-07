@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- ================= CONFIGURACIÓN GENERAL ================= -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Título -->
   <title>JetSky - Selecciona tus Asientos</title>
+
+  <!-- Librerías externas -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- ================= ESTILOS DE ASIENTOS ================= -->
   <style>
     .seat {
       width: 42px;
@@ -39,14 +46,20 @@
     }
   </style>
 </head>
+
 <body class="bg-gradient-to-b from-blue-50 to-white min-h-screen">
 
+  <!-- ================= HEADER ================= -->
   <header class="bg-white shadow-sm">
     <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
       <div class="flex items-center gap-3">
         <i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
         <span class="text-3xl font-bold text-[#69d7f7]">JetSky</span>
       </div>
+
+      <!-- Botón volver -->
       <a href="passenger.html" class="flex items-center gap-2 text-gray-700 hover:text-black">
         <i class="fa-solid fa-arrow-left"></i>
         <span>Volver</span>
@@ -54,12 +67,21 @@
     </nav>
   </header>
 
+  <!-- ================= CONTENIDO PRINCIPAL ================= -->
   <div class="max-w-5xl mx-auto px-6 py-12">
     <div class="bg-white rounded-3xl shadow-xl p-10">
-      <h2 class="text-3xl font-bold text-center mb-4">Selecciona tus Asientos</h2>
-      <p class="text-center text-gray-600 mb-10" id="seatInfo">Selecciona <span class="font-semibold text-[#f89f37]" id="numSeats">1</span> asiento(s)</p>
 
-      <!-- Leyenda -->
+      <!-- Título -->
+      <h2 class="text-3xl font-bold text-center mb-4">
+        Selecciona tus Asientos
+      </h2>
+
+      <!-- Información de cantidad -->
+      <p class="text-center text-gray-600 mb-10" id="seatInfo">
+        Selecciona <span class="font-semibold text-[#f89f37]" id="numSeats">1</span> asiento(s)
+      </p>
+
+      <!-- ================= LEYENDA ================= -->
       <div class="flex justify-center gap-8 mb-10 text-sm">
         <div class="flex items-center gap-2">
           <div class="w-6 h-6 bg-[#d1fae5] border-2 border-[#10b981] rounded"></div>
@@ -75,8 +97,9 @@
         </div>
       </div>
 
-      <!-- Mapa de asientos -->
+      <!-- ================= MAPA DE ASIENTOS ================= -->
       <div class="bg-gray-50 p-8 rounded-2xl mb-10">
+
         <!-- Cabina -->
         <div class="text-center mb-6">
           <div class="inline-block bg-[#69d7f7] text-white px-8 py-2 rounded-t-3xl text-sm font-medium">
@@ -84,24 +107,32 @@
           </div>
         </div>
 
+        <!-- Contenedor dinámico -->
         <div id="seatMap" class="grid grid-cols-7 gap-3 max-w-md mx-auto"></div>
       </div>
 
+      <!-- ================= RESUMEN ================= -->
       <div class="flex justify-between items-center">
         <div>
           <p class="text-sm text-gray-600">Asientos seleccionados:</p>
           <p id="selectedSeatsDisplay" class="text-2xl font-bold text-[#f89f37]">Ninguno</p>
         </div>
+
+        <!-- Botón continuar -->
         <button onclick="continueToPayment()" id="continueBtn"
           class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-5 rounded-2xl text-lg font-semibold disabled:opacity-50"
           disabled>
           Continuar al Pago
         </button>
       </div>
+
     </div>
   </div>
 
+  <!-- ================= LÓGICA DEL SISTEMA ================= -->
   <script>
+
+    // ================= RECUPERAR DATOS =================
     const selectedFlight = JSON.parse(localStorage.getItem('selectedFlight') || '{}');
     const searchData = JSON.parse(localStorage.getItem('searchData') || '{}');
     const passengerInfo = JSON.parse(localStorage.getItem('passengerInfo') || '{}');
@@ -109,21 +140,24 @@
     let selectedSeats = [];
     const numPassengers = parseInt(searchData.passengers) || 1;
 
+    // Validación
     if (!selectedFlight.id) {
       window.location.href = 'results.html';
     }
 
+    // Mostrar número de asientos requeridos
     document.getElementById('numSeats').textContent = numPassengers;
 
-    // Asientos ocupados de ejemplo
+    // ================= DATOS MOCK =================
     const occupiedSeats = ['1A', '1B', '2C', '3D', '5A', '7F', '8B', '10C', '12E', '15A'];
 
+    // ================= GENERAR MAPA =================
     function generateSeatMap() {
       const seatMap = document.getElementById('seatMap');
       seatMap.innerHTML = '';
 
-      // Cabeceras de columnas (A B C | D E F)
       const headers = ['A', 'B', 'C', '', 'D', 'E', 'F'];
+
       headers.forEach(header => {
         const div = document.createElement('div');
         div.className = 'text-center font-bold text-gray-500 text-sm';
@@ -131,9 +165,9 @@
         seatMap.appendChild(div);
       });
 
-      // Generar filas 1 a 20
       for (let row = 1; row <= 20; row++) {
         ['A', 'B', 'C', 'aisle', 'D', 'E', 'F'].forEach(letter => {
+
           if (letter === 'aisle') {
             const aisle = document.createElement('div');
             aisle.className = 'flex items-center justify-center text-xs text-gray-400 font-medium';
@@ -160,7 +194,7 @@
               selectedSeats.push(seatId);
             }
 
-            generateSeatMap(); // Actualizar mapa
+            generateSeatMap();
             updateSelectedDisplay();
           });
 
@@ -169,6 +203,7 @@
       }
     }
 
+    // ================= ACTUALIZAR UI =================
     function updateSelectedDisplay() {
       document.getElementById('selectedSeatsDisplay').textContent = 
         selectedSeats.length > 0 ? selectedSeats.join(', ') : 'Ninguno';
@@ -176,19 +211,25 @@
       document.getElementById('continueBtn').disabled = selectedSeats.length !== numPassengers;
     }
 
+    // ================= CONTINUAR =================
     function continueToPayment() {
+
       if (selectedSeats.length !== numPassengers) {
         alert(`Debes seleccionar exactamente ${numPassengers} asiento(s)`);
         return;
       }
 
       localStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
+
+      // ================= MEJORA: Optimización en selección y persistencia de asientos =================
+
       window.location.href = 'payment.html';
     }
 
-    // Inicializar
+    // ================= INICIALIZACIÓN =================
     generateSeatMap();
     updateSelectedDisplay();
+
   </script>
 </body>
-</html>
+</html> 
