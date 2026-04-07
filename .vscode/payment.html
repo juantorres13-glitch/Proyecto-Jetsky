@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- ================= CONFIGURACIÓN GENERAL ================= -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Título -->
   <title>JetSky - Método de Pago</title>
+
+  <!-- Librerías externas -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body class="bg-gradient-to-b from-blue-50 to-white min-h-screen">
 
+  <!-- ================= HEADER ================= -->
   <header class="bg-white shadow-sm">
     <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
       <div class="flex items-center gap-3">
         <i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
         <span class="text-3xl font-bold text-[#69d7f7]">JetSky</span>
       </div>
+
+      <!-- Botón volver -->
       <a href="seats.html" class="flex items-center gap-2 text-gray-700 hover:text-black">
         <i class="fa-solid fa-arrow-left"></i>
         <span>Volver a asientos</span>
@@ -22,27 +33,32 @@
     </nav>
   </header>
 
+  <!-- ================= CONTENIDO PRINCIPAL ================= -->
   <div class="max-w-6xl mx-auto px-6 py-12">
     <div class="grid md:grid-cols-5 gap-10">
       
-      <!-- Formulario de Pago -->
+      <!-- ================= FORMULARIO DE PAGO ================= -->
       <div class="md:col-span-3">
         <div class="bg-white rounded-3xl shadow-xl p-10">
           <h2 class="text-3xl font-bold mb-8">Información de Pago</h2>
           
           <form id="paymentForm" class="space-y-8">
+
+            <!-- Número de tarjeta -->
             <div>
               <label class="block text-sm font-medium mb-2">Número de Tarjeta *</label>
               <input type="text" id="cardNumber" maxlength="19" placeholder="1234 5678 9012 3456"
                      class="w-full h-14 border border-gray-300 rounded-2xl px-6 focus:outline-none focus:border-[#69d7f7]">
             </div>
 
+            <!-- Nombre -->
             <div>
               <label class="block text-sm font-medium mb-2">Nombre en la Tarjeta *</label>
               <input type="text" id="cardName" placeholder="JUAN PÉREZ" 
                      class="w-full h-14 border border-gray-300 rounded-2xl px-6 uppercase focus:outline-none focus:border-[#69d7f7]">
             </div>
 
+            <!-- Expiración y CVV -->
             <div class="grid grid-cols-2 gap-6">
               <div>
                 <label class="block text-sm font-medium mb-2">Fecha de Expiración *</label>
@@ -56,6 +72,7 @@
               </div>
             </div>
 
+            <!-- Seguridad -->
             <div class="bg-blue-50 p-6 rounded-2xl flex gap-4">
               <i class="fa-solid fa-shield-alt text-3xl text-[#69d7f7]"></i>
               <div>
@@ -64,22 +81,26 @@
               </div>
             </div>
 
+            <!-- Botón pagar -->
             <button type="submit" 
               class="w-full bg-[#f89f37] hover:bg-[#e68817] text-white py-6 rounded-2xl text-xl font-semibold flex items-center justify-center gap-3">
               <i class="fa-solid fa-credit-card"></i>
               Pagar Ahora
             </button>
+
           </form>
         </div>
       </div>
 
-      <!-- Resumen de Compra -->
+      <!-- ================= RESUMEN DE COMPRA ================= -->
       <div class="md:col-span-2">
         <div class="bg-white rounded-3xl shadow-xl p-8 sticky top-8">
           <h3 class="font-bold text-2xl mb-6">Resumen de tu Reserva</h3>
           
+          <!-- Datos dinámicos -->
           <div id="purchaseSummary" class="space-y-6"></div>
 
+          <!-- Total -->
           <div class="border-t pt-6 mt-8">
             <div class="flex justify-between text-lg">
               <span class="font-semibold">Total a Pagar</span>
@@ -89,15 +110,20 @@
           </div>
         </div>
       </div>
+
     </div>
   </div>
 
+  <!-- ================= LÓGICA ================= -->
   <script>
+
+    // ================= RECUPERAR DATOS =================
     const selectedFlight = JSON.parse(localStorage.getItem('selectedFlight') || '{}');
     const searchData = JSON.parse(localStorage.getItem('searchData') || '{}');
     const passengerInfo = JSON.parse(localStorage.getItem('passengerInfo') || '{}');
     const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats') || '[]');
 
+    // Validación
     if (!selectedFlight.id || selectedSeats.length === 0) {
       window.location.href = 'seats.html';
     }
@@ -105,8 +131,9 @@
     const numPassengers = parseInt(searchData.passengers) || 1;
     const totalAmount = selectedFlight.price * numPassengers;
 
-    // Renderizar resumen
+    // ================= RESUMEN =================
     const summaryDiv = document.getElementById('purchaseSummary');
+
     summaryDiv.innerHTML = `
       <div class="space-y-4 text-sm">
         <div class="flex justify-between">
@@ -138,7 +165,7 @@
 
     document.getElementById('totalPrice').textContent = '$' + totalAmount.toLocaleString('es-CO');
 
-    // Formulario de pago
+    // ================= PROCESO DE PAGO =================
     document.getElementById('paymentForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -147,12 +174,13 @@
       const expiryDate = document.getElementById('expiryDate').value.trim();
       const cvv = document.getElementById('cvv').value.trim();
 
+      // Validación
       if (!cardNumber || !cardName || !expiryDate || !cvv) {
         alert("Por favor completa todos los campos de pago");
         return;
       }
 
-      // Simular procesamiento
+      // ================= GENERAR CONFIRMACIÓN =================
       const confirmationData = {
         bookingId: "JET" + Math.floor(Math.random() * 1000000),
         flight: selectedFlight,
@@ -163,8 +191,12 @@
       };
 
       localStorage.setItem('bookingConfirmation', JSON.stringify(confirmationData));
+
+      // ================= MEJORA: Simulación de pago y generación de reserva =================
+
       window.location.href = 'confirmation.html';
     });
+
   </script>
 </body>
-</html>
+</html> 
