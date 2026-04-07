@@ -88,7 +88,7 @@
         const html = await respuesta.text();
         contenedor.innerHTML = html; 
 
-        // Enrutador final completo
+        // Enrutador final completoo
         if (nombreArchivo === 'clientes' && typeof renderClientes === 'function') renderClientes();
         else if (nombreArchivo === 'reservas' && typeof renderReservas === 'function') renderReservas();
         else if (nombreArchivo === 'tiquetes' && typeof renderTiquetes === 'function') renderTiquetes();
