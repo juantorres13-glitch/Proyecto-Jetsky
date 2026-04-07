@@ -1,0 +1,54 @@
+<div class="section-header">
+  <div>
+    <h1 class="page-title">Reportes y Análisis</h1>
+    <p class="page-subtitle">Visualiza las métricas y estadísticas del negocio</p>
+  </div>
+  <button class="btn btn-primary" onclick="alert('Generando PDF...')">
+    Exportar PDF
+  </button>
+</div>
+
+<div class="stats-grid" style="margin-bottom: 1.5rem;">
+  <div class="stat-card">
+    <p class="stat-label text-muted">Clientes Totales</p>
+    <p class="stat-value" style="color: #2563eb;">1,234</p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label text-muted">Reservas Activas</p>
+    <p class="stat-value" style="color: #16a34a;">156</p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label text-muted">Ingresos del Mes</p>
+    <p class="stat-value" style="color: #ea580c;">$55M</p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label text-muted">Paquetes Vendidos</p>
+    <p class="stat-value" style="color: #9333ea;">89</p>
+  </div>
+</div>
+
+<div class="cards-grid" style="margin-bottom: 1.5rem;">
+  <div class="stat-card" style="padding: 1.5rem;">
+    <h3 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">Ventas Mensuales</h3>
+    <p class="text-muted" style="font-size: 0.875rem; margin-bottom: 1.5rem;">Número de reservas por mes</p>
+    <div style="position: relative; height: 300px; width: 100%;">
+      <canvas id="ventasChart"></canvas>
+    </div>
+  </div>
+
+  <div class="stat-card" style="padding: 1.5rem;">
+    <h3 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">Ingresos Mensuales</h3>
+    <p class="text-muted" style="font-size: 0.875rem; margin-bottom: 1.5rem;">Ingresos en millones de COP</p>
+    <div style="position: relative; height: 300px; width: 100%;">
+      <canvas id="ingresosChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="stat-card" style="padding: 1.5rem;">
+  <h3 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">Destinos Más Populares</h3>
+  <p class="text-muted" style="font-size: 0.875rem; margin-bottom: 1.5rem;">Distribución de ventas por destino</p>
+  <div style="position: relative; height: 300px; width: 100%; max-width: 500px; margin: 0 auto;">
+    <canvas id="destinosChart"></canvas>
+  </div>
+</div>

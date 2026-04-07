@@ -1,0 +1,91 @@
+<div class="section-header">
+  <div>
+    <h1 class="page-title">Gestión de Reservas</h1>
+    <p class="page-subtitle">Administra las reservas de viajes</p>
+  </div>
+  <button class="btn btn-primary" onclick="abrirModalReserva()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+    Nueva Reserva
+  </button>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card stat-blue">
+    <p class="stat-label text-white-opacity">Total Reservas</p>
+    <p class="stat-value text-white" id="stat-res-total">0</p>
+  </div>
+  <div class="stat-card" style="border-color: #fde047;">
+    <p class="stat-label text-orange">Pendientes</p>
+    <p class="stat-value text-orange" id="stat-res-pendientes">0</p>
+  </div>
+  <div class="stat-card" style="border-color: #bbf7d0;">
+    <p class="stat-label text-green">Confirmadas</p>
+    <p class="stat-value text-green" id="stat-res-confirmadas">0</p>
+  </div>
+  <div class="stat-card" style="border-color: #fecaca;">
+    <p class="stat-label text-red">Canceladas</p>
+    <p class="stat-value text-red" id="stat-res-canceladas">0</p>
+  </div>
+</div>
+
+<div class="search-container">
+  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+  <input type="text" class="search-input" id="search-reservas" placeholder="Buscar por cliente o destino..." onkeyup="filtrarReservas()">
+</div>
+
+<div id="reservas-grid" class="cards-grid"></div>
+
+<div id="modal-reserva" class="modal-overlay">
+  <div class="modal-content" style="max-width: 600px;">
+    <div class="modal-header">
+      <h2 id="modal-res-titulo" class="page-title" style="font-size: 1.25rem;">Nueva Reserva</h2>
+      <button class="btn-icon" onclick="cerrarModalReserva()" style="background:none; border:none; cursor:pointer;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    
+    <form id="form-reserva" onsubmit="guardarReserva(event)">
+      <input type="hidden" id="res-id">
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Cliente *</label>
+          <input type="text" id="res-cliente" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Destino *</label>
+          <input type="text" id="res-destino" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha de Salida *</label>
+          <input type="date" id="res-salida" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha de Regreso *</label>
+          <input type="date" id="res-regreso" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pasajeros</label>
+          <input type="number" id="res-pasajeros" class="form-input" min="1" value="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estado</label>
+          <select id="res-estado" class="form-input">
+            <option value="pendiente">Pendiente</option>
+            <option value="confirmada">Confirmada</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Total (COP) *</label>
+          <input type="number" id="res-total" class="form-input" required>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="cerrarModalReserva()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-res-guardar">Crear</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="section-header">
+  <div>
+    <h1 class="page-title">Gestión de Paquetes Turísticos</h1>
+    <p class="page-subtitle">Administra los paquetes de viaje disponibles</p>
+  </div>
+  <button class="btn btn-primary" onclick="abrirModalPaquete()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+    Nuevo Paquete
+  </button>
+</div>
+
+<div class="search-container">
+  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+  <input type="text" class="search-input" id="search-paquetes" placeholder="Buscar por nombre o destino..." onkeyup="filtrarPaquetes()">
+</div>
+
+<div id="paquetes-grid" class="cards-grid"></div>
+
+<div id="modal-paquete" class="modal-overlay">
+  <div class="modal-content" style="max-width: 650px;">
+    <div class="modal-header">
+      <h2 id="modal-paq-titulo" class="page-title" style="font-size: 1.25rem;">Nuevo Paquete</h2>
+      <button class="btn-icon" onclick="cerrarModalPaquete()" style="background:none; border:none; cursor:pointer;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    
+    <form id="form-paquete" onsubmit="guardarPaquete(event)">
+      <input type="hidden" id="paq-id">
+      
+      <div class="form-grid" style="max-height: 60vh; overflow-y: auto; padding-right: 0.5rem;">
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Nombre del Paquete *</label>
+          <input type="text" id="paq-nombre" class="form-input" required placeholder="Ej: Escapada Caribeña">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Destino *</label>
+          <input type="text" id="paq-destino" class="form-input" required placeholder="Cartagena y San Andrés">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Duración (días)</label>
+          <input type="number" id="paq-duracion" class="form-input" placeholder="7">
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Descripción</label>
+          <textarea id="paq-descripcion" class="form-input" rows="3" placeholder="Describe el paquete..."></textarea>
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Incluye (separado por comas)</label>
+          <textarea id="paq-incluye" class="form-input" rows="2" placeholder="Vuelos, Hotel 5 estrellas, Desayuno..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Precio (COP) *</label>
+          <input type="number" id="paq-precio" class="form-input" required placeholder="3500000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Disponibilidad (cupos)</label>
+          <input type="number" id="paq-disponibilidad" class="form-input" placeholder="15">
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Rating (1 al 5)</label>
+          <input type="number" id="paq-rating" class="form-input" step="0.1" min="1" max="5" placeholder="4.8">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="cerrarModalPaquete()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-paq-guardar">Crear</button>
+      </div>
+    </form>
+  </div>
+</div>

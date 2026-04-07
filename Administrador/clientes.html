@@ -1,0 +1,83 @@
+<div class="section-header">
+  <div>
+    <h1 class="page-title">Gestión de Clientes</h1>
+    <p class="page-subtitle">Administra la información de tus clientes</p>
+  </div>
+  <button class="btn btn-primary" onclick="abrirModalCliente()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+    Nuevo Cliente
+  </button>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card stat-blue">
+    <p class="stat-label text-white-opacity">Total Clientes</p>
+    <p class="stat-value text-white" id="stat-total">0</p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-label text-muted">Nuevos</p>
+    <p class="stat-value" id="stat-nuevos">0</p>
+  </div>
+  <div class="stat-card stat-border-blue">
+    <p class="stat-label text-blue">Frecuentes</p>
+    <p class="stat-value text-blue" id="stat-frecuentes">0</p>
+  </div>
+  <div class="stat-card stat-gradient">
+    <p class="stat-label text-white-opacity">VIP</p>
+    <p class="stat-value text-white" id="stat-vip">0</p>
+  </div>
+</div>
+
+<div class="search-container">
+  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+  <input type="text" class="search-input" id="search-clientes" placeholder="Buscar por nombre, email o teléfono..." onkeyup="filtrarClientes()">
+</div>
+
+<div id="clientes-grid" class="cards-grid"></div>
+
+<div id="modal-cliente" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modal-titulo" class="page-title" style="font-size: 1.25rem;">Nuevo Cliente</h2>
+      <button class="btn-icon" onclick="cerrarModalCliente()" style="background:none; border:none; cursor:pointer;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    
+    <form id="form-cliente" onsubmit="guardarCliente(event)">
+      <input type="hidden" id="cliente-id">
+      
+      <div class="form-grid">
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Nombre Completo *</label>
+          <input type="text" id="cliente-nombre" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input type="email" id="cliente-email" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Teléfono *</label>
+          <input type="text" id="cliente-telefono" class="form-input" required>
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Dirección</label>
+          <input type="text" id="cliente-direccion" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nivel</label>
+          <select id="cliente-nivel" class="form-input">
+            <option value="nuevo">Nuevo</option>
+            <option value="frecuente">Frecuente</option>
+            <option value="vip">VIP</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="cerrarModalCliente()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-guardar">Crear Cliente</button>
+      </div>
+    </form>
+  </div>
+</div>

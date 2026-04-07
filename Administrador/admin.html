@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Gestión</title>
+  <link rel="stylesheet" href="css/style.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <header class="top-header">
+      <button class="btn btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Atrás
+      </button>
+      <button class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        Crear
+      </button>
+    </header>
+
+    <div class="main-layout">
+      
+      <aside class="sidebar">
+        <button id="btn-clientes" class="nav-item active" onclick="cargarSeccion('clientes', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="nav-text">Clientes</span>
+        </button>
+        
+        <button class="nav-item" onclick="cargarSeccion('reservas', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.2-1.1.6L3 8l6 4-3 3-3.5-.5L1 16l4.5 2L10 21l1.5-1.5-.5-3.5 3-3 4 6l1.2-.7c.4-.2.7-.6.6-1.1Z"/></svg>
+          <span class="nav-text">Reservas</span>
+        </button>
+        
+        <button class="nav-item" onclick="cargarSeccion('tiquetes', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+          <span class="nav-text">Tiquetes</span>
+        </button>
+
+        <button class="nav-item" onclick="cargarSeccion('paquetes', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          <span class="nav-text">Paquetes</span>
+        </button>
+
+        <button class="nav-item" onclick="cargarSeccion('ubicacion', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span class="nav-text">Ubicación</span>
+        </button>
+
+        <button class="nav-item" onclick="cargarSeccion('reportes', this)">
+          <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          <span class="nav-text">Reportes</span>
+        </button>
+      </aside>
+
+      <main id="main-content" class="content-area">
+        <p class="text-muted">Cargando panel...</p>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/clientes.js"></script>
+  <script src="js/reservas.js"></script>
+  <script src="js/tiquetes.js"></script>
+  <script src="js/paquetes.js"></script>
+  <script src="js/ubicacion.js"></script>
+  <script src="js/reportes.js"></script> 
+  
+  <script>
+    async function cargarSeccion(nombreArchivo, elementoBoton) {
+      const botones = document.querySelectorAll('.nav-item');
+      botones.forEach(boton => boton.classList.remove('active'));
+      elementoBoton.classList.add('active');
+
+      const contenedor = document.getElementById('main-content');
+      contenedor.innerHTML = '<p class="text-muted" style="text-align:center; padding:2rem;">Cargando...</p>';
+
+      try {
+        const respuesta = await fetch(`${nombreArchivo}.html`);
+        
+        if (!respuesta.ok) {
+          throw new Error(`Error HTTP: ${respuesta.status}`);
+        }
+        
+        const html = await respuesta.text();
+        contenedor.innerHTML = html; 
+
+        // Enrutador final completoo
+        if (nombreArchivo === 'clientes' && typeof renderClientes === 'function') renderClientes();
+        else if (nombreArchivo === 'reservas' && typeof renderReservas === 'function') renderReservas();
+        else if (nombreArchivo === 'tiquetes' && typeof renderTiquetes === 'function') renderTiquetes();
+        else if (nombreArchivo === 'paquetes' && typeof renderPaquetes === 'function') renderPaquetes();
+        else if (nombreArchivo === 'ubicacion' && typeof renderUbicaciones === 'function') renderUbicaciones();
+        else if (nombreArchivo === 'reportes' && typeof renderReportes === 'function') renderReportes();
+
+      } catch (error) {
+        console.error('Pille el error acá:', error);
+        contenedor.innerHTML = `
+          <div style="color: #991b1b; background: #fef2f2; padding: 2rem; border: 1px solid #fecaca; border-radius: 8px;">
+            <h3 style="margin-bottom:0.5rem;">🚨 Error al cargar la pestaña</h3>
+            <p>No se pudo cargar el archivo <b>${nombreArchivo}.html</b></p>
+          </div>
+        `;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const btnClientes = document.getElementById('btn-clientes');
+      if(btnClientes) cargarSeccion('clientes', btnClientes);
+    });
+  </script>
+</body>
+</html>
