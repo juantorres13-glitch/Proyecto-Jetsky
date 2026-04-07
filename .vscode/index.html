@@ -1,20 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Configuración básica del documento -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Título de la página -->
   <title>JetSky - Vuela a tu destino soñado</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Librerías externas -->
+  <script src="https://cdn.tailwindcss.com"></script> <!-- Estilos con Tailwind -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> <!-- Iconos -->
 </head>
+
 <body class="bg-gradient-to-b from-blue-50 to-white min-h-screen">
 
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <!-- Implementación inicial del encabezado del sistema -->
   <header class="bg-white shadow-sm">
     <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      
+      <!-- Logo de la aerolínea -->
       <div class="flex items-center gap-3">
         <i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
         <span class="text-3xl font-bold text-[#69d7f7]">JetSky</span>
       </div>
+
+      <!-- Navegación del usuario -->
       <div class="flex gap-4">
         <a href="dashboard.html" class="px-6 py-2 border border-gray-800 rounded-xl">Mi Panel</a>
         <a href="register.html" class="px-6 py-2 bg-[#f89f37] text-white rounded-xl">Registrarse</a>
@@ -22,20 +34,41 @@
     </nav>
   </header>
 
+  <!-- ================= SECCIÓN PRINCIPAL ================= -->
   <div class="max-w-7xl mx-auto px-6 py-16">
+
+    <!-- Título principal -->
+    <!-- Mejora en la presentación visual del sistema -->
     <div class="text-center mb-12">
-      <h1 class="text-5xl md:text-6xl font-bold mb-6">Vuela a Cualquier<br><span class="text-[#69d7f7]">Destino Soñado</span></h1>
+      <h1 class="text-5xl md:text-6xl font-bold mb-6">
+        Vuela a Cualquier<br>
+        <span class="text-[#69d7f7]">Destino Soñado</span>
+      </h1>
       <p class="text-xl text-gray-600">Más de 200 destinos con las mejores tarifas</p>
     </div>
 
+    <!-- ================= FORMULARIO DE BÚSQUEDA ================= -->
+    <!-- Implementación de búsqueda de vuelos -->
     <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-5xl mx-auto">
+      
       <form id="searchForm">
+
+        <!-- Tipo de viaje -->
+        <!-- Funcionalidad de selección: ida y vuelta / solo ida -->
         <div class="flex gap-4 mb-8 justify-center">
-          <button type="button" id="roundtrip" class="px-8 py-3 rounded-2xl font-semibold bg-[#69d7f7] text-white">Ida y vuelta</button>
-          <button type="button" id="oneway" class="px-8 py-3 rounded-2xl font-semibold bg-gray-100">Solo ida</button>
+          <button type="button" id="roundtrip" class="px-8 py-3 rounded-2xl font-semibold bg-[#69d7f7] text-white">
+            Ida y vuelta
+          </button>
+          <button type="button" id="oneway" class="px-8 py-3 rounded-2xl font-semibold bg-gray-100">
+            Solo ida
+          </button>
         </div>
 
+        <!-- Datos del vuelo -->
+        <!-- Entrada de datos del usuario -->
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <!-- Origen -->
           <div>
             <label class="block text-sm font-medium mb-2">Origen</label>
             <select id="origin" class="w-full h-12 border rounded-2xl px-4" required>
@@ -45,6 +78,8 @@
               <option value="medellin">Medellín (MDE)</option>
             </select>
           </div>
+
+          <!-- Destino -->
           <div>
             <label class="block text-sm font-medium mb-2">Destino</label>
             <select id="destination" class="w-full h-12 border rounded-2xl px-4" required>
@@ -54,17 +89,25 @@
               <option value="london">Londres (LHR)</option>
             </select>
           </div>
+
+          <!-- Fecha de salida -->
           <div>
             <label class="block text-sm font-medium mb-2">Fecha de Ida</label>
             <input type="date" id="departureDate" class="w-full h-12 border rounded-2xl px-4" required>
           </div>
+
+          <!-- Fecha de regreso -->
+          <!-- Se oculta si el usuario selecciona solo ida -->
           <div id="returnDiv">
             <label class="block text-sm font-medium mb-2">Fecha de Vuelta</label>
             <input type="date" id="returnDate" class="w-full h-12 border rounded-2xl px-4">
           </div>
         </div>
 
+        <!-- Opciones adicionales -->
         <div class="grid md:grid-cols-3 gap-6 mt-8">
+
+          <!-- Número de pasajeros -->
           <div>
             <label class="block text-sm font-medium mb-2">Pasajeros</label>
             <select id="passengers" class="w-full h-12 border rounded-2xl px-4">
@@ -73,6 +116,8 @@
               <option value="3">3 Pasajeros</option>
             </select>
           </div>
+
+          <!-- Clase del vuelo -->
           <div>
             <label class="block text-sm font-medium mb-2">Clase</label>
             <select id="flightClass" class="w-full h-12 border rounded-2xl px-4">
@@ -80,6 +125,8 @@
               <option value="business">Business</option>
             </select>
           </div>
+
+          <!-- Botón de búsqueda -->
           <div class="flex items-end">
             <button type="submit" class="w-full h-12 bg-[#f89f37] hover:bg-[#e68817] text-white font-semibold rounded-2xl">
               Buscar Vuelos
@@ -90,11 +137,15 @@
     </div>
   </div>
 
+  <!-- ================= LÓGICA DEL SISTEMA ================= -->
   <script>
-    // Guardar datos y redirigir
+
+    // ================= BÚSQUEDA DE VUELOS =================
+    // Captura de datos del formulario y almacenamiento local
     document.getElementById('searchForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
+      // Objeto con los datos ingresados por el usuario
       const searchData = {
         origin: document.getElementById('origin').value,
         destination: document.getElementById('destination').value,
@@ -104,17 +155,25 @@
         flightClass: document.getElementById('flightClass').value
       };
 
+      // Guardar datos en el almacenamiento local
       localStorage.setItem('searchData', JSON.stringify(searchData));
+
+      // Redirección a la página de resultados
       window.location.href = 'results.html';
     });
 
-    // Toggle ida y vuelta
+    // ================= CONTROL DE TIPO DE VIAJE =================
+    // Mostrar u ocultar campo de regreso
+
     document.getElementById('roundtrip').addEventListener('click', () => {
       document.getElementById('returnDiv').style.display = 'block';
     });
+
     document.getElementById('oneway').addEventListener('click', () => {
       document.getElementById('returnDiv').style.display = 'none';
     });
+
   </script>
+
 </body>
 </html>
