@@ -64,6 +64,7 @@
   <script src="js/reservas.js"></script>
   <script src="js/tiquetes.js"></script>
   <script src="js/paquetes.js"></script>
+  <script src="js/ubicacion.js"></script>
   
   <script>
     async function cargarSeccion(nombreArchivo, elementoBoton) {
@@ -97,6 +98,9 @@
         } else if (nombreArchivo === 'paquetes') {
           // Aquí agregamos la condición para que ejecute el JS de paquetes
           if (typeof renderPaquetes === 'function') renderPaquetes();
+        } else if (nombreArchivo === 'ubicacion') {
+          // Acá es donde llamamos la función de ubicaciones
+          if (typeof renderUbicaciones === 'function') renderUbicaciones();
         }
 
       } catch (error) {
