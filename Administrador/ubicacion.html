@@ -1,0 +1,103 @@
+<div class="section-header">
+  <div>
+    <h1 class="page-title">Gestión de Ubicaciones</h1>
+    <p class="page-subtitle">Administra las oficinas y puntos de atención</p>
+  </div>
+  <button class="btn btn-primary" onclick="abrirModalUbicacion()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+    Nueva Ubicación
+  </button>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card stat-blue">
+    <p class="stat-label text-white-opacity">Total Ubicaciones</p>
+    <p class="stat-value text-white" id="stat-ubi-total">0</p>
+  </div>
+  <div class="stat-card" style="border-color: #bfdbfe;">
+    <p class="stat-label text-blue">Oficinas Principales</p>
+    <p class="stat-value text-blue" id="stat-ubi-oficinas">0</p>
+  </div>
+  <div class="stat-card" style="border-color: #bbf7d0;">
+    <p class="stat-label text-green">Sucursales</p>
+    <p class="stat-value text-green" id="stat-ubi-sucursales">0</p>
+  </div>
+  <div class="stat-card" style="border-color: #fed7aa;">
+    <p class="stat-label text-orange">Puntos de Atención</p>
+    <p class="stat-value text-orange" id="stat-ubi-puntos">0</p>
+  </div>
+</div>
+
+<div class="search-container">
+  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+  <input type="text" class="search-input" id="search-ubicacion" placeholder="Buscar por nombre, ciudad o dirección..." onkeyup="filtrarUbicaciones()">
+</div>
+
+<div id="ubicacion-grid" class="cards-grid"></div>
+
+<div id="modal-ubicacion" class="modal-overlay">
+  <div class="modal-content" style="max-width: 650px;">
+    <div class="modal-header">
+      <h2 id="modal-ubi-titulo" class="page-title" style="font-size: 1.25rem;">Nueva Ubicación</h2>
+      <button class="btn-icon" onclick="cerrarModalUbicacion()" style="background:none; border:none; cursor:pointer;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    
+    <form id="form-ubicacion" onsubmit="guardarUbicacion(event)">
+      <input type="hidden" id="ubi-id">
+      
+      <div class="form-grid" style="max-height: 60vh; overflow-y: auto; padding-right: 0.5rem;">
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Nombre *</label>
+          <input type="text" id="ubi-nombre" class="form-input" required placeholder="Oficina Principal Bogotá">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo</label>
+          <select id="ubi-tipo" class="form-input">
+            <option value="Oficina Principal">Oficina Principal</option>
+            <option value="Sucursal">Sucursal</option>
+            <option value="Punto de Atención">Punto de Atención</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ciudad *</label>
+          <input type="text" id="ubi-ciudad" class="form-input" required placeholder="Bogotá">
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Dirección *</label>
+          <input type="text" id="ubi-direccion" class="form-input" required placeholder="Calle 100 #8A-55">
+        </div>
+        <div class="form-group">
+          <label class="form-label">País</label>
+          <input type="text" id="ubi-pais" class="form-input" placeholder="Colombia" value="Colombia">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Teléfono</label>
+          <input type="text" id="ubi-telefono" class="form-input" placeholder="+57 1 234 5678">
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Email</label>
+          <input type="email" id="ubi-email" class="form-input" placeholder="oficina@agencia.com">
+        </div>
+        <div class="form-group" style="grid-column: span 2;">
+          <label class="form-label">Horario de Atención</label>
+          <input type="text" id="ubi-horario" class="form-input" placeholder="Lun-Vie: 8:00 AM - 6:00 PM">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Latitud</label>
+          <input type="number" step="any" id="ubi-lat" class="form-input" placeholder="4.6097">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Longitud</label>
+          <input type="number" step="any" id="ubi-lng" class="form-input" placeholder="-74.0817">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="cerrarModalUbicacion()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-ubi-guardar">Crear</button>
+      </div>
+    </form>
+  </div>
+</div>
