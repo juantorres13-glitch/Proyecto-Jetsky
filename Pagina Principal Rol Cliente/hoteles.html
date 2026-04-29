@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetSky - Alojamientos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 font-sans overflow-x-hidden">
+
+    <nav class="bg-white border-b border-gray-100 py-4 px-8 flex justify-between items-center sticky top-0 z-50">
+        <div class="text-2xl font-bold text-gray-900">Jet<span class="text-[#F7931E]">Sky</span></div>
+        <a href="home.html" class="text-sm font-bold text-black hover:text-cyan-500 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i> Volver a Vuelos
+        </a>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-10 flex gap-8">
+
+        <!-- SIDEBAR FILTROS -->
+        <aside class="w-64 shrink-0 hidden md:block">
+            <div class="sticky top-24 flex flex-col" style="max-height: calc(100vh - 7rem);">
+                <!-- Cabecera fija -->
+                <div class="bg-white px-6 pt-5 pb-4 rounded-t-3xl border border-b-0 border-gray-100 shadow-sm shrink-0">
+                    <h2 class="font-bold text-xl">Filtros</h2>
+                </div>
+                <!-- Contenido scrolleable -->
+                <div id="filtrosScroll" class="bg-white px-6 pb-4 rounded-b-3xl border border-t-0 border-gray-100 shadow-sm overflow-y-auto flex-1" style="scrollbar-width: thin; scrollbar-color: #e5e7eb transparent;">
+
+                <!-- Precio -->
+                <div class="mb-8">
+                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Precio por noche</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-3 text-sm text-gray-600 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="precio-check" data-min="0" data-max="300000"> Hasta $300.000
+                        </label>
+                        <label class="flex items-center gap-3 text-sm text-gray-600 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="precio-check" data-min="300000" data-max="600000"> $300.000 – $600.000
+                        </label>
+                        <label class="flex items-center gap-3 text-sm text-gray-600 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="precio-check" data-min="600000" data-max="1200000"> $600.000 – $1.200.000
+                        </label>
+                        <label class="flex items-center gap-3 text-sm text-gray-600 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="precio-check" data-min="1200000" data-max="99999999"> Más de $1.200.000
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Estrellas -->
+                <div class="mb-8">
+                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Estrellas</h3>
+                    <div class="flex flex-col gap-3 text-sm text-gray-600">
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="estrellas-check" value="5"> 5 Estrellas
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="estrellas-check" value="4"> 4 Estrellas
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="estrellas-check" value="3"> 3 Estrellas
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="estrellas-check" value="2"> 2 Estrellas
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Servicios -->
+                <div class="mb-8">
+                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Servicios</h3>
+                    <div class="flex flex-col gap-3 text-sm text-gray-600">
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="servicio-check" value="wifi"> Wi-Fi gratis
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="servicio-check" value="piscina"> Piscina
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="servicio-check" value="desayuno"> Desayuno incluido
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="servicio-check" value="parqueadero"> Parqueadero
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Estilo -->
+                <div>
+                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Estilo</h3>
+                    <div class="flex flex-col gap-3 text-sm text-gray-600">
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="estilo-check" value="economico"> Económico
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="estilo-check" value="familiar"> Familiar
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer hover:text-black">
+                            <input type="checkbox" class="estilo-check" value="lujo"> Lujo
+                        </label>
+                    </div>
+                </div>
+
+                <button id="btnLimpiar" class="mt-6 w-full text-xs text-gray-400 hover:text-gray-700 underline transition">
+                    Limpiar filtros
+                </button>
+                </div><!-- fin scroll -->
+            </div><!-- fin sticky wrapper -->
+        </aside>
+
+        <!-- SECCIÓN PRINCIPAL -->
+        <section class="flex-1 min-w-0 space-y-6">
+            <div class="flex justify-between items-end mb-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Alojamientos</h1>
+                    <p class="text-gray-500 text-sm mt-1">Explora los mejores hoteles</p>
+                </div>
+                <span id="contadorResultados" class="text-sm text-gray-400 font-medium"></span>
+            </div>
+
+            <!-- BUSCADOR -->
+            <div class="flex justify-center">
+            <div class="bg-white border border-gray-200 rounded-2xl px-5 py-3 inline-flex items-center gap-4 shadow-sm">
+
+                <i class="fas fa-search text-gray-400 shrink-0"></i>
+
+                <select id="destino" class="border-0 outline-none text-sm text-gray-600 bg-transparent cursor-pointer shrink-0">
+                    <option value="">Destino</option>
+                    <option value="CTG">Cartagena</option>
+                    <option value="SAN">San Andrés</option>
+                    <option value="CDG">París</option>
+                    <option value="LHR">Londres</option>
+                    <option value="HND">Tokio</option>
+                    <option value="DXB">Dubái</option>
+                    <option value="MAD">Madrid</option>
+                    <option value="FCO">Roma</option>
+                    <option value="MED">Medellín</option>
+                    <option value="BOG">Bogotá</option>
+                </select>
+
+                <div class="w-px h-5 bg-gray-200 shrink-0"></div>
+
+                <input type="date" class="border-0 outline-none text-sm text-gray-600 bg-transparent shrink-0">
+
+                <div class="w-px h-5 bg-gray-200 shrink-0"></div>
+
+                <input type="date" class="border-0 outline-none text-sm text-gray-600 bg-transparent shrink-0">
+
+                <div class="w-px h-5 bg-gray-200 shrink-0"></div>
+
+                <!-- Habitaciones y Huéspedes -->
+                <div class="relative shrink-0">
+                    <button id="btnPersonas" class="flex items-center gap-2 text-sm text-gray-600 whitespace-nowrap">
+                        <i class="fas fa-user text-gray-400 text-xs"></i>
+                        <span id="textoPersonas">1 hab · 2 huéspedes</span>
+                        <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                    </button>
+                    <div id="panelPersonas"
+                        class="hidden absolute right-0 z-20 bg-white border border-gray-200 rounded-2xl shadow-xl mt-3 w-60 p-5 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-700">Habitaciones</span>
+                            <div class="flex items-center gap-3">
+                                <button onclick="cambiar('habitaciones', -1)" class="w-7 h-7 rounded-full border border-gray-300 text-gray-600 hover:border-[#F7931E] hover:text-[#F7931E] transition text-sm">−</button>
+                                <span id="habitaciones" class="w-4 text-center font-bold text-sm">1</span>
+                                <button onclick="cambiar('habitaciones', 1)" class="w-7 h-7 rounded-full border border-gray-300 text-gray-600 hover:border-[#F7931E] hover:text-[#F7931E] transition text-sm">+</button>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-700">Huéspedes</span>
+                            <div class="flex items-center gap-3">
+                                <button onclick="cambiar('huespedes', -1)" class="w-7 h-7 rounded-full border border-gray-300 text-gray-600 hover:border-[#F7931E] hover:text-[#F7931E] transition text-sm">−</button>
+                                <span id="huespedes" class="w-4 text-center font-bold text-sm">2</span>
+                                <button onclick="cambiar('huespedes', 1)" class="w-7 h-7 rounded-full border border-gray-300 text-gray-600 hover:border-[#F7931E] hover:text-[#F7931E] transition text-sm">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="buscarHotel"
+                    class="bg-[#F7931E] text-white px-5 py-2 rounded-xl font-bold hover:opacity-90 transition text-sm shrink-0">
+                    Buscar
+                </button>
+            </div>
+            </div><!-- fin wrapper centrado -->
+
+            <!-- LISTA HOTELES -->
+            <div id="listaHoteles" class="space-y-5">
+
+                <!-- Hotel 1 -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-destino="SAN" data-precio="520000" data-estrellas="5" data-servicios="wifi piscina desayuno" data-estilo="lujo">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-[#F7931E] text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.9</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Grand Hotel JetSky</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Punta Norte, San Andrés</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$520.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 2 -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-destino="CTG" data-precio="400000" data-estrellas="4" data-servicios="wifi piscina desayuno parqueadero" data-estilo="familiar">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://i.pinimg.com/1200x/d4/c2/48/d4c2487ed44148e0adacad2496baf802.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-cyan-600 text-[10px] font-bold uppercase tracking-[0.2em]">Familiar</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.7</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Las Américas Torre del Mar</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>La Boquilla, Cartagena</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$400.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 3 -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-destino="CDG" data-precio="1800000" data-estrellas="5" data-servicios="wifi desayuno" data-estilo="lujo">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1549294413-26f195200c16?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.8</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hôtel Plaza Athénée</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>8.º Arrondissement, París</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$1.800.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 4 -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-destino="DXB" data-precio="2500000" data-estrellas="5" data-servicios="wifi piscina desayuno parqueadero" data-estilo="lujo">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1612294037637-ec328d0e075e?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-amber-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 5.0</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Burj Al Arab Jumeirah</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Jumeirah Beach, Dubái</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$2.500.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 5 -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-destino="MED" data-precio="220000" data-estrellas="3" data-servicios="wifi parqueadero" data-estilo="economico">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-green-500 text-[10px] font-bold uppercase tracking-[0.2em]">Económico</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.2</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel Dann Carlton Medellín</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>El Poblado, Medellín</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$220.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 6 -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-destino="MAD" data-precio="950000" data-estrellas="4" data-servicios="wifi desayuno piscina" data-estilo="lujo">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.6</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel Rosewood Villa Magna</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Paseo de la Castellana, Madrid</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$950.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 7 -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-destino="BOG" data-precio="180000" data-estrellas="2" data-servicios="wifi" data-estilo="economico">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1455587734955-081b22074882?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-green-500 text-[10px] font-bold uppercase tracking-[0.2em]">Económico</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 3.9</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel Tequendama Bogotá</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Centro Internacional, Bogotá</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$180.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 8 -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-destino="HND" data-precio="1100000" data-estrellas="5" data-servicios="wifi desayuno piscina" data-estilo="lujo">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.9</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">The Peninsula Tokyo</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Marunouchi, Tokio</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$1.100.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 9 -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-destino="CTG" data-precio="270000" data-estrellas="3" data-servicios="wifi parqueadero desayuno" data-estilo="familiar">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-cyan-600 text-[10px] font-bold uppercase tracking-[0.2em]">Familiar</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.3</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel Caribe Cartagena</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Bocagrande, Cartagena</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$270.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 10 -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-destino="LHR" data-precio="1400000" data-estrellas="5" data-servicios="wifi desayuno piscina parqueadero" data-estilo="lujo">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.8</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">The Savoy London</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Strand, Londres</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$1.400.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sin resultados -->
+                <div id="sinResultados" class="hidden text-center py-20 text-gray-400">
+                    <i class="fas fa-search text-4xl mb-4 block"></i>
+                    <p class="text-lg font-semibold text-gray-500">No se encontraron hoteles</p>
+                    <p class="text-sm mt-1">Intenta con otros filtros o destinos</p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <style>
+        .slider-thumb::-webkit-slider-thumb {
+            appearance: none; pointer-events: auto;
+            height: 20px; width: 20px; border-radius: 50%;
+            background: #ffffff; border: 2px solid #F7931E;
+            cursor: pointer; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .slider-thumb::-moz-range-thumb {
+            height: 20px; width: 20px; border-radius: 50%;
+            background: #ffffff; border: 2px solid #F7931E; cursor: pointer;
+        }
+    </style>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="bg-[#0f172a] text-white py-12 mt-16">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+                <div>
+                    <h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Compra</h6>
+                    <div class="text-sm text-gray-400 space-y-2">
+                        <p class="hover:text-white cursor-pointer">Vuelos baratos</p>
+                        <p class="hover:text-white cursor-pointer">Hoteles</p>
+                        <p class="hover:text-white cursor-pointer">Acumula Puntos</p>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">JetSky</h6>
+                    <div class="text-sm text-gray-400 space-y-2">
+                        <p class="hover:text-white cursor-pointer">Sobre nosotros</p>
+                        <p class="hover:text-white cursor-pointer">Sostenibilidad</p>
+                        <p class="hover:text-white cursor-pointer">Empleo</p>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Ayuda</h6>
+                    <div class="text-sm text-gray-400 space-y-2">
+                        <p class="hover:text-white cursor-pointer">Soporte</p>
+                        <p class="hover:text-white cursor-pointer">PQRS</p>
+                        <p class="hover:text-white cursor-pointer">Check-in</p>
+                    </div>
+                </div>
+                <div>
+                    <h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Legal</h6>
+                    <div class="text-sm text-gray-400 space-y-2">
+                        <p class="hover:text-white cursor-pointer">Privacidad</p>
+                        <p class="hover:text-white cursor-pointer">Condiciones</p>
+                        <p class="hover:text-white cursor-pointer">Cookies</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-800 text-center">
+                <p class="text-gray-500 text-[10px] tracking-[0.3em]">© 2026 JETSKY · TODOS LOS DERECHOS RESERVADOS</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ── Panel habitaciones/huéspedes ──
+        const btn = document.getElementById("btnPersonas");
+        const panel = document.getElementById("panelPersonas");
+        const texto = document.getElementById("textoPersonas");
+        let habitaciones = 1, huespedes = 2;
+
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            panel.classList.toggle("hidden");
+        });
+        document.addEventListener("click", () => panel.classList.add("hidden"));
+        panel.addEventListener("click", (e) => e.stopPropagation());
+
+        function cambiar(tipo, valor) {
+            if (tipo === "habitaciones") {
+                habitaciones = Math.max(1, habitaciones + valor);
+                document.getElementById("habitaciones").innerText = habitaciones;
+            } else {
+                huespedes = Math.max(1, huespedes + valor);
+                document.getElementById("huespedes").innerText = huespedes;
+            }
+            texto.innerText = `${habitaciones} hab · ${huespedes} huésped${huespedes > 1 ? 'es' : ''}`;
+        }
+
+        // ── Lógica de filtrado ──
+        function aplicarFiltros() {
+            const destino = document.getElementById("destino").value;
+            const estrellasSeleccionadas = [...document.querySelectorAll(".estrellas-check:checked")].map(c => parseInt(c.value));
+            const serviciosSeleccionados = [...document.querySelectorAll(".servicio-check:checked")].map(c => c.value);
+            const estilosSeleccionados = [...document.querySelectorAll(".estilo-check:checked")].map(c => c.value);
+            const preciosSeleccionados = [...document.querySelectorAll(".precio-check:checked")];
+
+            const cards = document.querySelectorAll(".hotel-card");
+            let visibles = 0;
+
+            cards.forEach(card => {
+                const cardDestino = card.dataset.destino;
+                const cardPrecio = parseInt(card.dataset.precio);
+                const cardEstrellas = parseInt(card.dataset.estrellas);
+                const cardServicios = card.dataset.servicios.split(" ");
+                const cardEstilo = card.dataset.estilo;
+                if (destino && cardDestino !== destino) { card.style.display = "none"; return; }
+                if (estrellasSeleccionadas.length > 0 && !estrellasSeleccionadas.includes(cardEstrellas)) { card.style.display = "none"; return; }
+                if (serviciosSeleccionados.length > 0 && !serviciosSeleccionados.every(s => cardServicios.includes(s))) { card.style.display = "none"; return; }
+                if (estilosSeleccionados.length > 0 && !estilosSeleccionados.includes(cardEstilo)) { card.style.display = "none"; return; }
+                if (preciosSeleccionados.length > 0) {
+                    const enRango = preciosSeleccionados.some(cb =>
+                        cardPrecio >= parseInt(cb.dataset.min) && cardPrecio <= parseInt(cb.dataset.max));
+                    if (!enRango) { card.style.display = "none"; return; }
+                }
+
+                card.style.display = "flex";
+                visibles++;
+            });
+
+            document.getElementById("contadorResultados").textContent =
+                visibles === 0 ? "" : `${visibles} resultado${visibles !== 1 ? 's' : ''}`;
+            document.getElementById("sinResultados").classList.toggle("hidden", visibles > 0);
+        }
+
+        // Escuchar todos los filtros en tiempo real
+        document.querySelectorAll(".estrellas-check, .servicio-check, .estilo-check, .precio-check")
+            .forEach(el => el.addEventListener("change", aplicarFiltros));
+        document.getElementById("destino").addEventListener("change", aplicarFiltros);
+        document.getElementById("buscarHotel").addEventListener("click", aplicarFiltros);
+
+        // Limpiar
+        document.getElementById("btnLimpiar").addEventListener("click", () => {
+            document.querySelectorAll(".estrellas-check, .servicio-check, .estilo-check, .precio-check")
+                .forEach(el => el.checked = false);
+            document.getElementById("destino").value = "";
+            aplicarFiltros();
+        });
+
+        aplicarFiltros();
+    </script>
+
+</body>
+</html>
