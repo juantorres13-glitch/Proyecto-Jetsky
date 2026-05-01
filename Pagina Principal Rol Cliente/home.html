@@ -113,10 +113,11 @@
                 <i class="fas fa-hotel text-base"></i>
              <span>Alojamiento</span>
               </a>
-                <button type="button" onclick="filterCatalogSection('paquetes')" data-section-filter="paquetes" class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium">
-                   <i class="fas fa-suitcase"></i>
-                    Paquetes
-                </button>
+              <a href="paquetes.html"
+                class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium transition-colors">
+                  <i class="fas fa-suitcase"></i>
+                  Paquetes
+              </a>
                 <button type="button" onclick="filterCatalogSection('ofertas')" data-section-filter="ofertas" class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium">
                     <i class="fas fa-fire"></i>
                     Ofertas
@@ -300,7 +301,7 @@
                     <div class="grid md:grid-cols-3 gap-4 mt-6">
                         <div>
                             <label class="text-sm font-medium block mb-1">Pasajeros</label>
-                            <select id="passengers" class="w-full h-12 px-4 border rounded-2xl">
+                            <select id="passengers" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#F7931E]">
                                 <option value="1">1 Pasajero</option>
                                 <option value="2">2 Pasajeros</option>
                                 <option value="3">3 Pasajeros</option>
@@ -310,7 +311,7 @@
                         </div>
                         <div>
                             <label class="text-sm font-medium block mb-1">Clase</label>
-                            <select id="flightClass" class="w-full h-12 px-4 border rounded-2xl">
+                            <select id="flightClass" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#F7931E]">
                                 <option value="economy">Económica</option>
                                 <option value="premium">Premium</option>
                                 <option value="business">Business</option>
@@ -576,35 +577,35 @@
         <span class="absolute top-4 right-4 bg-orange-400 text-white px-3 py-1 rounded-full text-sm font-bold">Popular</span>
       </div>
       <div class="p-6">
-        <h3 class="text-xl font-bold mb-2">Tour Cartagena de Indias</h3>
-        <p class="text-gray-600 mb-4">3 dias / 2 noches. Incluye vuelo, hotel 4 estrellas, city tour y dia de playa.</p>
+        <h3 class="text-xl font-bold mb-2">Cartagena All Inclusive</h3>
+        <p class="text-gray-600 mb-4">7 dias / 6 noches. Incluye vuelo, hotel 4 estrellas, city tour y dia de playa.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 3 dias</span>
+          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 7 dias</span>
           <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Cartagena</span>
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-2xl font-bold text-[#f97316]">$860.000</span>
-          <button class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
+          <span class="text-2xl font-bold text-[#f97316]">$4.000.000</span>
+          <button onclick="verPaquete('p7')" class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
         </div>
       </div>
     </div>
 
     <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
       <div class="relative">
-        <img src="https://images.unsplash.com/photo-1523816572-a1a23d1a67b8?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        <img src="https://www.topcompanions.com/static/968f69b6c648cddbe63001ee8fa00399/d2f4e/Luxury-hotels-Dubai.jpg"
              class="h-56 w-full object-cover" alt="Paquete Dubai">
         <span class="absolute top-4 right-4 bg-cyan-400 text-white px-3 py-1 rounded-full text-sm font-bold">Todo incluido</span>
       </div>
       <div class="p-6">
         <h3 class="text-xl font-bold mb-2">Paquete Dubai </h3>
-        <p class="text-gray-600 mb-4">4 dias / 3 noches. Incluye vuelo, hotel con playa, tour marina y al parque acuático Aquaventure.</p>
+        <p class="text-gray-600 mb-4">9 dias / 8 noches. Incluye vuelo, Playa Privada, Spa diario y cena bajo las estrellas.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 4 dias</span>
+          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 9 dias</span>
           <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Dubai</span>
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-2xl font-bold text-[#f97316]">$3.500.000</span>
-          <button class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
+          <span class="text-2xl font-bold text-[#f97316]">$15.000.000</span>
+          <button onclick="verPaquete('p4')" class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
         </div>
       </div>
     </div>
@@ -613,18 +614,18 @@
       <div class="relative">
         <img src="https://i.pinimg.com/1200x/26/89/b3/2689b38565214b3403532cfcbb2f0608.jpg"
              class="h-56 w-full object-cover" alt="Tour Tokio">
-        <span class="absolute top-4 right-4 bg-orange-400 text-white px-3 py-1 rounded-full text-sm font-bold">Familiar</span>
+        <span class="absolute top-4 right-4 bg-orange-400 text-white px-3 py-1 rounded-full text-sm font-bold">Popular</span>
       </div>
       <div class="p-6">
         <h3 class="text-xl font-bold mb-2">Tour Tokio</h3>
-        <p class="text-gray-600 mb-4"> 5 dias / 4 noches. Vuelo, hotel de lujo, ceremonia té, templos y tren bala.</p>
+        <p class="text-gray-600 mb-4"> 11 dias / 10 noches. Incluye vuelo, Onsen privado, ceremonia del té, y el Monte Fuji.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 5 dias</span>
+          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 11 dias</span>
           <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Tokio</span>
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-2xl font-bold text-[#f97316]">$8.000.000</span>
-          <button class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
+          <span class="text-2xl font-bold text-[#f97316]">$12.500.000</span>
+          <button onclick="verPaquete('p2')" class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
         </div>
       </div>
     </div>
@@ -1102,6 +1103,16 @@
             // Redirigimos a la página de alojamientos
             window.location.href = 'hoteles.html';
         }
+
+          // Nueva función para ir a paquetes con detalle específico
+          function verPaquete(packageId) {
+              // Guardamos el ID del paquete que queremos abrir
+              localStorage.setItem('paqueteSeleccionado', packageId);
+              
+              // Redirigimos a la página de paquetes
+              window.location.href = 'paquetes.html';
+          }
+</script>
         
     </script>
 </body>

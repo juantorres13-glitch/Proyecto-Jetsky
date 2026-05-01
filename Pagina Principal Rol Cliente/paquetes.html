@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>JetSky – Paquetes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        html { scroll-behavior: smooth; }
+        .hero-gradient { background: linear-gradient(135deg, #0f172a 0%, #1a3a5c 55%, #0e7490 100%); }
+        .card-lift { transition: transform 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.35s; }
+        .card-lift:hover { transform: translateY(-7px); box-shadow: 0 24px 48px -8px rgba(0,0,0,0.14); }
+        .badge-hot { background: linear-gradient(90deg, #F7931E, #f59e0b); }
+        .pill-active { background:#0f172a; color:#fff; }
+        .pill-idle   { background:#f1f5f9; color:#64748b; }
+        .modal-body  { scrollbar-width: thin; scrollbar-color: #e2e8f0 transparent; }
+        .shine { position:relative; overflow:hidden; }
+        .shine::after {
+            content:''; position:absolute; top:0; left:-75%;
+            width:50%; height:100%;
+            background:linear-gradient(to right,transparent,rgba(255,255,255,.13),transparent);
+            transform:skewX(-20deg); transition:left .55s;
+        }
+        .shine:hover::after { left:125%; }
+        .itinerary-line { border-left: 2px dashed #e2e8f0; margin-left: 12px; }
+        input[type=radio]:checked + .hab-label { border-color:#F7931E; color:#F7931E; }
+    </style>
+
+    
+</head>
+
+<body class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+       <header class="bg-white shadow-sm"> 
+            <nav class= "max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-plane text-[#69d7f7] text-2xl"></i>
+                    <span class="text-2xl font-bold text-[#69d7f7]">JetSky</span>
+                </div>
+                <a href="home.html" >
+                <button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-5 py-2 rounded-lg flex items-center gap-2 text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Volver al Inicio
+                </button>
+                </a>
+             </nav>
+        </header>
+
+<!-- ═══════════════ HERO + BUSCADOR ═══════════════ -->
+<section class="hero-bg text-white pt-14 pb-4 px-6">
+
+        <!-- Buscador -->
+        <div class="bg-white rounded-2xl px-2 py-2 flex flex-wrap gap-2 max-w-3xl mx-auto shadow-2xl">
+            <div class="flex items-center gap-2 flex-1 min-w-[130px] px-3 py-2">
+                <i class="fas fa-map-marker-alt text-gray-400 shrink-0"></i>
+                <select id="destino" class="w-full outline-none text-sm text-gray-600 bg-transparent">
+                    <option value="">¿A dónde?</option>
+                    <option value="europa">Europa</option>
+                    <option value="asia">Asia</option>
+                    <option value="caribe">Caribe</option>
+                    <option value="oriente">Oriente Medio</option>
+                </select>
+            </div>
+            <div class="w-px bg-gray-100 self-stretch"></div>
+            <div class="flex items-center gap-2 flex-1 min-w-[130px] px-3 py-2">
+                <i class="fas fa-calendar text-gray-400 shrink-0"></i>
+                <input type="date" class="w-full outline-none text-sm text-gray-600 bg-transparent">
+            </div>
+            <div class="w-px bg-gray-100 self-stretch"></div>
+            <div class="flex items-center gap-2 flex-1 min-w-[120px] px-3 py-2">
+                <i class="fas fa-users text-gray-400 shrink-0"></i>
+                <select class="w-full outline-none text-sm text-gray-600 bg-transparent">
+                    <option>1 viajero</option>
+                    <option selected>2 viajeros</option>
+                    <option>3 viajeros</option>
+                    <option>4 viajeros</option>
+                    <option>5 o más</option>
+                </select>
+            </div>
+            <button onclick="buscarDesdeHero()" class="shine bg-[#f97316] hover:bg-[#ea580c] text-white px-6 py-3 rounded-xl font-bold text-sm hover:opacity-90 transition shrink-0">
+                <i class="fas fa-search mr-2"></i>Buscar
+            </button>
+        </div>
+    </div>
+</section>
+
+  
+
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="max-w-6xl mx-auto px-6 pt-4 pb-12">
+
+    <!-- encabezado + ordenar -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-7">
+        <div>
+            <h2 class="text-3xl font-bold text-gray-900">Paquetes disponibles</h2>
+            <p class="text-gray-400 text-sm mt-0.5">Vuelo + hotel + experiencias curadas por expertos</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <span id="contPaq" class="text-sm text-gray-400 font-medium"></span>
+            <select id="selectOrden" onchange="ordenar()"
+                class="border border-gray-200 rounded-xl px-4 py-2 text-sm text-gray-600 outline-none focus:border-[#F7931E] bg-white">
+                <option value="">Ordenar por</option>
+                <option value="pa">Precio: menor a mayor</option>
+                <option value="pd">Precio: mayor a menor</option>
+                <option value="rating">Mejor valorado</option>
+                <option value="dur">Duración: más corto</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- pills filtro -->
+    <div class="flex gap-4 flex-wrap mb-10 md:justify-start justify-center">
+        <button class="pill pill-active  text-xs font-bold px-4 py-2 rounded-full transition" data-tag="todos"    onclick="setTag(this)">Todos</button>
+        <button class="pill pill-idle    text-xs font-bold px-4 py-2 rounded-full transition" data-tag="lujo"     onclick="setTag(this)"><i class="fas fa-gem mr-1"></i>Lujo</button>
+        <button class="pill pill-idle    text-xs font-bold px-4 py-2 rounded-full transition" data-tag="familiar" onclick="setTag(this)"><i class="fas fa-child mr-1"></i>Familiar</button>
+        <button class="pill pill-idle    text-xs font-bold px-4 py-2 rounded-full transition" data-tag="economico" onclick="setTag(this)"><i class="fas fa-wallet mr-1"></i>Económico</button>
+    </div>
+
+    <!-- grid -->
+    <div id="gridPaq" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7">
+
+        <!-- PKG 1 -->
+        <div class="pcard card-lift bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer"
+             data-id="p1" data-tags="europa lujo" data-precio="8900000" data-rating="4.9" data-dur="7" onclick="open_pkg('p1')">
+            <div class="relative h-52 overflow-hidden">
+                <img src="https://th.bing.com/th/id/R.7274ce531d4ba2abf245efa61bcdc83e?rik=M9qLHSvBHcA79g&pid=ImgRaw&r=0" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                <span class="badge-hot absolute top-4 left-4 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"><i class="fas fa-fire mr-1"></i>Más vendido</span>
+                <span class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full">7 noches</span>
+                <div class="absolute bottom-4 left-5"><p class="text-white font-black text-xl leading-tight">París Romántico</p><p class="text-white/75 text-xs mt-0.5"><i class="fas fa-map-marker-alt mr-1"></i>París, Francia</p></div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-plane mr-1"></i>Vuelo</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-hotel mr-1"></i>Hotel 5★</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-ticket-alt mr-1"></i>Tours</span>
+                    </div>
+                    <span class="text-cyan-600 text-xs font-bold"><i class="fas fa-star mr-1"></i>4.9</span>
+                </div>
+                <p class="text-gray-500 text-xs leading-relaxed mb-4">Torre Eiffel, Louvre, crucero por el Sena y cena con estrella Michelin incluida.</p>
+                <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                    <div><p class="text-[10px] text-gray-400">Desde / persona</p><p class="text-2xl font-black text-gray-900">$8.900.000</p></div>
+                    <button class="shine bg-gray-900 text-white px-5 py-2 rounded-2xl text-xs font-bold hover:bg-[#69d7f7] transition">Ver paquete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PKG 2 -->
+        <div class="pcard card-lift bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer"
+             data-id="p2" data-tags="asia lujo" data-precio="12500000" data-rating="5.0" data-dur="10" onclick="open_pkg('p2')">
+            <div class="relative h-52 overflow-hidden">
+                <img src="https://i.pinimg.com/1200x/26/89/b3/2689b38565214b3403532cfcbb2f0608.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                <span class="absolute top-4 left-4 bg-cyan-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"><i class="fas fa-gem mr-1"></i>Premium</span>
+                <span class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full">10 noches</span>
+                <div class="absolute bottom-4 left-5"><p class="text-white font-black text-xl leading-tight">Tokio Imperial</p><p class="text-white/75 text-xs mt-0.5"><i class="fas fa-map-marker-alt mr-1"></i>Tokio, Japón</p></div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-plane mr-1"></i>Vuelo</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-hotel mr-1"></i>Hotel 5★</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-utensils mr-1"></i>Comidas</span>
+                    </div>
+                    <span class="text-cyan-600 text-xs font-bold"><i class="fas fa-star mr-1"></i>5.0</span>
+                </div>
+                <p class="text-gray-500 text-xs leading-relaxed mb-4">Shinjuku, Monte Fuji, ceremonia del té y una noche en ryokan tradicional.</p>
+                <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                    <div><p class="text-[10px] text-gray-400">Desde / persona</p><p class="text-2xl font-black text-gray-900">$12.500.000</p></div>
+                    <button class="shine bg-gray-900 text-white px-5 py-2 rounded-2xl text-xs font-bold hover:bg-[#69d7f7] transition">Ver paquete</button>
+                </div>
+            </div>
+        </div>
+              <!-- PKG 3 -->
+        <div class="pcard card-lift bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer"
+             data-id="p3" data-tags="caribe familiar economico" data-precio="3200000" data-rating="4.7" data-dur="5" onclick="open_pkg('p3')">
+            <div class="relative h-52 overflow-hidden">
+                <img src="https://i.pinimg.com/1200x/e6/03/3c/e6033cfcab1f12759ef326a1cae8ea31.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                <span class="absolute top-4 left-4 bg-green-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"><i class="fas fa-tag mr-1"></i>Oferta</span>
+                <span class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full">5 noches</span>
+                <div class="absolute bottom-4 left-5"><p class="text-white font-black text-xl leading-tight">San Andrés Paraíso</p><p class="text-white/75 text-xs mt-0.5"><i class="fas fa-map-marker-alt mr-1"></i>San Andrés, Colombia</p></div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-plane mr-1"></i>Vuelo</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-hotel mr-1"></i>Hotel 4★</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-water mr-1"></i>Snorkel</span>
+                    </div>
+                    <span class="text-cyan-600 text-xs font-bold"><i class="fas fa-star mr-1"></i>4.7</span>
+                </div>
+                <p class="text-gray-500 text-xs leading-relaxed mb-4">Mar de los 7 colores, snorkel en el acuario natural y catamarán al atardecer.</p>
+                <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                    <div><p class="text-[10px] text-gray-400">Desde / persona</p><p class="text-2xl font-black text-gray-900">$3.200.000</p></div>
+                    <button class="shine bg-gray-900 text-white px-5 py-2 rounded-2xl text-xs font-bold hover:bg-[#69d7f7] transition">Ver paquete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PKG 4 -->
+        <div class="pcard card-lift bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer"
+             data-id="p4" data-tags="oriente lujo" data-precio="15000000" data-rating="5.0" data-dur="8" onclick="open_pkg('p4')">
+            <div class="relative h-52 overflow-hidden">
+                <img src="https://www.topcompanions.com/static/968f69b6c648cddbe63001ee8fa00399/d2f4e/Luxury-hotels-Dubai.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                <span class="badge-hot absolute top-4 left-4 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"><i class="fas fa-crown mr-1"></i>Exclusivo</span>
+                <span class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full">8 noches</span>
+                <div class="absolute bottom-4 left-5"><p class="text-white font-black text-xl leading-tight">Dubái Ultra Luxury</p><p class="text-white/75 text-xs mt-0.5"><i class="fas fa-map-marker-alt mr-1"></i>Dubái, EAU</p></div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-plane mr-1"></i>Business</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-hotel mr-1"></i>Hotel 7★</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Rolls-Royce</span>
+                    </div>
+                    <span class="text-cyan-600 text-xs font-bold"><i class="fas fa-star mr-1"></i>5.0</span>
+                </div>
+                <p class="text-gray-500 text-xs leading-relaxed mb-4">Burj Al Arab, helicóptero privado, Desert Safari y cena en el restaurante más alto del mundo.</p>
+                <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                    <div><p class="text-[10px] text-gray-400">Desde / persona</p><p class="text-2xl font-black text-gray-900">$15.000.000</p></div>
+                    <button class="shine bg-gray-900 text-white px-5 py-2 rounded-2xl text-xs font-bold hover:bg-[#69d7f7] transition">Ver paquete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PKG 5 -->
+        <div class="pcard card-lift bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer"
+             data-id="p5" data-tags="colombia aventura economico" data-precio="2100000" data-rating="4.6" data-dur="4" onclick="open_pkg('p5')">
+            <div class="relative h-52 overflow-hidden">
+                <img src="https://i.pinimg.com/736x/0a/12/56/0a1256efa3373a336a125faf174f47d5.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                <span class="absolute top-4 left-4 bg-green-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"><i class="fas fa-leaf mr-1"></i>Eco</span>
+                <span class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full">4 noches</span>
+                <div class="absolute bottom-4 left-5"><p class="text-white font-black text-xl leading-tight">Medellín City Break</p><p class="text-white/75 text-xs mt-0.5"><i class="fas fa-map-marker-alt mr-1"></i>Medellín, Colombia</p></div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-plane mr-1"></i>Vuelo</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-hotel mr-1"></i>Hotel 4★</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-route mr-1"></i>City tour</span>
+                    </div>
+                    <span class="text-cyan-600 text-xs font-bold"><i class="fas fa-star mr-1"></i>4.6</span>
+                </div>
+                <p class="text-gray-500 text-xs leading-relaxed mb-4">Parque Arví, Guatapé, tour de graffiti y degustación de café de origen.</p>
+                <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                    <div><p class="text-[10px] text-gray-400">Desde / persona</p><p class="text-2xl font-black text-gray-900">$2.100.000</p></div>
+                    <button class="shine bg-gray-900 text-white px-5 py-2 rounded-2xl text-xs font-bold hover:bg-[#69d7f7] transition">Ver paquete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PKG 6 -->
+        <div class="pcard card-lift bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer"
+             data-id="p6" data-tags="europa familiar" data-precio="6500000" data-rating="4.8" data-dur="8" onclick="open_pkg('p6')">
+            <div class="relative h-52 overflow-hidden">
+                <img src="https://i.pinimg.com/1200x/8f/7c/7f/8f7c7f45be058e866984a2b79d689280.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                <span class="absolute top-4 left-4 bg-purple-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"><i class="fas fa-child mr-1"></i>Familiar</span>
+                <span class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full">8 noches</span>
+                <div class="absolute bottom-4 left-5"><p class="text-white font-black text-xl leading-tight">Roma & Vaticano</p><p class="text-white/75 text-xs mt-0.5"><i class="fas fa-map-marker-alt mr-1"></i>Roma, Italia</p></div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-plane mr-1"></i>Vuelo</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-hotel mr-1"></i>Hotel 4★</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-ticket-alt mr-1"></i>Museos VIP</span>
+                    </div>
+                    <span class="text-cyan-600 text-xs font-bold"><i class="fas fa-star mr-1"></i>4.8</span>
+                </div>
+                <p class="text-gray-500 text-xs leading-relaxed mb-4">Coliseo, Vaticano sin colas, clase de cocina italiana y Tívoli en excursión.</p>
+                <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                    <div><p class="text-[10px] text-gray-400">Desde / persona</p><p class="text-2xl font-black text-gray-900">$6.500.000</p></div>
+                    <button class="shine bg-gray-900 text-white px-5 py-2 rounded-2xl text-xs font-bold hover:bg-[#69d7f7] transition">Ver paquete</button>
+                </div>
+            </div>
+        </div>
+
+                <!-- PKG 7 -->
+        <div class="pcard card-lift bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer"
+             data-id="p7" data-tags="caribe familiar lujo" data-precio="4800000" data-rating="4.8" data-dur="6" onclick="open_pkg('p7')">
+            <div class="relative h-52 overflow-hidden">
+                <img src="https://i.pinimg.com/1200x/90/09/d7/9009d76915b103eb43c9e69bd9a1e3f0.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                <span class="badge-hot absolute top-4 left-4 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"><i class="fas fa-fire mr-1"></i>Trending</span>
+                <span class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full">6 noches</span>
+                <div class="absolute bottom-4 left-5"><p class="text-white font-black text-xl leading-tight">Cartagena All Inclusive</p><p class="text-white/75 text-xs mt-0.5"><i class="fas fa-map-marker-alt mr-1"></i>Cartagena, Colombia</p></div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-plane mr-1"></i>Vuelo</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-utensils mr-1"></i>All Inclusive</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-ship mr-1"></i>Crucero</span>
+                    </div>
+                    <span class="text-cyan-600 text-xs font-bold"><i class="fas fa-star mr-1"></i>4.8</span>
+                </div>
+                <p class="text-gray-500 text-xs leading-relaxed mb-4">Ciudad Amurallada, Islas del Rosario, catamarán y gastronomía costeña sin límite.</p>
+                <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                    <div><p class="text-[10px] text-gray-400">Desde / persona</p><p class="text-2xl font-black text-gray-900">$4.000.000</p></div>
+                    <button class="shine bg-gray-900 text-white px-5 py-2 rounded-2xl text-xs font-bold hover:bg-[#69d7f7] transition">Ver paquete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PKG 8 -->
+        <div class="pcard card-lift bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer"
+             data-id="p8" data-tags="europa lujo" data-precio="9800000" data-rating="4.8" data-dur="7" onclick="open_pkg('p8')">
+            <div class="relative h-52 overflow-hidden">
+                <img src="https://i.pinimg.com/1200x/02/94/c8/0294c8e5cf6d143fca801de8e7e9d797.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                <span class="absolute top-4 left-4 bg-cyan-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"><i class="fas fa-star mr-1"></i>Top rated</span>
+                <span class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full">7 noches</span>
+                <div class="absolute bottom-4 left-5"><p class="text-white font-black text-xl leading-tight">Londres Clásico</p><p class="text-white/75 text-xs mt-0.5"><i class="fas fa-map-marker-alt mr-1"></i>Londres, Reino Unido</p></div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-plane mr-1"></i>Vuelo</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-hotel mr-1"></i>Hotel 4★</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-subway mr-1"></i>Oyster Card</span>
+                    </div>
+                    <span class="text-cyan-600 text-xs font-bold"><i class="fas fa-star mr-1"></i>4.8</span>
+                </div>
+                <p class="text-gray-500 text-xs leading-relaxed mb-4">Big Ben, British Museum, afternoon tea en Harrods y show en el West End.</p>
+                <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                    <div><p class="text-[10px] text-gray-400">Desde / persona</p><p class="text-2xl font-black text-gray-900">$9.800.000</p></div>
+                    <button class="shine bg-gray-900 text-white px-5 py-2 rounded-2xl text-xs font-bold hover:bg-[#69d7f7] transition">Ver paquete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PKG 9 -->
+        <div class="pcard card-lift bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer"
+             data-id="p9" data-tags="colombia aventura familiar" data-precio="1800000" data-rating="4.5" data-dur="3" onclick="open_pkg('p9')">
+            <div class="relative h-52 overflow-hidden">
+                <img src="https://i.pinimg.com/1200x/86/11/1e/86111e45790caf0ae96582ec1730ede6.jpg" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                <span class="absolute top-4 left-4 bg-green-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"><i class="fas fa-leaf mr-1"></i>Aventura</span>
+                <span class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full">3 noches</span>
+                <div class="absolute bottom-4 left-5"><p class="text-white font-black text-xl leading-tight">Eje Cafetero Mágico</p><p class="text-white/75 text-xs mt-0.5"><i class="fas fa-map-marker-alt mr-1"></i>Salento, Colombia</p></div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-bus mr-1"></i>Transfer</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-hotel mr-1"></i>Finca boutique</span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Café tour</span>
+                    </div>
+                    <span class="text-cyan-600 text-xs font-bold"><i class="fas fa-star mr-1"></i>4.5</span>
+                </div>
+                <p class="text-gray-500 text-xs leading-relaxed mb-4">Valle del Cocora, finca cafetera, senderismo entre palmas de cera y cata de café premium.</p>
+                <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                    <div><p class="text-[10px] text-gray-400">Desde / persona</p><p class="text-2xl font-black text-gray-900">$1.800.000</p></div>
+                    <button class="shine bg-gray-900 text-white px-5 py-2 rounded-2xl text-xs font-bold hover:bg-[#69d7f7] transition">Ver paquete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- vacío -->
+        <div id="empty" class="hidden col-span-full text-center py-24 text-gray-400">
+            <i class="fas fa-box-open text-5xl mb-5 block"></i>
+            <p class="text-xl font-bold text-gray-500">Sin resultados para este filtro</p>
+            <p class="text-sm mt-2">Intenta con otra categoría</p>
+        </div>
+    </div><!-- fin grid -->
+
+</main><!-- fin main -->
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="bg-[#0f172a] text-white py-12 mt-16">
+    <div class="max-w-5xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+            <div><h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Compra</h6>
+                <div class="text-sm text-gray-400 space-y-2">
+                    <p class="hover:text-white cursor-pointer">Vuelos baratos</p>
+                    <p class="hover:text-white cursor-pointer">Hoteles</p>
+                    <p class="hover:text-white cursor-pointer">Paquetes</p>
+                </div></div>
+            <div><h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">JetSky</h6>
+                <div class="text-sm text-gray-400 space-y-2">
+                    <p class="hover:text-white cursor-pointer">Sobre nosotros</p>
+                    <p class="hover:text-white cursor-pointer">Sostenibilidad</p>
+                    <p class="hover:text-white cursor-pointer">Empleo</p>
+                </div></div>
+            <div><h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Ayuda</h6>
+                <div class="text-sm text-gray-400 space-y-2">
+                    <p class="hover:text-white cursor-pointer">Soporte</p>
+                    <p class="hover:text-white cursor-pointer">PQRS</p>
+                    <p class="hover:text-white cursor-pointer">Check-in</p>
+                </div></div>
+            <div><h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Legal</h6>
+                <div class="text-sm text-gray-400 space-y-2">
+                    <p class="hover:text-white cursor-pointer">Privacidad</p>
+                    <p class="hover:text-white cursor-pointer">Condiciones</p>
+                    <p class="hover:text-white cursor-pointer">Cookies</p>
+                </div></div>
+        </div>
+        <div class="mt-12 pt-8 border-t border-gray-800 text-center">
+            <p class="text-gray-500 text-[10px] tracking-[.3em]">© 2026 JETSKY · TODOS LOS DERECHOS RESERVADOS</p>
+        </div>
+    </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL DETALLE + RESERVA
+═══════════════════════════════════════════════════════════════ -->
+<div id="overlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4"
+     style="background:rgba(15,23,42,.75);backdrop-filter:blur(6px)">
+    <div id="mbox" class="bg-white rounded-[2rem] w-full max-w-2xl max-h-[92vh] overflow-y-auto shadow-2xl relative modal-body">
+
+        <!-- cerrar -->
+        <button onclick="close_modal()" class="absolute top-5 right-5 z-10 w-9 h-9 bg-white/90 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 shadow transition">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <!-- ── VISTA DETALLE ── -->
+        <div id="vDet">
+            <div class="h-64 overflow-hidden rounded-t-[2rem] relative">
+                <img id="dImg" src="" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div class="absolute bottom-5 left-7">
+                    <p id="dBadge" class="text-[10px] font-bold uppercase tracking-widest text-white/70 mb-1"></p>
+                    <h2 id="dNombre" class="text-2xl font-black text-white"></h2>
+                    <p id="dLoc" class="text-white/80 text-sm mt-1"></p>
+                </div>
+            </div>
+            <div class="p-8">
+                <!-- quick stats -->
+                <div class="grid grid-cols-3 gap-3 mb-7">
+                    <div class="bg-slate-50 rounded-2xl p-4 text-center">
+                        <i class="fas fa-moon text-[#F7931E] mb-2 block"></i>
+                        <p id="dNoches" class="font-black text-gray-900 text-xl"></p>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider">Noches</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-4 text-center">
+                        <i class="fas fa-star text-cyan-500 mb-2 block"></i>
+                        <p id="dRating" class="font-black text-gray-900 text-xl"></p>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider">Rating</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-4 text-center">
+                        <i class="fas fa-users text-purple-400 mb-2 block"></i>
+                        <p id="dPax" class="font-black text-gray-900 text-xl"></p>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-wider">Viajeros</p>
+                    </div>
+                </div>
+                <h4 class="section-label mb-2">Descripción</h4>
+                <p id="dDesc" class="text-gray-600 text-sm leading-relaxed mb-7"></p>
+                <h4 class="section-label mb-3">¿Qué incluye?</h4>
+                <div id="dIncluye" class="grid grid-cols-2 gap-2 mb-7"></div>
+                <h4 class="section-label mb-4">Itinerario día a día</h4>
+                <div id="dItinerario" class="space-y-0 mb-8"></div>
+                <div class="border-t border-gray-100 pt-6 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-gray-400">Desde / persona</p>
+                        <p id="dPrecio" class="text-3xl font-black text-gray-900"></p>
+                        <p class="text-xs text-green-500 font-semibold mt-1"><i class="fas fa-check-circle mr-1"></i>Cancelación gratuita 72h antes</p>
+                    </div>
+                    <button onclick="go_reservar()" class="shine bg-[#F7931E] text-white px-8 py-3 rounded-2xl font-bold hover:opacity-90 transition text-sm">
+                        Reservar paquete
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── VISTA RESERVAR ── -->
+        <div id="vRes" class="hidden p-8">
+
+            <!-- stepper -->
+            <div class="flex items-center gap-1 mb-8" id="stepper">
+                <div class="flex items-center gap-2"><div id="s1" class="step w-7 h-7 rounded-full bg-[#F7931E] text-white text-xs font-bold flex items-center justify-center">1</div><span class="text-xs font-semibold text-gray-700">Viaje</span></div>
+                <div class="flex-1 h-px bg-gray-200"></div>
+                <div class="flex items-center gap-2"><div id="s2" class="step w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">2</div><span class="text-xs font-semibold text-gray-400">Pasajero</span></div>
+                <div class="flex-1 h-px bg-gray-200"></div>
+                <div class="flex items-center gap-2"><div id="s3" class="step w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">3</div><span class="text-xs font-semibold text-gray-400">Pago</span></div>
+                <div class="flex-1 h-px bg-gray-200"></div>
+                <div class="flex items-center gap-2"><div id="s4" class="step w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">4</div><span class="text-xs font-semibold text-gray-400">Listo</span></div>
+            </div>
+
+            <!-- mini card resumen -->
+            <div class="bg-slate-50 rounded-2xl p-4 flex gap-4 mb-7">
+                <img id="rImg" src="" class="w-20 h-16 object-cover rounded-xl shrink-0">
+                <div><p id="rNom" class="font-bold text-gray-900 text-sm"></p><p id="rLoc" class="text-gray-500 text-xs mt-0.5"></p><p id="rPre" class="text-[#F7931E] font-bold text-sm mt-1"></p></div>
+            </div>
+
+            <!-- PASO 1 — detalles viaje -->
+            <div id="paso1">
+                <h3 class="text-lg font-bold text-gray-900 mb-5">Detalles del viaje</h3>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div><label class="flabel">Fecha de salida</label><input id="pFecha" type="date" class="finput"></div>
+                    <div><label class="flabel">Viajeros</label>
+                        <select id="pViaj" class="finput bg-white">
+                            <option>1 viajero</option><option selected>2 viajeros</option><option>3 viajeros</option><option>4 viajeros</option><option>5 o más</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="flabel">Tipo de habitación</label>
+                    <div class="grid grid-cols-3 gap-3 mt-1">
+                        <label class="cursor-pointer"><input type="radio" name="hab" value="sencilla" class="sr-only peer"><div class="peer-checked:border-[#F7931E] peer-checked:text-[#F7931E] border-2 border-gray-200 rounded-xl p-3 text-center text-xs font-semibold text-gray-400 transition"><i class="fas fa-bed block mb-1 text-lg"></i>Sencilla</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="hab" value="doble" checked class="sr-only peer"><div class="peer-checked:border-[#F7931E] peer-checked:text-[#F7931E] border-2 border-[#F7931E] text-[#F7931E] rounded-xl p-3 text-center text-xs font-semibold transition"><i class="fas fa-bed block mb-1 text-lg"></i>Doble</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="hab" value="suite" class="sr-only peer"><div class="peer-checked:border-[#F7931E] peer-checked:text-[#F7931E] border-2 border-gray-200 rounded-xl p-3 text-center text-xs font-semibold text-gray-400 transition"><i class="fas fa-star block mb-1 text-lg"></i>Suite</div></label>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="flabel">Solicitudes especiales</label>
+                    <textarea rows="2" placeholder="Alergias, ocasión especial, preferencias..." class="finput resize-none"></textarea>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="go_det()" class="btn-sec flex-1">← Volver</button>
+                    <button onclick="go_step(2)" class="btn-prim flex-1">Continuar →</button>
+                </div>
+            </div>
+
+            <!-- PASO 2 — pasajero -->
+            <div id="paso2" class="hidden">
+                <h3 class="text-lg font-bold text-gray-900 mb-5">Datos del pasajero principal</h3>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div><label class="flabel">Nombre</label><input id="pNom" type="text" placeholder="María" class="finput"></div>
+                    <div><label class="flabel">Apellido</label><input id="pApe" type="text" placeholder="García" class="finput"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div><label class="flabel">Correo</label><input id="pEmail" type="email" placeholder="maria@email.com" class="finput"></div>
+                    <div><label class="flabel">Teléfono</label><input type="tel" placeholder="+57 300 000 0000" class="finput"></div>
+                </div>
+                <div class="mb-4"><label class="flabel">Pasaporte / Cédula</label><input type="text" placeholder="CC 1234567890" class="finput"></div>
+                <div class="mb-6">
+                    <label class="flabel">Nacionalidad</label>
+                    <select class="finput bg-white"><option>Colombia</option><option>Venezuela</option><option>Ecuador</option><option>México</option><option>Otro</option></select>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="go_step(1)" class="btn-sec flex-1">← Volver</button>
+                    <button onclick="go_step(3)" class="btn-prim flex-1">Continuar →</button>
+                </div>
+            </div>
+
+            <!-- PASO 3 — pago -->
+            <div id="paso3" class="hidden">
+                <h3 class="text-lg font-bold text-gray-900 mb-5">Datos de pago</h3>
+                <div class="flex items-center gap-3 bg-orange-50 border border-orange-100 rounded-xl px-4 py-3 mb-6">
+                    <div class="w-8 h-8 bg-[#F7931E] rounded-lg flex items-center justify-center shrink-0">
+                        <i class="fas fa-credit-card text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-gray-800">Pago con tarjeta</p>
+                        <p class="text-xs text-gray-400">Débito o crédito · Transacción segura cifrada</p>
+                    </div>
+                    <i class="fas fa-lock text-gray-300 ml-auto"></i>
+                </div>
+                <div id="fTarjeta">
+                    <div class="mb-4"><label class="flabel">Número de tarjeta</label><input type="text" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this)" class="finput font-mono"></div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div><label class="flabel">Vencimiento</label><input type="text" placeholder="MM/AA" maxlength="5" class="finput font-mono"></div>
+                        <div><label class="flabel">CVV</label><input type="password" placeholder="•••" maxlength="4" class="finput font-mono"></div>
+                    </div>
+                    <div class="mb-5"><label class="flabel">Titular</label><input type="text" placeholder="MARÍA GARCÍA" class="finput uppercase"></div>
+                </div>
+                <!-- resumen -->
+                <div class="bg-slate-50 rounded-2xl p-5 mb-6 space-y-2">
+                    <div class="flex justify-between text-sm text-gray-600"><span>Precio paquete</span><span id="rBase"></span></div>
+                    <div class="flex justify-between text-sm text-gray-600"><span>IVA (19%)</span><span id="rIva"></span></div>
+                    <div class="border-t border-gray-200 pt-2 flex justify-between font-black text-gray-900 text-base"><span>Total</span><span id="rTotal"></span></div>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="go_step(2)" class="btn-sec flex-1">← Volver</button>
+                    <button onclick="go_step(4)" class="btn-prim flex-1">Confirmar pago →</button>
+                </div>
+            </div>
+
+            <!-- PASO 4 — confirmación -->
+            <div id="paso4" class="hidden text-center py-4">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-check text-green-500 text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">¡Paquete reservado!</h3>
+                <p class="text-gray-500 text-sm mb-6">Enviamos vouchers e itinerario completo a tu correo.</p>
+                <div class="bg-slate-50 rounded-2xl p-5 text-left mb-6 space-y-3">
+                    <div class="flex justify-between text-sm"><span class="text-gray-500">Paquete</span><span id="cPkg" class="font-semibold text-gray-900"></span></div>
+                    <div class="flex justify-between text-sm"><span class="text-gray-500">Pasajero</span><span id="cPax" class="font-semibold text-gray-900"></span></div>
+                    <div class="flex justify-between text-sm"><span class="text-gray-500">Total pagado</span><span id="cTotal" class="font-bold text-[#F7931E]"></span></div>
+                    <div class="flex justify-between text-sm"><span class="text-gray-500">Código reserva</span><span id="cCod" class="font-mono font-bold text-gray-900"></span></div>
+                </div>
+                <button onclick="close_modal()" class="w-full bg-gray-900 text-white py-3 rounded-2xl font-bold hover:bg-cyan-600 transition text-sm">Cerrar</button>
+            </div>
+        </div><!-- fin vRes -->
+    </div>
+</div>
+
+<!-- ─── ESTILOS UTILITARIOS ─── -->
+<style>
+.section-label { font-size:.625rem; font-weight:700; text-transform:uppercase; letter-spacing:.15em; color:#94a3b8; }
+.flabel { display:block; font-size:.625rem; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:#94a3b8; margin-bottom:.25rem; }
+.finput { width:100%; border:1px solid #e2e8f0; border-radius:.75rem; padding:.75rem 1rem; font-size:.875rem; outline:none; transition:border-color .2s; }
+.finput:focus { border-color:#F7931E; }
+.btn-prim { background:#F7931E; color:#fff; padding:.75rem; border-radius:1rem; font-weight:700; font-size:.875rem; transition:opacity .2s; }
+.btn-prim:hover { opacity:.88; }
+.btn-sec  { border:1px solid #e2e8f0; color:#64748b; padding:.75rem; border-radius:1rem; font-weight:700; font-size:.875rem; transition:border-color .2s; }
+.btn-sec:hover { border-color:#94a3b8; }
+.metodo-btn  { border-width:2px; border-radius:.75rem; padding:.6rem; font-size:.8rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:.35rem; transition:all .2s; }
+.metodo-on   { border-color:#F7931E; color:#F7931E; }
+.metodo-off  { border-color:#e2e8f0; color:#94a3b8; }
+</style>
+
+<!-- ─── DATOS PAQUETES ─── -->
+<script>
+const PKG = {
+  p1:{nombre:"París Romántico",loc:"París, Francia",noches:7,rating:"4.9",pax:"Para 2",precio:8900000,badge:"⭐ Más vendido",
+    img:"https://i.pinimg.com/1200x/5f/7d/f2/5f7df2557c6bfa65ef3c41cf4113f61a.jpg",
+    desc:"Una semana sumergidos en la ciudad del amor. De la Torre Eiffel al Louvre, de Montmartre a Versalles. Incluye cena de gala en restaurante con estrella Michelin y crucero privado por el Sena al anochecer.",
+    incluye:[["fas fa-plane","Vuelo ida y vuelta"],["fas fa-hotel","7 noches hotel 5★"],["fas fa-coffee","Desayuno diario"],["fas fa-ticket-alt","Entrada Torre Eiffel"],["fas fa-ship","Crucero por el Sena"],["fas fa-bus","Traslados aeropuerto"],["fas fa-glass-cheers","Cena Michelin"],["fas fa-headset","Guía local 24h"]],
+    itinerario:[{d:1,t:"Llegada & Campos Elíseos",x:"Traslado al hotel y paseo nocturno por los Campos Elíseos con bienvenida de champagne."},{d:2,t:"Torre Eiffel & Trocadero",x:"Acceso VIP al summit de la Torre Eiffel y tarde libre en Montmartre."},{d:3,t:"Louvre & Le Marais",x:"Visita guiada con acceso prioritario al Louvre y almuerzo en Le Marais."},{d:4,t:"Versalles",x:"Excursión de día completo al Palacio y jardines de Versalles."},{d:5,t:"Día libre & Compras",x:"Galerías Lafayette, Boulevard Haussmann y Saint-Germain-des-Prés."},{d:6,t:"Crucero & Cena Michelin",x:"Crucero privado al atardecer y cena de gala con menú degustación."},{d:7,t:"Au revoir París",x:"Desayuno final, paseo por el Marais y traslado al aeropuerto."}]},
+  p2:{nombre:"Tokio Imperial",loc:"Tokio, Japón",noches:10,rating:"5.0",pax:"Para 2",precio:12500000,badge:"💎 Premium",
+    img:"https://i.pinimg.com/736x/34/be/7f/34be7fb9076c94026170b73c9394a3e8.jpg",
+    desc:"Diez días descubriendo la dualidad de Japón: la metrópolis más futurista del mundo y 2.000 años de historia samurái. Onsen privado, ceremonia del té, sushi de mercado y el inigualable Monte Fuji.",
+    incluye:[["fas fa-plane","Vuelo ida y vuelta"],["fas fa-hotel","8 noches hotel 5★"],["fas fa-torii-gate","1 noche Ryokan"],["fas fa-utensils","Comidas incluidas"],["fas fa-train","JR Pass ilimitado"],["fas fa-mountain","Excursión Monte Fuji"],["fas fa-leaf","Ceremonia del té"],["fas fa-headset","Guía bilingüe"]],
+    itinerario:[{d:1,t:"Llegada a Narita",x:"Bienvenida, traslado al hotel en Shinjuku y primer ramen auténtico."},{d:2,t:"Shinjuku & Harajuku",x:"Templo Meiji, calle Takeshita y luces de Kabukicho por la noche."},{d:3,t:"Shibuya & Akihabara",x:"El cruce más famoso del mundo, Shibuya Sky y mundo electrónico de Akihabara."},{d:4,t:"Monte Fuji",x:"Excursión completa al Monte Fuji y los Cinco Lagos con almuerzo kaiseki."},{d:5,t:"Nikko",x:"Santuarios y templos Patrimonio UNESCO entre montañas cubiertas de cedros."},{d:6,t:"Asakusa & Ueno",x:"Templo Senso-ji, mercado de Nakamise y Museo Nacional de Tokio."},{d:7,t:"Ryokan en Hakone",x:"Traslado a Hakone, onsen privado y cena kaiseki de 12 tiempos."},{d:8,t:"Tsukiji & Ginza",x:"Mercado pesquero Tsukiji, sushi del mejor chef y tarde en Ginza."},{d:9,t:"Día libre en Tokio",x:"Compras en Shibuya o visita a DisneySea (excursión opcional)."},{d:10,t:"Sayonara Tokio",x:"Desayuno japonés, traslado a Narita y vuelo de regreso."}]},
+  p3:{nombre:"San Andrés Paraíso",loc:"San Andrés, Colombia",noches:5,rating:"4.7",pax:"Para todos",precio:3200000,badge:"🏷️ Oferta",
+    img:"https://i.pinimg.com/736x/7a/35/8a/7a358ad1bf79ef9e709c8c12723fcea5.jpg",
+    desc:"El Caribe colombiano en todo su esplendor. El Mar de los Siete Colores, arrecifes de coral vírgenes, langosta fresca y ritmo reggae. El escape perfecto a tan solo unas horas de vuelo.",
+    incluye:[["fas fa-plane","Vuelo ida y vuelta"],["fas fa-hotel","5 noches hotel 4★"],["fas fa-coffee","Desayuno diario"],["fas fa-fish","Tour snorkel"],["fas fa-ship","Catamarán"],["fas fa-water","Moto acuática 1h"],["fas fa-bus","Traslados"],["fas fa-map","City tour"]],
+    itinerario:[{d:1,t:"Llegada a la isla",x:"Cóctel de bienvenida, check-in y cena frente al mar."},{d:2,t:"Mar de los 7 Colores",x:"Snorkel en el acuario natural y Johnny Cay. Almuerzo de langosta en el mar."},{d:3,t:"Islas & Catamarán",x:"Paseo en catamarán a Haynes Cay con música en vivo y cóctel de bienvenida."},{d:4,t:"Día libre",x:"Playa, motos acuáticas, tiendas free shop o masaje en la playa."},{d:5,t:"La Piscinita & Retorno",x:"Último snorkel en La Piscinita y traslado al aeropuerto."}]},
+  p4:{nombre:"Dubái Ultra Luxury",loc:"Dubái, EAU",noches:8,rating:"5.0",pax:"Para 2",precio:15000000,badge:"👑 Exclusivo",
+    img:"https://i.pinimg.com/736x/da/d9/66/dad966eeb126b3106257ffcdb5b21a98.jpg",
+    desc:"La experiencia definitiva del lujo árabe. Clase Business en Emirates, suite con mayordomo en el Burj Al Arab, helicóptero privado y cena en At.mosphere, el restaurante más alto del mundo.",
+    incluye:[["fas fa-plane","Business Class Emirates"],["fas fa-hotel","6 noches Burj Al Arab"],["fas fa-helicopter","Vuelo helicóptero"],["fas fa-utensils","Todo incluido"],["fas fa-car","Rolls-Royce privado"],["fas fa-spa","Spa diario"],["fas fa-swimming-pool","Playa privada"],["fas fa-concierge-bell","Mayordomo 24h"]],
+    itinerario:[{d:1,t:"Llegada en Business",x:"Recepción VIP en Rolls-Royce y check-in en suite del Burj Al Arab."},{d:2,t:"Helicóptero & At.mosphere",x:"Vuelo en helicóptero sobre Dubái y cena en el piso 122 del Burj Khalifa."},{d:3,t:"Desert Safari Privado",x:"4x4 en dunas de Liwa, campamento beduino de lujo y cena bajo las estrellas."},{d:4,t:"Palm Jumeirah",x:"Atlantis The Palm, monorail y brunch en el Nobu con vistas al golfo."},{d:5,t:"Gold Souk & Abra",x:"Mercado del oro, especias y paseo en dhow tradicional por el Creek."},{d:6,t:"Día de Spa",x:"Spa exclusivo del Burj Al Arab y tarde libre en playa privada."},{d:7,t:"Ferrari World & Yas Island",x:"Adrenalina en Ferrari World y cena en restaurante Gordon Ramsay Yas."},{d:8,t:"Retorno en Business",x:"Desayuno de lujo, check-out y transfer al aeropuerto Business Class."}]},
+  p5:{nombre:"Medellín City Break",loc:"Medellín, Colombia",noches:4,rating:"4.6",pax:"Para todos",precio:2100000,badge:"🌿 Eco",
+    img:"https://i.pinimg.com/736x/06/50/59/06505944c3781610c0d46691777992e4.jpg",
+    desc:"La ciudad de la eterna primavera: innovación, naturaleza y gastronomía de clase mundial. Metro cable, Guatapé, café de origen y los mejores bares de El Poblado en 4 noches perfectas.",
+    incluye:[["fas fa-plane","Vuelo ida y vuelta"],["fas fa-hotel","4 noches hotel 4★"],["fas fa-coffee","Desayuno + café"],["fas fa-cable-car","Metro Cable"],["fas fa-mountain","Excursión Guatapé"],["fas fa-paint-brush","Tour graffiti"],["fas fa-seedling","Finca cafetera"],["fas fa-bus","Traslados"]],
+    itinerario:[{d:1,t:"Llegada a Medellín",x:"Bienvenida y primera noche de tapas en el vibrante Parque Lleras."},{d:2,t:"Parque Arví & Metro Cable",x:"Línea L de metro cable a Santo Domingo y Parque Arví con senderismo."},{d:3,t:"Guatapé",x:"Excursión a la Piedra del Peñol con 740 escalones y almuerzo en el lago."},{d:4,t:"Finca Cafetera",x:"Visita a finca orgánica, cosecha, proceso y cata premium de microlotes."}]},
+  p6:{nombre:"Roma & Vaticano",loc:"Roma, Italia",noches:8,rating:"4.8",pax:"Para todos",precio:6500000,badge:"👨‍👩‍👧 Familiar",
+    img:"https://i.pinimg.com/1200x/9d/f7/84/9df784894afd815263d8cce76b18b24b.jpg",
+    desc:"La ciudad eterna en 8 noches memorables. Coliseo al amanecer, Capilla Sixtina sin multitudes con acceso VIP, pasta fresca con nonna italiana y piazzas con 2.000 años de historia.",
+    incluye:[["fas fa-plane","Vuelo ida y vuelta"],["fas fa-hotel","8 noches hotel 4★"],["fas fa-coffee","Desayuno diario"],["fas fa-ticket-alt","Vaticano VIP"],["fas fa-ticket-alt","Coliseo + Foro Romano"],["fas fa-utensils","Clase cocina italiana"],["fas fa-bus","Traslados aeropuerto"],["fas fa-headset","Guía en español"]],
+    itinerario:[{d:1,t:"Benvenuti a Roma",x:"Traslado al hotel y primera pizza napolitana en el Trastevere."},{d:2,t:"Coliseo & Foro Romano",x:"Tour madrugador con guía arqueólogo antes de que lleguen las multitudes."},{d:3,t:"Vaticano VIP",x:"Acceso anticipado a Museos Vaticanos, Capilla Sixtina y Basílica de San Pedro."},{d:4,t:"Fontana di Trevi & Panteón",x:"Monedas en Trevi, Piazza Navona y gelatería artesanal."},{d:5,t:"Clase de cocina italiana",x:"Mercado de Campo dei Fiori, clase de pasta y cena con lo cocinado."},{d:6,t:"Excursión Tívoli",x:"Villa d'Este y sus jardines, Patrimonio UNESCO a 30 km de Roma."},{d:7,t:"Borghese & Shopping",x:"Galería Borghese por la mañana y tarde de compras en Via Condotti."},{d:8,t:"Arrivederci Roma",x:"Último espresso romano, traslado al aeropuerto y vuelo de regreso."}]},
+  p7:{nombre:"Cartagena All Inclusive",loc:"Cartagena, Colombia",noches:6,rating:"4.8",pax:"Para todos",precio:4800000,badge:"🔥 Trending",
+    img:"https://i.pinimg.com/736x/64/9d/95/649d959ce9098840071d8b9657383fac.jpg",
+    desc:"El Caribe colombiano con todo incluido en la Ciudad Heroica. Murallas coloniales, Islas del Rosario, langosta y ceviche sin límite y el catamarán al atardecer más espectacular de Colombia.",
+    incluye:[["fas fa-plane","Vuelo ida y vuelta"],["fas fa-hotel","6 noches hotel 5★"],["fas fa-utensils","All Inclusive"],["fas fa-ship","Islas del Rosario"],["fas fa-ship","Catamarán al atardecer"],["fas fa-walking","City tour Colonial"],["fas fa-car","Traslados"],["fas fa-glass-cheers","Open bar premium"]],
+    itinerario:[{d:1,t:"Llegada & Cóctel",x:"Check-in, recorrido y primera noche en la Ciudad Amurallada."},{d:2,t:"Ciudad Amurallada & Castillo",x:"Tour colonial, Castillo San Felipe y puesta de sol en las murallas."},{d:3,t:"Islas del Rosario",x:"Catamarán a las islas, snorkel en aguas cristalinas y almuerzo marino."},{d:4,t:"Playa Blanca",x:"Día completo en la playa más blanca de Colombia con open bar."},{d:5,t:"Catamarán al atardecer",x:"Paseo romántico con champagne y música en vivo sobre el mar."},{d:6,t:"Día libre & Retorno",x:"Mañana libre, compras en el centro histórico y vuelo de regreso."}]},
+  p8:{nombre:"Londres Clásico",loc:"Londres, Reino Unido",noches:7,rating:"4.8",pax:"Para todos",precio:9800000,badge:"⭐ Top Rated",
+    img:"https://images.unsplash.com/photo-1543832923-44667a44c804?q=80&w=900",
+    desc:"La capital del mundo en toda su gloria. De los pubs victorianos a los restaurantes Michelin, del Big Ben al Soho, de Harrods a Camden Market. Londres es infinita y este paquete captura su esencia.",
+    incluye:[["fas fa-plane","Vuelo ida y vuelta"],["fas fa-hotel","7 noches hotel 4★"],["fas fa-coffee","Desayuno inglés"],["fas fa-subway","Oyster Card 7 días"],["fas fa-eye","London Eye"],["fas fa-landmark","Tower Bridge Tour"],["fas fa-bus","Traslados"],["fas fa-theater-masks","Show West End"]],
+    itinerario:[{d:1,t:"Arrival in London",x:"Traslado al hotel, Oyster Card y primera pinta en pub victoriano."},{d:2,t:"Westminster & Big Ben",x:"Palacio de Westminster, Abadía y Buckingham en cambio de guardia."},{d:3,t:"British Museum & Covent Garden",x:"Momias egipcias y tarde de actuaciones callejeras en Covent Garden."},{d:4,t:"Tower Bridge & Borough Market",x:"Torre de Londres, Tower Bridge Glass Walk y mercado gourmet."},{d:5,t:"Notting Hill & Harrods",x:"Fachadas de colores, mercado de antigüedades y afternoon tea en Harrods."},{d:6,t:"Tate Modern & West End",x:"Arte contemporáneo y noche de musical en el West End."},{d:7,t:"Camden & Goodbye",x:"Mañana libre en Camden Market y vuelo de regreso."}]},
+  p9:{nombre:"Eje Cafetero Mágico",loc:"Salento, Colombia",noches:3,rating:"4.5",pax:"Para todos",precio:1800000,badge:"🌿 Aventura",
+    img:"https://i.pinimg.com/1200x/e1/b4/45/e1b44556e449d75fd5383f6e11911b7d.jpg",
+    desc:"El corazón verde de Colombia: palmas de cera más altas del mundo, cafetales orgánicos y pueblos patrimonio de la humanidad. El plan perfecto para desconectarse y respirar profundo.",
+    incluye:[["fas fa-bus","Transfer terrestre"],["fas fa-hotel","3 noches finca boutique"],["fas fa-utensils","Desayuno + almuerzo"],["fas fa-coffee","Tour finca cafetera"],["fas fa-hiking","Senderismo Valle Cocora"],["fas fa-horse","Cabalgata"],["fas fa-map","Guía local"],["fas fa-tram","Jeep Willys"]],
+    itinerario:[{d:1,t:"Llegada a Salento",x:"Bienvenida en jeep Willys, recorrido por el pueblo y noche de trucha."},{d:2,t:"Valle del Cocora",x:"Senderismo entre palmas de cera de hasta 60m y cabalgata por la montaña."},{d:3,t:"Finca Cafetera",x:"Finca orgánica, cosecha, proceso del grano a la taza y cata de microlotes."}]}
+};
+
+// ─── estado ───
+let tagOn = 'todos', pkgOn = null, stepOn = 1;
+
+// ─── filtros + orden ───
+function setTag(btn){
+    document.querySelectorAll('.pill').forEach(p=>{ p.className = p.className.replace(/pill-(active|idle)/,'pill-idle'); });
+    btn.className = btn.className.replace('pill-idle','pill-active');
+    tagOn = btn.dataset.tag;
+    renderFiltro();
+}
+// Reemplaza la función actual buscarDesdeHero() por esta:
+
+function buscarDesdeHero(){
+    const destino = document.getElementById('destino').value;
+
+    // si no selecciona nada, muestra todos
+    if(!destino){
+        tagOn = 'todos';
+    } else {
+        tagOn = destino;
+    }
+
+    // actualizar pills visualmente
+    document.querySelectorAll('.pill').forEach(p=>{
+        p.classList.remove('pill-active');
+        p.classList.add('pill-idle');
+    });
+
+    const pill = [...document.querySelectorAll('.pill')]
+        .find(p => p.dataset.tag === tagOn);
+
+    if(pill){
+        pill.classList.remove('pill-idle');
+        pill.classList.add('pill-active');
+    }
+
+    renderFiltro();
+
+    // bajar a los paquetes
+    document.getElementById('gridPaq')
+        .scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function renderFiltro(){
+    let n=0;
+    document.querySelectorAll('.pcard').forEach(c=>{
+        const show = tagOn==='todos' || c.dataset.tags.split(' ').includes(tagOn);
+        c.style.display = show ? '' : 'none';
+        if(show) n++;
+    });
+    document.getElementById('contPaq').textContent = n + ' paquete' + (n!==1?'s':'');
+    document.getElementById('empty').classList.toggle('hidden', n>0);
+    ordenar();
+}
+function ordenar(){
+    const v = document.getElementById('selectOrden').value;
+    if(!v) return;
+    const grid = document.getElementById('gridPaq');
+    const cards = [...grid.querySelectorAll('.pcard')].filter(c=>c.style.display!=='none');
+    cards.sort((a,b)=>{
+        if(v==='pa') return +a.dataset.precio - +b.dataset.precio;
+        if(v==='pd') return +b.dataset.precio - +a.dataset.precio;
+        if(v==='rating') return +b.dataset.rating - +a.dataset.rating;
+        if(v==='dur') return +a.dataset.dur - +b.dataset.dur;
+    });
+    cards.forEach(c=>grid.appendChild(c));
+}
+
+            // ─── modal detalle ───
+            function open_pkg(id){
+                pkgOn = PKG[id];
+                const p = pkgOn;
+                document.getElementById('dImg').src   = p.img;
+                document.getElementById('dBadge').textContent = p.badge;
+                document.getElementById('dNombre').textContent = p.nombre;
+                document.getElementById('dLoc').innerHTML  = '<i class="fas fa-map-marker-alt mr-2"></i>'+p.loc;
+                document.getElementById('dNoches').textContent = p.noches;
+                document.getElementById('dRating').textContent = p.rating;
+                document.getElementById('dPax').textContent    = p.pax;
+                document.getElementById('dDesc').textContent   = p.desc;
+                document.getElementById('dPrecio').textContent = '$'+p.precio.toLocaleString('es-CO');
+
+                document.getElementById('dIncluye').innerHTML = p.incluye.map(([ic,tx])=>
+                    `<div class="flex items-center gap-2 text-sm text-gray-600">
+                        <div class="w-7 h-7 bg-orange-50 rounded-lg flex items-center justify-center shrink-0">
+                            <i class="${ic} text-[#F7931E] text-xs"></i></div>${tx}</div>`
+                ).join('');
+
+                document.getElementById('dItinerario').innerHTML = p.itinerario.map((d,i)=>
+                    `<div class="flex gap-3">
+                        <div class="flex flex-col items-center shrink-0">
+                            <div class="w-8 h-8 rounded-full bg-[#F7931E] text-white text-xs font-black flex items-center justify-center">${d.d}</div>
+                            ${i<p.itinerario.length-1?'<div class="w-0.5 flex-1 bg-gray-200 my-1"></div>':''}
+                        </div>
+                        <div class="pb-4">
+                            <p class="font-bold text-gray-900 text-sm leading-tight">${d.t}</p>
+                            <p class="text-gray-500 text-xs mt-0.5 leading-relaxed">${d.x}</p>
+                        </div>
+                    </div>`
+                ).join('');
+
+                show('vDet'); hide('vRes');
+                document.getElementById('overlay').classList.remove('hidden');
+                document.body.style.overflow='hidden';
+            }
+
+            function close_modal(){ document.getElementById('overlay').classList.add('hidden'); document.body.style.overflow=''; }
+            document.getElementById('overlay').addEventListener('click',e=>{ if(e.target===e.currentTarget) close_modal(); });
+
+            // ─── modal reserva ───
+            function go_reservar(){
+                const p = pkgOn;
+                document.getElementById('rImg').src = p.img;
+                document.getElementById('rNom').textContent = p.nombre;
+                document.getElementById('rLoc').textContent = p.loc;
+                document.getElementById('rPre').textContent = '$'+p.precio.toLocaleString('es-CO')+' / persona';
+                const iva = Math.round(p.precio*.19);
+                document.getElementById('rBase').textContent  = '$'+p.precio.toLocaleString('es-CO');
+                document.getElementById('rIva').textContent   = '$'+iva.toLocaleString('es-CO');
+                document.getElementById('rTotal').textContent = '$'+(p.precio+iva).toLocaleString('es-CO');
+                hide('vDet'); show('vRes');
+                go_step(1);
+            }
+
+            function go_det(){ show('vDet'); hide('vRes'); }
+
+            function go_step(n){
+                stepOn = n;
+                ['paso1','paso2','paso3','paso4'].forEach((id,i)=>{ document.getElementById(id).classList.toggle('hidden', i+1!==n); });
+                ['s2','s3','s4'].forEach((id,i)=>{
+                    const el = document.getElementById(id);
+                    el.className = 'step w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center '+(n>=i+2?'bg-[#F7931E] text-white':'bg-gray-200 text-gray-400');
+                });
+                if(n===4){
+                    const nm = (document.getElementById('pNom').value||'Viajero')+' '+(document.getElementById('pApe').value||'');
+                    const iva = Math.round(pkgOn.precio*.19);
+                    document.getElementById('cPkg').textContent   = pkgOn.nombre;
+                    document.getElementById('cPax').textContent   = nm.trim();
+                    document.getElementById('cTotal').textContent = '$'+(pkgOn.precio+iva).toLocaleString('es-CO');
+                    document.getElementById('cCod').textContent   = 'PKG-'+Math.random().toString(36).substring(2,8).toUpperCase();
+                }
+                document.getElementById('mbox').scrollTop=0;
+            }
+
+            // método de pago: solo tarjeta (sin función metodo)
+            function fmtCard(i){ i.value=i.value.replace(/\D/g,'').substring(0,16).replace(/(\d{4})/g,'$1 ').trim(); }
+
+            // helpers
+            function show(id){ document.getElementById(id).classList.remove('hidden'); }
+            function hide(id){ document.getElementById(id).classList.add('hidden'); }
+
+            renderFiltro();
+
+
+            renderFiltro();// Render inicial + abrir paquete si viene desde home
+                document.addEventListener('DOMContentLoaded', function() {
+                    renderFiltro();
+
+                    // Verificar si viene un paquete seleccionado desde home.html
+                    const paqueteId = localStorage.getItem('paqueteSeleccionado');
+                    if (paqueteId) {
+                        // Limpiar para no volver a abrirlo si recargan
+                        localStorage.removeItem('paqueteSeleccionado');
+                        
+                        // Pequeño delay para que el DOM esté listo
+                        setTimeout(() => {
+                            open_pkg(paqueteId);
+                        }, 800);
+                    }
+             });
+
+    </script>
+    </body>
+</html>
