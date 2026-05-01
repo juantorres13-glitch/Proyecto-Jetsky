@@ -7,18 +7,27 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="bg-slate-50 font-sans overflow-x-hidden">
+<body class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
 
-    <nav class="bg-white border-b border-gray-100 py-4 px-8 flex justify-between items-center sticky top-0 z-50">
-        <div class="text-2xl font-bold text-gray-900">Jet<span class="text-[#F7931E]">Sky</span></div>
-        <a href="home.html" class="text-sm font-bold text-black hover:text-cyan-500 transition-colors">
-            <i class="fas fa-arrow-left mr-2"></i> Volver a Vuelos
-        </a>
-    </nav>
+        <header class="bg-white shadow-sm"> 
+            <nav class= "max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-plane text-[#69d7f7] text-2xl"></i>
+                    <span class="text-2xl font-bold text-[#69d7f7]">JetSky</span>
+                </div>
+                <a href="home.html" >
+                <button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-5 py-2 rounded-lg flex items-center gap-2 text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Volver al Inicio
+                </button>
+                </a>
+             </nav>
+        </header>
 
     <main class="max-w-7xl mx-auto px-6 py-10 flex gap-8">
 
-        <!-- SIDEBAR FILTROS -->
+        <!--  FILTROS -->
+
         <aside class="w-64 shrink-0 hidden md:block">
             <div class="sticky top-24 flex flex-col" style="max-height: calc(100vh - 7rem);">
                 <!-- Cabecera fija -->
@@ -108,7 +117,7 @@
             </div><!-- fin sticky wrapper -->
         </aside>
 
-        <!-- SECCIÓN PRINCIPAL -->
+        <!-- Seccion hoteles/alojamientos -->
         <section class="flex-1 min-w-0 space-y-6">
             <div class="flex justify-between items-end mb-4">
                 <div>
@@ -177,7 +186,7 @@
                 </div>
 
                 <button id="buscarHotel"
-                    class="bg-[#F7931E] text-white px-5 py-2 rounded-xl font-bold hover:opacity-90 transition text-sm shrink-0">
+                    class="bg-[#f97316] hover:bg-[#ea580c] text-white px-5 py-2 rounded-xl font-bold hover:opacity-90 transition text-sm shrink-0">
                     Buscar
                 </button>
             </div>
@@ -186,9 +195,9 @@
             <!-- LISTA HOTELES -->
             <div id="listaHoteles" class="space-y-5">
 
-                <!-- Hotel 1 -->
+                <!-- Hotel 1/ San Andres-->
                 <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
-                    data-destino="SAN" data-precio="520000" data-estrellas="5" data-servicios="wifi piscina desayuno" data-estilo="lujo">
+                    data-destino="SAN" data-precio="520000" data-estrellas="5" data-servicios="wifi piscina desayuno" data-estilo="lujo" data-id="1" data-nombre="Grand Hotel JetSky" data-ubicacion="Punta Norte, San Andrés" data-rating="4.9" data-img="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=900" data-desc="Un paraíso frente al mar Caribe con vistas panorámicas al arrecife. Habitaciones amplias con balcón privado, diseño contemporáneo y acceso directo a playa de arena blanca." data-comodidades="Piscina infinita · Spa & masajes · Restaurante de mariscos · Bar en la playa · Snorkeling · Kayak">
                     <div class="w-64 h-56 overflow-hidden shrink-0">
                         <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
@@ -208,14 +217,18 @@
                         </div>
                         <div class="flex justify-between items-center mt-4">
                             <p class="text-2xl font-bold text-gray-900">$520.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
-                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hotel 2 -->
+                <!-- Hotel 2/ 1 Cartagena -->
                 <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
-                    data-destino="CTG" data-precio="400000" data-estrellas="4" data-servicios="wifi piscina desayuno parqueadero" data-estilo="familiar">
+                    data-destino="CTG" data-precio="400000" data-estrellas="4" data-servicios="wifi piscina desayuno parqueadero" data-estilo="familiar" data-id="2" 
+                    data-nombre="Las Américas Torre del Mar" data-ubicacion="La Boquilla, Cartagena" data-rating="4.7" data-img="https://i.travelapi.com/hotels/5000000/4470000/4469600/4469515/83effa12_z.jpg" 
+                    data-desc="Hotel familiar de referencia en La Boquilla con amplia oferta de actividades para todas las edades, piscinas temáticas y gastronomía local de primer nivel."
+                    data-comodidades="3 piscinas · Zona infantil · Restaurante buffet · Parqueadero gratuito · Sala de juegos">
+                   
                     <div class="w-64 h-56 overflow-hidden shrink-0">
                         <img src="https://i.pinimg.com/1200x/d4/c2/48/d4c2487ed44148e0adacad2496baf802.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
@@ -230,21 +243,25 @@
                             <div class="flex gap-2 mt-3 flex-wrap">
                                 <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
                                 <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
-                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
                             </div>
                         </div>
                         <div class="flex justify-between items-center mt-4">
                             <p class="text-2xl font-bold text-gray-900">$400.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
-                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hotel 3 -->
+                <!-- Hotel 3/ 1 Paris -->
                 <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
-                    data-destino="CDG" data-precio="1800000" data-estrellas="5" data-servicios="wifi desayuno" data-estilo="lujo">
+                    data-destino="CDG" data-precio="1200000" data-estrellas="5" data-servicios="wifi desayuno" data-estilo="lujo" data-id="3"
+                    data-nombre="Hotel Bowmann" data-ubicacion="Francia, París" data-rating="4.8" data-img="https://i.pinimg.com/1200x/c9/af/b2/c9afb26ca4a684cc9ef5e35a747495c9.jpg"
+                    data-desc="El Hôtel Bowmann es un ícono de la elegancia. Situado en el corazón de París, Francia, se encuentra a solo unos pasos de la prestigiosa Avenue Montaigne y espectaculares vistas a la Torre Eiffel desde sus suites superiores." 
+                    data-comodidades="Restaurante Alain Ducasse · Bar Le Relais · Dior Institut Spa · Servicio de mayordomo · Sommelier privado">
+
                     <div class="w-64 h-56 overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1549294413-26f195200c16?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="https://i.pinimg.com/originals/f1/09/db/f109db868cc4281a83c4f63e2c7772f6.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="p-7 flex-1 flex flex-col justify-between">
                         <div>
@@ -252,53 +269,59 @@
                                 <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
                                 <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.8</div>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hôtel Plaza Athénée</h3>
-                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>8.º Arrondissement, París</p>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel Bowmann</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>París, Francia</p>
                             <div class="flex gap-2 mt-3 flex-wrap">
-                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-spa mr-1"></i>Spa</span>
                                 <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
                             </div>
                         </div>
                         <div class="flex justify-between items-center mt-4">
-                            <p class="text-2xl font-bold text-gray-900">$1.800.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
-                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                            <p class="text-2xl font-bold text-gray-900">$1.200.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hotel 4 -->
+                <!-- Hotel 4/ 1 Dubai -->
                 <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
-                    data-destino="DXB" data-precio="2500000" data-estrellas="5" data-servicios="wifi piscina desayuno parqueadero" data-estilo="lujo">
+                    data-destino="DXB" data-precio="5500000" data-estrellas="5" data-servicios="wifi piscina desayuno parqueadero" data-estilo="lujo" data-id="4" 
+                    data-nombre="Burj Al Arab Jumeirah" data-ubicacion="Jumeirah Beach, Dubái" data-rating="5.0" data-img="https://i.pinimg.com/1200x/e3/de/c0/e3dec00586506e4167904c00ea999116.jpg" 
+                    data-desc="El único hotel 7 estrellas del mundo, construido sobre una isla artificial. Cada suite ocupa dos plantas con decoración en oro de 24 quilates y mayordomo personal 24h." 
+                    data-comodidades="Piscina privada · Helipuerto · 8 restaurantes exclusivos · Playa privada · Traslado en Rolls-Royce · Spa de lujo">
                     <div class="w-64 h-56 overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1612294037637-ec328d0e075e?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="https://i.pinimg.com/736x/94/ed/95/94ed95ff6b1eac336644c32c4ca8d179.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="p-7 flex-1 flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between">
-                                <span class="text-amber-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
                                 <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 5.0</div>
                             </div>
                             <h3 class="text-xl font-bold text-gray-900 mt-1">Burj Al Arab Jumeirah</h3>
                             <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Jumeirah Beach, Dubái</p>
                             <div class="flex gap-2 mt-3 flex-wrap">
-                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-spa mr-1"></i>Spa</span>
                                 <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
                                 <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
-                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-dumbbell mr-1"></i>Gym</span>
                             </div>
                         </div>
                         <div class="flex justify-between items-center mt-4">
-                            <p class="text-2xl font-bold text-gray-900">$2.500.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
-                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                            <p class="text-2xl font-bold text-gray-900">$5.500.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hotel 5 -->
+                <!-- Hotel 5 / 1 Medellín -->
                 <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
-                    data-destino="MED" data-precio="220000" data-estrellas="3" data-servicios="wifi parqueadero" data-estilo="economico">
+                    data-destino="MED" data-precio="590000" data-estrellas="4" data-servicios="wifi Piscina" data-estilo="economico" data-id="5" 
+                    data-nombre="Hotel Dann Carlton Medellín" data-ubicacion="El Poblado, Medellín" data-rating="4.2" data-img="https://cf.bstatic.com/xdata/images/hotel/max1024x768/835167300.jpg?k=ee0c666978215e700bd94956cc1985b1ec46c64d2f9f9bc9f7d7ed0ace5f1c47&o=" 
+                    data-desc="Ubicado en el corazón de El Poblado, el barrio más vibrante de Medellín. Excelente relación calidad-precio con habitaciones cómodas y cercano a restaurantes y vida nocturna." 
+                    data-comodidades="Wi-Fi de alta velocidad · Parqueadero cubierto · Restaurante ·Piscina al aire libre · Servicio de lavandería · Recepción 24h">
                     <div class="w-64 h-56 overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="https://images.trvl-media.com/hotels/8000000/7790000/7784900/7784899/3ea56f18_z.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="p-7 flex-1 flex flex-col justify-between">
                         <div>
@@ -310,21 +333,24 @@
                             <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>El Poblado, Medellín</p>
                             <div class="flex gap-2 mt-3 flex-wrap">
                                 <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
-                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
                             </div>
                         </div>
                         <div class="flex justify-between items-center mt-4">
-                            <p class="text-2xl font-bold text-gray-900">$220.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
-                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                            <p class="text-2xl font-bold text-gray-900">$590.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Hotel 6 -->
                 <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
-                    data-destino="MAD" data-precio="950000" data-estrellas="4" data-servicios="wifi desayuno piscina" data-estilo="lujo">
+                    data-destino="MAD" data-precio="950000" data-estrellas="4" data-servicios="wifi desayuno piscina" data-estilo="lujo" data-id="6"
+                    data-nombre="Hotel Rosewood Villa Magna" data-ubicacion="Paseo de la Castellana, Madrid" data-rating="4.6" data-img="https://i.pinimg.com/1200x/05/85/4f/05854f251b5286fc683d3d722ea1caa5.jpg" 
+                    data-desc="Elegancia clásica en el centro financiero y cultural de Madrid. Referente de hospitalidad con servicio personalizado, gastronomía de autor y spa de vanguardia." 
+                    data-comodidades="Piscina cubierta · Spa Sense · Restaurante Magna · Terraza panorámica · Sala de reuniones · Concierge">
                     <div class="w-64 h-56 overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="https://www.luxurylink.com/images/sho_549ca52f/9697_01-2048/Villa%2BMagna.jpg?filtered=1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="p-7 flex-1 flex flex-col justify-between">
                         <div>
@@ -342,16 +368,19 @@
                         </div>
                         <div class="flex justify-between items-center mt-4">
                             <p class="text-2xl font-bold text-gray-900">$950.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
-                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hotel 7 -->
+                <!-- Hotel 7 / Bogota -->
                 <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
-                    data-destino="BOG" data-precio="180000" data-estrellas="2" data-servicios="wifi" data-estilo="economico">
+                    data-destino="BOG" data-precio="180000" data-estrellas="2" data-servicios="wifi" data-estilo="economico" data-id="7" 
+                    data-nombre="Hotel Tequendama Bogotá" data-ubicacion="Centro Internacional, Bogotá" data-rating="3.9" data-img="https://cf.bstatic.com/xdata/images/hotel/max1024x768/786298437.jpg?k=945d8622bba31c9fab978fa6d11939243906a52e4b1ea49d2f96c7c11cac0db9&o=" 
+                    data-desc="Clásico capitalino con más de 70 años de historia en el corazón de Bogotá. Ideal para viajeros de negocios que buscan ubicación céntrica a precio competitivo." 
+                    data-comodidades="Wi-Fi gratis · Recepción 24h · Café El Mirador · Centro de negocios · Traslado aeropuerto (costo adicional)">
                     <div class="w-64 h-56 overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1455587734955-081b22074882?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="https://i.pinimg.com/1200x/18/75/6d/18756d5c1ab84eac2e2dc5c9d18156a3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="p-7 flex-1 flex flex-col justify-between">
                         <div>
@@ -367,16 +396,19 @@
                         </div>
                         <div class="flex justify-between items-center mt-4">
                             <p class="text-2xl font-bold text-gray-900">$180.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
-                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Hotel 8 -->
                 <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
-                    data-destino="HND" data-precio="1100000" data-estrellas="5" data-servicios="wifi desayuno piscina" data-estilo="lujo">
+                    data-destino="HND" data-precio="1300000" data-estrellas="5" data-servicios="wifi desayuno piscina" data-estilo="lujo" data-id="8" 
+                    data-nombre="The Peninsula Tokyo" data-ubicacion="Marunouchi, Tokio" data-rating="4.9" data-img="https://i.pinimg.com/1200x/72/6c/60/726c60e1c9c2b33e1d4c2bbeb30dff2b.jpg" 
+                    data-desc="Hospitalidad japonesa en su máxima expresión. Frente al Palacio Imperial con vistas al jardín histórico, habitaciones con tecnología de última generación y servicio impecable." 
+                    data-comodidades="Piscina de cristal en piso 24 · Spa The Peninsula · 5 restaurantes · Sala de té japonesa · Servicio de kimono">
                     <div class="w-64 h-56 overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="https://th.bing.com/th/id/R.6ba4924b5429118490013ca3fba2ad99?rik=qL7j3iiyCJBYQg&pid=ImgRaw&r=0" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="p-7 flex-1 flex flex-col justify-between">
                         <div>
@@ -393,44 +425,50 @@
                             </div>
                         </div>
                         <div class="flex justify-between items-center mt-4">
-                            <p class="text-2xl font-bold text-gray-900">$1.100.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
-                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                            <p class="text-2xl font-bold text-gray-900">$1.300.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hotel 9 -->
+                <!-- Hotel 9 / Cartagena -->
                 <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
-                    data-destino="CTG" data-precio="270000" data-estrellas="3" data-servicios="wifi parqueadero desayuno" data-estilo="familiar">
+                    data-destino="CTG" data-precio="950000" data-estrellas="5" data-servicios="wifi parqueadero desayuno" data-estilo="Lujo" data-id="9" 
+                    data-nombre="Hotel Caribe Cartagena" data-ubicacion="Bocagrande, Cartagena" data-rating="4.3" data-img="https://pix8.agoda.net/hotelImages/38/38/38_120516001857736.jpg?ca=0&ce=1&s=960x720&isSkia=true" 
+                    data-desc="El hotel más emblemático de Bocagrande con 60 años de tradición. Amplia playa privada, jardines tropicales y la mejor vista al Castillo San Felipe desde sus habitaciones superiores." 
+                    data-comodidades="Playa privada · 2 piscinas · Restaurante El Laguito · Parqueadero · Actividades acuáticas · Kids Club">
                     <div class="w-64 h-56 overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="https://convergine.nyc3.digitaloceanspaces.com/clients/supremarine/assets/images/beach_resorts_in_cartagena_hotel_caribe.png" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="p-7 flex-1 flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between">
-                                <span class="text-cyan-600 text-[10px] font-bold uppercase tracking-[0.2em]">Familiar</span>
-                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.3</div>
+                                <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 5.0</div>
                             </div>
                             <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel Caribe Cartagena</h3>
                             <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Bocagrande, Cartagena</p>
                             <div class="flex gap-2 mt-3 flex-wrap">
-                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
-                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Spa</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-dumbbell mr-1"></i>Gym</span>
                                 <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
                             </div>
                         </div>
                         <div class="flex justify-between items-center mt-4">
-                            <p class="text-2xl font-bold text-gray-900">$270.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
-                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                            <p class="text-2xl font-bold text-gray-900">$950.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hotel 10 -->
+                <!-- Hotel 10/ Londres -->
                 <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
-                    data-destino="LHR" data-precio="1400000" data-estrellas="5" data-servicios="wifi desayuno piscina parqueadero" data-estilo="lujo">
+                    data-destino="LHR" data-precio="1400000" data-estrellas="5" data-servicios="wifi desayuno piscina parqueadero" data-estilo="lujo" data-id="10" 
+                    data-nombre="The Savoy London" data-ubicacion="Strand, Londres" data-rating="4.8" data-img="https://i.pinimg.com/1200x/7a/88/50/7a8850c22c7b607e7d126141c8383b7b.jpg" 
+                    data-desc="Leyenda viviente del Strand desde 1889. Donde Winston Churchill, Charlie Chaplin y Marilyn Monroe se hospedaron. Arte deco y estilo eduardiano perfectamente preservados." 
+                    data-comodidades="The Savoy Spa · Piscina art déco · The American Bar · Restaurante Kaspar's · Butler service · Thames Foyer">
                     <div class="w-64 h-56 overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=500" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="https://i.pinimg.com/736x/76/a3/cd/76a3cdb3e3afe24c621a03dbf71c7668.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     </div>
                     <div class="p-7 flex-1 flex flex-col justify-between">
                         <div>
@@ -448,7 +486,434 @@
                         </div>
                         <div class="flex justify-between items-center mt-4">
                             <p class="text-2xl font-bold text-gray-900">$1.400.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
-                            <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- ── TOKIO 2 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="11" data-destino="HND" data-precio="800000" data-estrellas="4" data-servicios="wifi desayuno" data-estilo="lujo"
+                    data-nombre="Andaz Tokyo Toranomon Hills" data-ubicacion="Toranomon Hills, Tokio" data-rating="4.7"
+                    data-img="https://cf.bstatic.com/xdata/images/hotel/max1024x768/525748276.jpg?k=4cf4f35d26b8120b24343aacff7ff86d83d8921432146937ace4d4a8135ffc87&o=&hp=1"
+                    data-desc="En lo alto de la torre Toranomon Hills, con vistas de 360° al skyline de Tokio y al Monte Fuji en días despejados. Diseño contemporáneo con arte japonés moderno en cada rincón."
+                    data-comodidades="Rooftop bar · Restaurante Tavern · Piscina en piso 51 · Spa Andaz · Sala de té · Servicio de bicicletas">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://i.vimeocdn.com/video/1631752870-01215e23af0368e6aaedb09cce4c22cfbfbd8197d021d7908ff948a35a68696e-d?mw=1920&mh=1080&q=70" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.7</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Andaz Tokyo Toranomon Hills</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Toranomon Hills, Tokio</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$800.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── TOKIO 3 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="12" data-destino="HND" data-precio="300000" data-estrellas="3" data-servicios="wifi parqueadero" data-estilo="economico"
+                    data-nombre="Dormy Inn Premium Shinjuku" data-ubicacion="Shinjuku, Tokio" data-rating="4.3"
+                    data-img="https://ak-d.tripcdn.com/images/1mc6i12000hyivyii0918_W_1280_853_R5.webp?proc=watermark/image_trip1,l_ne,x_16,y_16,w_67,h_16;digimark/t_image,logo_tripbinary;ignoredefaultwm,1A8F"
+                    data-desc="El favorito de los viajeros inteligentes en el corazón de Shinjuku. Habitaciones compactas y funcionales con onsen natural en la azotea, perfectas para explorar Tokio sin gastar de más."
+                    data-comodidades="Onsen en azotea · Sauna · Comedor de ramen · Wi-Fi fibra óptica · Parqueadero · Servicio de lavandería · Recepción 24h">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://dormyinnpremiumginza.hotelsoftokyo.com/data/Pictures/OriginalPhoto/15373/1537378/1537378231/tokyo-picture-2.JPEG" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-green-500 text-[10px] font-bold uppercase tracking-[0.2em]">Económico</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.3</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Dormy Inn Premium Shinjuku</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Shinjuku, Tokio</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$300.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── BOGOTÁ 2 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="13" data-destino="BOG" data-precio="450000" data-estrellas="4" data-servicios="wifi desayuno parqueadero" data-estilo="familiar"
+                    data-nombre="Hotel Casa Medina" data-ubicacion="Chapinero, Bogotá" data-rating="4.5"
+                    data-img="https://i.pinimg.com/1200x/9e/d0/be/9ed0becfc678c6a6f2f3580570171b80.jpg"
+                    data-desc="Joya patrimonial de Bogotá inaugurada en 1946, declarada Monumento Nacional. Arquitectura colonial española con jardines interiores, vitrales originales y una atmósfera de elegancia atemporal."
+                    data-comodidades="Restaurante La Granja · Salón colonial para eventos · Jardín interior · Parqueadero · Bar de whisky · Concierge">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://thepointsguy.global.ssl.fastly.net/us/originals/2024/10/20241018_Four-Seasons-Bogota_Four-Seasons-Bogota-Casa-Medina-entrance-night_ERosen_121.jpg?width=1920" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-cyan-600 text-[10px] font-bold uppercase tracking-[0.2em]">Familiar</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.5</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel Casa Medina</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Chapinero, Bogotá</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$450.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── BOGOTÁ 3 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="14" data-destino="BOG" data-precio="900000" data-estrellas="5" data-servicios="wifi desayuno piscina parqueadero" data-estilo="lujo"
+                    data-nombre="W Bogotá" data-ubicacion="Usaquén, Bogotá" data-rating="4.8"
+                    data-img="https://cf.bstatic.com/xdata/images/hotel/max1024x768/773876021.jpg?k=0328a164360bcd926e5c440e7d579f5441881ca64de6633bf8ab6d9eda2b149f&o="
+                    data-desc="Diseño atrevido y energía vibrante en el exclusivo barrio de Usaquén. El W Bogotá redefine el lujo moderno con su arquitectura vanguardista, piscina espectacular y vida nocturna de primer nivel."
+                    data-comodidades="WET deck (piscina) · AWAY Spa · Restaurante Sn2 · Whatever/Whenever service · DJ bar Woobar · Gimnasio 24h">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://tse3.mm.bing.net/th/id/OIP.6HnfJsgh1DUQ4U0SjQFvsgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.8</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">W Bogotá</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Usaquén, Bogotá</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$900.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── DUBAI 2 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="15" data-destino="DXB" data-precio="1600000" data-estrellas="5" data-servicios="wifi piscina desayuno parqueadero" data-estilo="lujo"
+                    data-nombre="Atlantis The Palm" data-ubicacion="Palm Jumeirah, Dubái" data-rating="4.7"
+                    data-img="https://cf.bstatic.com/xdata/images/hotel/max1024x768/727476744.jpg?k=3569aa6e375113048da2abb04ce395b854d1c1ea665fcc967e6331171737d9b9&o="
+                    data-desc="El resort más icónico de Palm Jumeirah con acceso ilimitado al parque acuático Aquaventure. Más de 20 restaurantes de talla mundial, aquarium privado y playas de arena dorada exclusivas."
+                    data-comodidades="Aquaventure Waterpark · Parque acuático · 17 restaurantes · Aquarium The Lost Chambers · Playa privada · Spa Shuiqi · Kids Club">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://i.pinimg.com/1200x/5d/74/6a/5d746acea7798b8627915f388e88ba5c.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.7</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Atlantis The Palm</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Palm Jumeirah, Dubái</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$1.600.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── DUBAI 3 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="16" data-destino="DXB" data-precio="750000" data-estrellas="4" data-servicios="wifi piscina parqueadero" data-estilo="familiar"
+                    data-nombre="JW Marriott Marquis Dubai" data-ubicacion="Business Bay, Dubái" data-rating="4.6"
+                    data-img="https://cf.bstatic.com/xdata/images/hotel/max1024x768/494064240.jpg?k=3319b5c9056b3fcf4e5d046e66a44e599138eac356b09588b0e0f7648caf8daa&o="
+                    data-desc="Dos torres gemelas que dominan el skyline de Business Bay. Un destino completo con más de 10 restaurantes internacionales, spa de clase mundial y vistas imponentes al Canal de Dubái."
+                    data-comodidades="Piscina al aire libre · Saray Spa · 14 restaurantes · Gimnasio · Parqueadero · Sala de conferencias · Shuttle al mall">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.skyscrapercenter.com/building/jwmm_exteriorshot_night_(c)jwmarriottmarquishoteldubai.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-cyan-600 text-[10px] font-bold uppercase tracking-[0.2em]">Familiar</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.6</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">JW Marriott Marquis Dubai</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Business Bay, Dubái</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$750.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── MEDELLÍN 2 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="17" data-destino="MED" data-precio="580000" data-estrellas="4" data-servicios="wifi piscina desayuno parqueadero" data-estilo="familiar"
+                    data-nombre="Hotel InterContinental Medellín" data-ubicacion="El Poblado, Medellín" data-rating="4.6"
+                    data-img="https://images.getaroom-cdn.com/image/upload/s--1htcZhBr--/c_limit,e_improve,fl_lossy.immutable_cache,h_940,q_auto:good,w_940/v1770665957/0b7f983c1325fe96606786db2882f65050519377?_a=BACAEuEv&atc=e7cd1cfa"
+                    data-desc="Referente de hospitalidad internacional en El Poblado con vistas panorámicas al Valle de Aburrá. Conectado directamente con el Centro Comercial El Tesoro y a pasos de los mejores restaurantes de la ciudad."
+                    data-comodidades="Piscina panorámica · Spa Secrets · Restaurante Mojito · Club InterContinental · Parqueadero cubierto · Sala de eventos · Acceso al CC El Tesoro">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://i.pinimg.com/1200x/f5/85/bd/f585bd479c73d8954698796e1dc87cae.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-cyan-600 text-[10px] font-bold uppercase tracking-[0.2em]">Familiar</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.6</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel InterContinental Medellín</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>El Poblado, Medellín</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$580.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── MEDELLÍN 3 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="18" data-destino="MED" data-precio="160000" data-estrellas="2" data-servicios="wifi" data-estilo="economico"
+                    data-nombre="Hotel Laureles Plaza" data-ubicacion="Laureles, Medellín" data-rating="3.8"
+                    data-img="https://i.pinimg.com/736x/40/3b/d9/403bd9151378a61a54a376d7e8b6da98.jpg"
+                    data-desc="Opción económica y bien ubicada en el barrio Laureles, el favorito de los mochileros y nómadas digitales. Cerca de cafés, parques, bicicletas y a 10 minutos del metro."
+                    data-comodidades="Wi-Fi alta velocidad · Recepción 24h · Zona de coworking · Cocina compartida · Información turística · Alquiler de bicicletas">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://i.pinimg.com/1200x/d3/22/91/d32291a1d044eb734ef26365be6a2f64.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-green-500 text-[10px] font-bold uppercase tracking-[0.2em]">Económico</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 3.8</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel Laureles Plaza</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Laureles, Medellín</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$160.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── ROMA 1 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="19" data-destino="FCO" data-precio="1300000" data-estrellas="5" data-servicios="wifi desayuno piscina" data-estilo="lujo"
+                    data-nombre="Hotel de Russie" data-ubicacion="Via del Babuino, Roma" data-rating="4.9"
+                    data-img="https://cf.bstatic.com/xdata/images/hotel/max1024x768/278888032.jpg?k=cc1d0ba7ae941112d890984b1be89be546b76a5bb34dfdbf29bad14437bf49eb&o="
+                    data-desc="El hotel más glamuroso de Roma frente a la Piazza del Popolo. Famoso por su jardín secreto con olivos centenarios donde Picasso, Cocteau y los Romanov se hospedaron. Lujo italiano en estado puro."
+                    data-comodidades="Jardín secreto · Piscina al aire libre · Ristorante Le Jardin · Stravinskij Bar · Spa Olio Lusso · Terraza panorámica · Concierge">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/330188972.jpg?k=2bee510a085d103aed8b7d7c353d20441a5ddc434afea6e32fbccc4fe1f2c7a2&o=" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-purple-500 text-[10px] font-bold uppercase tracking-[0.2em]">Lujo</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.9</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel de Russie</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Via del Babuino, Roma</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-swimming-pool mr-1"></i>Piscina</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$1.300.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── ROMA 2 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="20" data-destino="FCO" data-precio="550000" data-estrellas="3" data-servicios="wifi desayuno" data-estilo="familiar"
+                    data-nombre="Hotel Nazionale Roma" data-ubicacion="Montecitorio, Roma" data-rating="4.2"
+                    data-img="https://i.pinimg.com/736x/95/37/fb/9537fb6dccb081325eb943beee68ec2a.jpg"
+                    data-desc="Clásico romano a pasos del Panteón y la Fontana de Trevi. Tres generaciones de la misma familia lo han gestionado con calidez italiana auténtica. Desayuno abundante con productos frescos del mercado."
+                    data-comodidades="Desayuno buffet romano · Terraza con vistas · Bar del lobby · Tour gratuito al Coliseo · Wi-Fi · Servicio de lavandería">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://i.pinimg.com/1200x/df/92/f1/df92f1c225d522acca7c00da4c970f9e.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-cyan-600 text-[10px] font-bold uppercase tracking-[0.2em]">Familiar</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.2</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel Nazionale Roma</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Montecitorio, Roma</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$550.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── ROMA 3 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="21" data-destino="FCO" data-precio="288000" data-estrellas="2" data-servicios="wifi" data-estilo="economico"
+                    data-nombre="Ostello Bello Roma" data-ubicacion="Termini, Roma" data-rating="4.0"
+                    data-img="https://i.pinimg.com/1200x/7e/28/68/7e2868eeb64cee17bf1e347103791973.jpg"
+                    data-desc="El hostel boutique más trendy de Roma a dos pasos de la Estación Termini. Habitaciones privadas con diseño italiano moderno, ambiente social y la mejor relación calidad-precio de la ciudad eterna."
+                    data-comodidades="Wi-Fi fibra óptica · Bar aperitivo · Terraza · Cocina equipada · Tours diarios · Recepción 24h · Consigna de equipaje">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2a/d4/2c/65/caption.jpg?w=1400&h=-1&s=1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-green-500 text-[10px] font-bold uppercase tracking-[0.2em]">Económico</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.0</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Ostello Bello Roma</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Termini, Roma</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$288.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── LONDRES 2 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="22" data-destino="LHR" data-precio="630000" data-estrellas="5" data-servicios="Gym desayuno parqueadero" data-estilo="familiar"
+                    data-nombre="The Hoxton Southwark" data-ubicacion="Southwark, Londres" data-rating="4.9"
+                    data-img="https://cf.bstatic.com/xdata/images/hotel/max1024x768/740338877.jpg?k=229cca5b32a43176f413a9ec9d8e712de0693ea52c34b7a558553b53a53fc3f4&o="
+                    data-desc="El hotel favorito de los creativos londinenses frente al Tate Modern y con vistas al Támesis. Habitaciones de diseño industrial con toques cálidos y el mejor brunch de Southwark en su restaurante Hubbard & Bell."
+                    data-comodidades="Restaurante Hubbard & Bell · Rooftop bar · Sala de reuniones creativa · Wi-Fi · Desayuno incluido · Bicicletas gratuitas · Parqueadero">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://i.pinimg.com/1200x/a0/de/0f/a0de0f37c3534ad6a5a006e8473c21da.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-cyan-600 text-[10px] font-bold uppercase tracking-[0.2em]">Familiar</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 4.9</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">The Hoxton Southwark</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Southwark, Londres</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-dumbbell mr-1"></i>Gym</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-car mr-1"></i>Parqueadero</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$630.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- ── Hotel 2/ Paris ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="24" data-destino="CDG" data-precio="500000" data-estrellas="3" data-servicios="wifi desayuno piscina" data-estilo="Familiar"
+                    data-nombre="Hotel Alison " data-ubicacion="distrito 8 de París, Francia" data-rating="3.5"
+                    data-img="https://q-xx.bstatic.com/xdata/images/hotel/max500/750996944.jpg?k=35f479541bea7bf259ef6f0af83add5e5e337bb70fad12a7f8a2e488636fdff7&o="
+                    data-desc="El Hotel Alison es un acogedor situado en el distrito 8 de París, una de las zonas más exclusivas de la ciudad. Se encuentra a poca distancia de lugares emblemáticos como la Place de la Madeleine y los famosos Campos Elíseos."
+                    data-comodidades="Desayuno tradicional · Aire acondicionador · minibar · lavanderia ">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://images.trvl-media.com/lodging/1000000/60000/53500/53485/4caddf96.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-cyan-600 text-[10px] font-bold uppercase tracking-[0.2em]">Familiar</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 3.9</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Hotel Alison </h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>distrito 8 de París, Francia</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$500.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── PARIS 3 ── -->
+                <div class="hotel-card bg-white rounded-[2rem] overflow-hidden border border-gray-100 flex hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500 group"
+                    data-id="25" data-destino="CDG" data-precio="310000" data-estrellas="3" data-servicios="wifi desayuno" data-estilo="familiar"
+                    data-nombre="Generator Paris" data-ubicacion="Canal Saint-Martin, París" data-rating="4.1"
+                    data-img="https://i.pinimg.com/1200x/a2/48/27/a24827263fd849a063516e5667772b0e.jpg"
+                    data-desc="El hotel boutique más de moda en el trendy barrio del Canal Saint-Martin. Diseño industrial parisino con toques vintage, ambiente joven y cosmopolita. A 10 minutos en metro del Marais y Notre Dame."
+                    data-comodidades="Bar rooftop · Sala de cine · Wi-Fi · Desayuno croissant parisino · Tours privados · Zona de coworking · Terraza canal">
+                    <div class="w-64 h-56 overflow-hidden shrink-0">
+                        <img src="https://i.pinimg.com/1200x/60/e2/ea/60e2ea3983f2f610c381468529532cf3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="p-7 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between">
+                                <span class="text-green-500 text-[10px] font-bold uppercase tracking-[0.2em]">Economico</span>
+                                <div class="text-cyan-600 text-xs font-bold"><i class="fas fa-star"></i> 3.3</div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mt-1">Generator Paris</h3>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>Canal Saint-Martin, París</p>
+                            <div class="flex gap-2 mt-3 flex-wrap">
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-wifi mr-1"></i>Wi-Fi</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-1"><i class="fas fa-coffee mr-1"></i>Desayuno</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <p class="text-2xl font-bold text-gray-900">$310.000 <span class="text-xs text-gray-400 font-normal">/ noche</span></p>
+                            <button onclick="abrirDetalle(this)" class="bg-gray-900 text-white px-6 py-2 rounded-2xl font-bold hover:bg-cyan-500 transition-colors text-sm">Detalles</button>
                         </div>
                     </div>
                 </div>
@@ -459,6 +924,8 @@
                     <p class="text-lg font-semibold text-gray-500">No se encontraron hoteles</p>
                     <p class="text-sm mt-1">Intenta con otros filtros o destinos</p>
                 </div>
+
+
 
             </div>
         </section>
@@ -581,6 +1048,8 @@
             document.getElementById("sinResultados").classList.toggle("hidden", visibles > 0);
         }
 
+
+
         // Escuchar todos los filtros en tiempo real
         document.querySelectorAll(".estrellas-check, .servicio-check, .estilo-check, .precio-check")
             .forEach(el => el.addEventListener("change", aplicarFiltros));
@@ -596,7 +1065,413 @@
         });
 
         aplicarFiltros();
+
+        // ════════════════════════════════
+        // MODAL DETALLES + RESERVA
+        // ════════════════════════════════
+        let hotelActual = {};
+        const servicioIconos = {
+            wifi: '<i class="fas fa-wifi mr-1"></i>Wi-Fi',
+            piscina: '<i class="fas fa-swimming-pool mr-1"></i>Piscina',
+            desayuno: '<i class="fas fa-coffee mr-1"></i>Desayuno',
+            parqueadero: '<i class="fas fa-car mr-1"></i>Parqueadero'
+        };
+        const estiloColores = {
+            lujo: 'text-purple-500', familiar: 'text-cyan-600', economico: 'text-green-500'
+        };
+
+        function abrirDetalle(btn) {
+            const card = btn.closest('.hotel-card');
+            hotelActual = {
+                nombre: card.dataset.nombre, ubicacion: card.dataset.ubicacion,
+                rating: card.dataset.rating, img: card.dataset.img,
+                desc: card.dataset.desc, comodidades: card.dataset.comodidades,
+                servicios: card.dataset.servicios.split(' '),
+                precio: parseInt(card.dataset.precio),
+                estrellas: parseInt(card.dataset.estrellas),
+                estilo: card.dataset.estilo,
+            };
+            document.getElementById('mImg').src = hotelActual.img;
+            document.getElementById('mNombre').textContent = hotelActual.nombre;
+            document.getElementById('mUbicacion').innerHTML = '<i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>' + hotelActual.ubicacion;
+            document.getElementById('mRating').innerHTML = '<i class="fas fa-star mr-1"></i>' + hotelActual.rating;
+            document.getElementById('mDesc').textContent = hotelActual.desc;
+            document.getElementById('mComodidades').textContent = hotelActual.comodidades;
+            document.getElementById('mPrecio').textContent = '$' + hotelActual.precio.toLocaleString('es-CO');
+            const estiloEl = document.getElementById('mEstilo');
+            estiloEl.textContent = hotelActual.estilo.charAt(0).toUpperCase() + hotelActual.estilo.slice(1);
+            estiloEl.className = 'text-[10px] font-bold uppercase tracking-widest ' + (estiloColores[hotelActual.estilo] || 'text-gray-400');
+            let stars = '';
+            for (let i = 0; i < 5; i++) stars += i < hotelActual.estrellas ? '<i class="fas fa-star"></i>' : '<i class="far fa-star text-gray-300"></i>';
+            document.getElementById('mEstrellas').innerHTML = stars;
+            document.getElementById('mServicios').innerHTML = hotelActual.servicios
+                .map(s => `<span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-3 py-1">${servicioIconos[s] || s}</span>`).join('');
+            document.getElementById('vistaDetalles').classList.remove('hidden');
+            document.getElementById('vistaReservar').classList.add('hidden');
+            document.getElementById('modalOverlay').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalOverlay').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        const modal = document.getElementById('modalOverlay');
+            if (modal) { // Solo si existe, añade el evento
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) cerrarModal();
+                });
+             }    
+
+        function irAReservar() {
+            document.getElementById('vistaDetalles').classList.add('hidden');
+            document.getElementById('vistaReservar').classList.remove('hidden');
+            document.getElementById('rImg').src = hotelActual.img;
+            document.getElementById('rNombre').textContent = hotelActual.nombre;
+            document.getElementById('rUbicacion').textContent = hotelActual.ubicacion;
+            document.getElementById('rPrecio').textContent = '$' + hotelActual.precio.toLocaleString('es-CO') + ' / noche';
+            const iva = Math.round(hotelActual.precio * 0.19);
+            const total = hotelActual.precio + iva;
+            document.getElementById('resumenPrecioNoche').textContent = '$' + hotelActual.precio.toLocaleString('es-CO');
+            document.getElementById('resumenIva').textContent = '$' + iva.toLocaleString('es-CO');
+            document.getElementById('resumenTotal').textContent = '$' + total.toLocaleString('es-CO');
+            irPaso(1);
+        }
+
+        function irADetalles() {
+            document.getElementById('vistaDetalles').classList.remove('hidden');
+            document.getElementById('vistaReservar').classList.add('hidden');
+        }
+
+        function irPaso(n) {
+            ['paso1','paso2','paso3'].forEach((id, i) => {
+                document.getElementById(id).classList.toggle('hidden', i + 1 !== n);
+            });
+            ['p2circle','p3circle'].forEach((id, i) => {
+                const el = document.getElementById(id);
+                const activo = n >= i + 2;
+                el.className = 'w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center ' +
+                    (activo ? 'bg-[#F7931E] text-white' : 'bg-gray-200 text-gray-400');
+            });
+            if (n === 3) {
+                const nombre = (document.getElementById('rNombreInput').value || 'Huésped') + ' ' + (document.getElementById('rApellido').value || '');
+                const iva = Math.round(hotelActual.precio * 0.19);
+                document.getElementById('confNombre').textContent = hotelActual.nombre;
+                document.getElementById('confHuesped').textContent = nombre.trim();
+                document.getElementById('confTotal').textContent = '$' + (hotelActual.precio + iva).toLocaleString('es-CO');
+                document.getElementById('confCodigo').textContent = 'JS-' + Math.random().toString(36).substring(2,8).toUpperCase();
+            }
+            document.getElementById('modalBox').scrollTop = 0;
+        }
+
+        function setMetodo(m) {
+            ['tarjeta','nequi','pse'].forEach(t => {
+                const btn = document.getElementById('btn' + t.charAt(0).toUpperCase() + t.slice(1));
+                const form = document.getElementById('form' + t.charAt(0).toUpperCase() + t.slice(1));
+                const activo = t === m;
+                btn.className = 'flex-1 border-2 rounded-xl py-2.5 text-sm font-semibold flex items-center justify-center gap-2 transition ' +
+                    (activo ? 'border-[#F7931E] text-[#F7931E]' : 'border-gray-200 text-gray-400');
+                if (form) form.classList.toggle('hidden', !activo);
+            });
+        }
+
+        function formatCard(input) {
+            let v = input.value.replace(/\D/g,'').substring(0,16);
+            input.value = v.replace(/(\d{4})/g,'$1 ').trim();
+        }
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const hotelId = localStorage.getItem('hotelSeleccionadoId');
+    
+    if (hotelId) {
+        // Buscamos la tarjeta del hotel que tenga ese data-id
+        const hotelCard = document.querySelector(`.hotel-card[data-id="${hotelId}"]`);
+        
+        if (hotelCard) {
+            hotelCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Buscamos el botón de detalles dentro de esa tarjeta y lo activamos
+            const btnDetalles = hotelCard.querySelector('button[onclick="abrirDetalle(this)"]');
+            if (btnDetalles) {
+                // Pequeño delay para asegurar que la página cargó bien los estilos
+                setTimeout(() => {
+                    btnDetalles.click();
+                }, 500);
+            }
+        }
+        // Limpiamos el localStorage para que no se abra siempre al entrar directo
+        localStorage.removeItem('hotelSeleccionadoId');
+    }
+});
+
+
     </script>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         MODAL DETALLES + RESERVA
+    ═══════════════════════════════════════════════════════ -->
+    <div id="modalOverlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4"
+        style="background:rgba(15,23,42,0.7); backdrop-filter:blur(6px);">
+        <div id="modalBox" class="bg-white rounded-[2rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative"
+            style="scrollbar-width:thin;">
+
+            <!-- Botón cerrar -->
+            <button onclick="cerrarModal()"
+                class="absolute top-5 right-5 z-10 w-9 h-9 bg-white/90 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 shadow transition">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- ── VISTA DETALLES ── -->
+            <div id="vistaDetalles">
+                <!-- Imagen hero -->
+                <div class="h-64 overflow-hidden rounded-t-[2rem]">
+                    <img id="mImg" src="" class="w-full h-full object-cover">
+                </div>
+                <div class="p-8">
+                    <div class="flex justify-between items-start mb-1">
+                        <span id="mEstilo" class="text-[10px] font-bold uppercase tracking-widest"></span>
+                        <span id="mRating" class="text-cyan-600 text-sm font-bold"><i class="fas fa-star mr-1"></i></span>
+                    </div>
+                    <h2 id="mNombre" class="text-2xl font-bold text-gray-900 mt-1"></h2>
+                    <p id="mUbicacion" class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i></p>
+
+                    <!-- Estrellas visuales -->
+                    <div id="mEstrellas" class="flex gap-1 mt-3 text-amber-400 text-sm"></div>
+
+                    <!-- Descripción -->
+                    <p id="mDesc" class="text-gray-600 text-sm mt-5 leading-relaxed"></p>
+
+                    <!-- Servicios -->
+                    <div id="mServicios" class="flex gap-2 mt-5 flex-wrap"></div>
+
+                    <!-- Comodidades -->
+                    <div class="mt-6">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Lo que incluye</h4>
+                        <p id="mComodidades" class="text-sm text-gray-600 leading-relaxed"></p>
+                    </div>
+
+                    <!-- Precio y CTA -->
+                    <div class="mt-8 flex justify-between items-center border-t border-gray-100 pt-6">
+                        <div>
+                            <p class="text-xs text-gray-400">Precio por noche</p>
+                            <p id="mPrecio" class="text-3xl font-bold text-gray-900"></p>
+                        </div>
+                        <button onclick="irAReservar()"
+                            class="bg-[#F7931E] text-white px-8 py-3 rounded-2xl font-bold hover:opacity-90 transition text-sm">
+                            Reservar ahora
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── VISTA RESERVAR (3 pasos) ── -->
+            <div id="vistaReservar" class="hidden p-8">
+
+                <!-- Indicador de pasos -->
+                <div class="flex items-center gap-2 mb-8">
+                    <div id="paso1ind" class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-full bg-[#F7931E] text-white text-xs font-bold flex items-center justify-center">1</div>
+                        <span class="text-xs font-semibold text-gray-700">Tus datos</span>
+                    </div>
+                    <div class="flex-1 h-px bg-gray-200"></div>
+                    <div id="paso2ind" class="flex items-center gap-2">
+                        <div id="p2circle" class="w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">2</div>
+                        <span class="text-xs font-semibold text-gray-400">Pago</span>
+                    </div>
+                    <div class="flex-1 h-px bg-gray-200"></div>
+                    <div id="paso3ind" class="flex items-center gap-2">
+                        <div id="p3circle" class="w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">3</div>
+                        <span class="text-xs font-semibold text-gray-400">Confirmación</span>
+                    </div>
+                </div>
+
+                <!-- Mini resumen hotel -->
+                <div class="bg-slate-50 rounded-2xl p-4 flex gap-4 mb-8">
+                    <img id="rImg" src="" class="w-20 h-16 object-cover rounded-xl shrink-0">
+                    <div>
+                        <p id="rNombre" class="font-bold text-gray-900 text-sm"></p>
+                        <p id="rUbicacion" class="text-gray-500 text-xs mt-0.5"></p>
+                        <p id="rPrecio" class="text-[#F7931E] font-bold text-sm mt-1"></p>
+                    </div>
+                </div>
+
+                <!-- PASO 1: Datos personales -->
+                <div id="paso1">
+                    <h3 class="text-lg font-bold text-gray-900 mb-5">Datos del huésped</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Nombre</label>
+                            <input id="rNombreInput" type="text" placeholder="Juan" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Apellido</label>
+                            <input id="rApellido" type="text" placeholder="Pérez" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Correo electrónico</label>
+                        <input id="rEmail" type="email" placeholder="juan@correo.com" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Check-in</label>
+                            <input id="rCheckin" type="date" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Check-out</label>
+                            <input id="rCheckout" type="date" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition">
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Solicitudes especiales</label>
+                        <textarea placeholder="Cama extra, piso alto, alergias..." rows="2"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition resize-none"></textarea>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="irADetalles()" class="flex-1 border border-gray-200 text-gray-600 py-3 rounded-2xl font-bold hover:border-gray-400 transition text-sm">
+                            ← Volver
+                        </button>
+                        <button onclick="irPaso(2)" class="flex-1 bg-[#F7931E] text-white py-3 rounded-2xl font-bold hover:opacity-90 transition text-sm">
+                            Continuar →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PASO 2: Pago -->
+                <div id="paso2" class="hidden">
+                    <h3 class="text-lg font-bold text-gray-900 mb-5">Método de pago</h3>
+
+                    <!-- Selector tipo pago -->
+                    <div class="flex gap-3 mb-6">
+                        <button onclick="setMetodo('tarjeta')" id="btnTarjeta"
+                            class="flex-1 border-2 border-[#F7931E] rounded-xl py-2.5 text-sm font-semibold text-[#F7931E] flex items-center justify-center gap-2 transition">
+                            <i class="fas fa-credit-card"></i> Tarjeta
+                        </button>
+                        <button onclick="setMetodo('nequi')" id="btnNequi"
+                            class="flex-1 border-2 border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 flex items-center justify-center gap-2 transition">
+                            <i class="fas fa-mobile-alt"></i> Nequi
+                        </button>
+                        <button onclick="setMetodo('pse')" id="btnPse"
+                            class="flex-1 border-2 border-gray-200 rounded-xl py-2.5 text-sm font-semibold text-gray-400 flex items-center justify-center gap-2 transition">
+                            <i class="fas fa-university"></i> PSE
+                        </button>
+                    </div>
+
+                    <!-- Formulario tarjeta -->
+                    <div id="formTarjeta">
+                        <div class="mb-4">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Número de tarjeta</label>
+                            <input type="text" placeholder="1234 5678 9012 3456" maxlength="19"
+                                oninput="formatCard(this)"
+                                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition font-mono">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Vencimiento</label>
+                                <input type="text" placeholder="MM/AA" maxlength="5"
+                                    class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition font-mono">
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">CVV</label>
+                                <input type="password" placeholder="•••" maxlength="4"
+                                    class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition font-mono">
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Nombre en la tarjeta</label>
+                            <input type="text" placeholder="JUAN PÉREZ"
+                                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition uppercase">
+                        </div>
+                    </div>
+
+                    <!-- Formulario Nequi -->
+                    <div id="formNequi" class="hidden mb-6">
+                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Número Nequi</label>
+                        <input type="tel" placeholder="3XX XXX XXXX"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition">
+                        <p class="text-xs text-gray-400 mt-2">Recibirás una notificación push para aprobar el pago.</p>
+                    </div>
+
+                    <!-- Formulario PSE -->
+                    <div id="formPse" class="hidden mb-6">
+                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Banco</label>
+                        <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#F7931E] transition">
+                            <option value="">Selecciona tu banco</option>
+                            <option>Bancolombia</option>
+                            <option>Davivienda</option>
+                            <option>Banco de Bogotá</option>
+                            <option>BBVA Colombia</option>
+                            <option>Nequi / Bancolombia</option>
+                        </select>
+                        <p class="text-xs text-gray-400 mt-2">Serás redirigido a tu banco para completar el pago.</p>
+                    </div>
+
+                    <!-- Resumen precio -->
+                    <div class="bg-slate-50 rounded-2xl p-4 mb-6 space-y-2">
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Precio por noche</span>
+                            <span id="resumenPrecioNoche"></span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Impuestos (19% IVA)</span>
+                            <span id="resumenIva"></span>
+                        </div>
+                        <div class="border-t border-gray-200 pt-2 flex justify-between font-bold text-gray-900">
+                            <span>Total</span>
+                            <span id="resumenTotal"></span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="irPaso(1)" class="flex-1 border border-gray-200 text-gray-600 py-3 rounded-2xl font-bold hover:border-gray-400 transition text-sm">
+                            ← Volver
+                        </button>
+                        <button onclick="irPaso(3)" class="flex-1 bg-[#F7931E] text-white py-3 rounded-2xl font-bold hover:opacity-90 transition text-sm">
+                            Confirmar pago →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PASO 3: Confirmación -->
+                <div id="paso3" class="hidden text-center py-4">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-check text-green-500 text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">¡Reserva confirmada!</h3>
+                    <p class="text-gray-500 text-sm mb-6">Hemos enviado los detalles a tu correo electrónico.</p>
+
+                    <div class="bg-slate-50 rounded-2xl p-5 text-left mb-6 space-y-3">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">Hotel</span>
+                            <span id="confNombre" class="font-semibold text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">Huésped</span>
+                            <span id="confHuesped" class="font-semibold text-gray-900"></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">Total pagado</span>
+                            <span id="confTotal" class="font-bold text-[#F7931E]"></span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-500">Código reserva</span>
+                            <span id="confCodigo" class="font-mono font-bold text-gray-900"></span>
+                        </div>
+                    </div>
+
+                    <button onclick="cerrarModal()"
+                        class="w-full bg-gray-900 text-white py-3 rounded-2xl font-bold hover:bg-cyan-600 transition text-sm">
+                        Cerrar
+                    </button>
+                </div>
+
+            </div><!-- fin vistaReservar -->
+        </div>
+    </div>
 
 </body>
 </html>

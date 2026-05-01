@@ -101,6 +101,7 @@
 
     <!-- Header -->
     <header class="bg-white shadow-sm">
+
         <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <i class="fas fa-plane text-[#69d7f7] text-2xl"></i>
@@ -143,7 +144,7 @@
                 <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#69d7f7] focus:outline-none focus:ring-2 focus:ring-[#69d7f7]">
                     Cuenta
                 </button>
-                <a id="registerLink" href="register.html"><button class="bg-[#f89f37] hover:bg-[#e68817] text-white px-6 py-3 rounded-xl font-medium">Registrarse</button></a>
+                <a id="registerLink" href="register.html"><button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-6 py-3 rounded-xl font-medium">Registrarse</button></a>
             </div>
         </nav>
     </header>
@@ -317,7 +318,7 @@
                             </select>
                         </div>
                         <div class="flex items-end">
-                            <button type="submit" class="w-full h-12 bg-[#f89f37] hover:bg-[#e68817] text-white rounded-2xl flex items-center justify-center gap-2 font-semibold">
+                            <button type="submit" class="w-full h-12 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-2xl flex items-center justify-center gap-2 font-semibold">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                                 Buscar
                             </button>
@@ -349,7 +350,7 @@
                     <p class="uppercase tracking-widest text-[10px] font-medium mb-1">¡Oferta especial!</p>
                     <h2 class="text-2xl font-bold leading-tight mb-2">Vuela a tu<br>destino favorito</h2>
                     <p class="text-base font-light mb-4">Desde <span class="font-semibold">COP 60.900</span></p>
-                    <a href="#" class="inline-block bg-[#f89f37] hover:bg-[#e68817] text-white px-5 py-2 rounded-xl font-semibold text-sm transition-colors">
+                    <a href="#" class="inline-block bg-[#f97316] hover:bg-[#ea580c] text-white px-5 py-2 rounded-xl font-semibold text-sm transition-colors">
                         Reservar ahora
                     </a>
                 </div>
@@ -451,7 +452,7 @@
 
         </div>
         <a class="registerAction" href="register.html">
-        <button class="bg-orange-400 hover:bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold">
+        <button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-8 py-3 rounded-lg font-semibold">
         Crear Mi Cuenta
         </button>
         </a>
@@ -492,15 +493,15 @@
         </div>
         <p class="text-gray-600 mb-4">A pasos de la playa, con desayuno incluido, piscina panoramica y traslado al aeropuerto.</p>
         <div class="flex gap-4 text-sm text-gray-500 mb-4">
-          <span><i class="fa-solid fa-location-dot text-orange-400"></i> Cartagena</span>
-          <span><i class="fa-solid fa-wifi text-orange-400"></i> Wifi</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]"></i> Cartagena</span>  
+          <span><i class="fa-solid fa-wifi text-[#f97316]"></i> Wifi</span>
         </div>
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-2xl font-bold text-orange-500">$400.000</p>
+            <p class="text-2xl font-bold text-[#f97316]">$400.000</p>
             <p class="text-xs text-gray-500">por noche</p>
           </div>
-          <button class="bg-cyan-400 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg">Ver hotel</button>
+          <button onclick="verDetalleHotel('2')" class="bg-cyan-400 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg">Ver hotel</button>
         </div>
       </div>
     </div>
@@ -515,38 +516,38 @@
         </div>
         <p class="text-gray-600 mb-4">A pasos de la Torre Eiffel, con desayuno buffet y tour guiado por el Louvre incluido.</p>
         <div class="flex gap-4 text-sm text-gray-500 mb-4">
-          <span><i class="fa-solid fa-location-dot text-orange-400"></i> París</span>
-          <span><i class="fa-solid fa-mug-hot text-orange-400"></i> Desayuno</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]"></i> París</span>
+          <span><i class="fa-solid fa-mug-hot text-[#f97316]"></i> Desayuno</span>
         </div>
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-2xl font-bold text-orange-500">$520.000</p>
+            <p class="text-2xl font-bold text-[#f97316]">$1.200.000</p>
             <p class="text-xs text-gray-500">por noche</p>
           </div>
-          <button class="bg-cyan-400 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg">Ver hotel</button>
+          <button onclick="verDetalleHotel('3')" class="bg-cyan-400 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg">Ver hotel</button>
         </div>
       </div>
     </div>
 
     <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
-      <img src="https://i.pinimg.com/1200x/11/d9/10/11d9105ea6e7be789aa273ff34f59456.jpg"
+      <img src="https://i.pinimg.com/1200x/a0/de/0f/a0de0f37c3534ad6a5a006e8473c21da.jpg"
            class="h-56 w-full object-cover" alt="Hotel en Londres">
       <div class="p-6">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="text-xl font-bold">Ramada by Wyndham Lisbon</h3>
+          <h3 class="text-xl font-bold">The Hoxton Southwark</h3>
           <span class="text-sm font-semibold bg-cyan-100 text-cyan-600 px-3 py-1 rounded-full">4.9</span>
         </div>
-        <p class="text-gray-600 mb-4">A pasos del metro Olaias, con desayuno buffet y vistas panorámicas al río Tajo.</p>
+        <p class="text-gray-600 mb-4">frente al Tate Modern y vistas al Támesis,el mejor brunch de Southwark.</p>
         <div class="flex gap-4 text-sm text-gray-500 mb-4">
-          <span><i class="fa-solid fa-location-dot text-orange-400"></i> Londres</span>
-          <span><i class="fa-solid fa-dumbbell text-orange-400"></i> Gym</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]"></i> Londres</span>
+          <span><i class="fa-solid fa-dumbbell text-[#f97316]"></i> Gym</span>
         </div>
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-2xl font-bold text-orange-500">$630.000</p>
+            <p class="text-2xl font-bold text-[#f97316]">$630.000</p>
             <p class="text-xs text-gray-500">por noche</p>
           </div>
-          <button class="bg-cyan-400 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg">Ver hotel</button>
+          <button onclick="verDetalleHotel('11')" class="bg-cyan-400 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg"> Ver hotel</button>
         </div>
       </div>
     </div>
@@ -578,11 +579,11 @@
         <h3 class="text-xl font-bold mb-2">Tour Cartagena de Indias</h3>
         <p class="text-gray-600 mb-4">3 dias / 2 noches. Incluye vuelo, hotel 4 estrellas, city tour y dia de playa.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock"></i> 3 dias</span>
-          <span><i class="fa-solid fa-location-dot"></i> Cartagena</span>
+          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 3 dias</span>
+          <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Cartagena</span>
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-2xl font-bold text-orange-500">$860.000</span>
+          <span class="text-2xl font-bold text-[#f97316]">$860.000</span>
           <button class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
         </div>
       </div>
@@ -598,11 +599,11 @@
         <h3 class="text-xl font-bold mb-2">Paquete Dubai </h3>
         <p class="text-gray-600 mb-4">4 dias / 3 noches. Incluye vuelo, hotel con playa, tour marina y al parque acuático Aquaventure.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock"></i> 4 dias</span>
-          <span><i class="fa-solid fa-location-dot"></i> Dubai</span>
+          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 4 dias</span>
+          <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Dubai</span>
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-2xl font-bold text-orange-500">$3.500.000</span>
+          <span class="text-2xl font-bold text-[#f97316]">$3.500.000</span>
           <button class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
         </div>
       </div>
@@ -618,11 +619,11 @@
         <h3 class="text-xl font-bold mb-2">Tour Tokio</h3>
         <p class="text-gray-600 mb-4"> 5 dias / 4 noches. Vuelo, hotel de lujo, ceremonia té, templos y tren bala.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock"></i> 5 dias</span>
-          <span><i class="fa-solid fa-location-dot"></i> Tokio</span>
+          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 5 dias</span>
+          <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Tokio</span>
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-2xl font-bold text-orange-500">$8.000.000</span>
+          <span class="text-2xl font-bold text-[#f97316]">$8.000.000</span>
           <button class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
         </div>
       </div>
@@ -648,7 +649,7 @@
     <div class="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 flex flex-col transition-transform hover:scale-[1.02] duration-300">
       <div class="relative">
         <img src="https://i.pinimg.com/1200x/12/ee/6a/12ee6a3eb352c9ae9fb4df036f93daca.jpg" class="h-56 w-full object-cover" alt="San Andrés">
-        <span class="absolute top-4 right-4 bg-[#f89f37] text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow-md">Oferta Flash</span>
+        <span class="absolute top-4 right-4 bg-[#f97316] text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow-md">Oferta Flash</span>
       </div>
       <div class="p-6 flex-grow flex flex-col justify-between">
         <div>
@@ -667,7 +668,7 @@
     <div class="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 flex flex-col transition-transform hover:scale-[1.02] duration-300">
       <div class="relative">
         <img src="https://i.pinimg.com/1200x/93/8c/5a/938c5a895a81b6544c2c31ea4023be61.jpg" class="h-56 w-full object-cover" alt="Amigos">
-        <span class="absolute top-4 right-4 bg-[#f89f37] text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow-md">Plan Referidos: 3x2</span>
+        <span class="absolute top-4 right-4 bg-[#f97316] text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow-md">Plan Referidos: 3x2</span>
       </div>
       <div class="p-6 flex-grow flex flex-col justify-between">
         <div>
@@ -686,7 +687,7 @@
     <div class="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 flex flex-col transition-transform hover:scale-[1.02] duration-300">
       <div class="relative">
         <img src="https://i.pinimg.com/1200x/c5/48/69/c5486955123520af86e14b97818a1f2d.jpg" class="h-56 w-full object-cover" alt="Escapada">
-        <span class="absolute top-4 right-4 bg-[#f89f37] text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow-md">Últimos cupos</span>
+        <span class="absolute top-4 right-4 bg-[#f97316] text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow-md">Últimos cupos</span>
       </div>
       <div class="p-6 flex-grow flex flex-col justify-between">
         <div>
@@ -713,7 +714,7 @@
         Regístrate y recibe 10% de descuento adicional en tu primer paquete turístico
       </p>
       <a class="registerAction" href="register.html">
-        <button class="bg-[#f89f37] hover:bg-[#e68817] text-white px-8 py-3 rounded-lg font-semibold">
+        <button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-8 py-3 rounded-lg font-semibold">
         Registrarme Ahora
         </button>
     </a>
@@ -1093,6 +1094,15 @@
                 accountModal.classList.add('hidden');
             }
         });
+
+
+        function verDetalleHotel(id) {
+            // Guardamos el ID del hotel seleccionado para que la página de hoteles sepa cuál abrir
+            localStorage.setItem('hotelSeleccionadoId', id);
+            // Redirigimos a la página de alojamientos
+            window.location.href = 'hoteles.html';
+        }
+        
     </script>
 </body>
 </html>
