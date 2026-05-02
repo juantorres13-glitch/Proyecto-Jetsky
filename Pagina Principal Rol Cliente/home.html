@@ -104,24 +104,23 @@
 
         <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <i class="fas fa-plane text-[#69d7f7] text-2xl"></i>
-                <span class="text-2xl font-bold text-[#69d7f7]">JetSky</span>
+                <i class="fas fa-plane text-[#0a68bd] text-2xl"></i>
+                <span class="text-2xl font-bold text-[#0a68bd]">JetSky</span>
             </div>
            
             <div class="hidden md:flex items-center gap-10">
-              <a href="hoteles.html" class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium transition-colors">
+              <a href="hoteles.html" class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium transition-colors">
                 <i class="fas fa-hotel text-base"></i>
              <span>Alojamiento</span>
               </a>
-              <a href="paquetes.html"
-                class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium transition-colors">
+              <a href="paquetes.html" class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium transition-colors">
                   <i class="fas fa-suitcase"></i>
                   Paquetes
               </a>
-                <button type="button" onclick="filterCatalogSection('ofertas')" data-section-filter="ofertas" class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium">
+                <a href="ofertas.html" class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium">
                     <i class="fas fa-fire"></i>
                     Ofertas
-                </button>
+                </a>
             </div>
             <div class="flex items-center gap-4">
                 <div class="relative">
@@ -255,14 +254,14 @@
             <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl p-8">
                 <form id="searchForm">
                     <div class="flex gap-4 mb-6">
-                        <button type="button" onclick="setTripType('roundtrip')" id="btn-round" class="px-6 py-3 rounded-2xl font-semibold bg-[#69d7f7] text-white">Ida y vuelta</button>
+                        <button type="button" onclick="setTripType('roundtrip')" id="btn-round" class="px-6 py-3 rounded-2xl font-semibold bg-[#0a68bd] text-white">Ida y vuelta</button>
                         <button type="button" onclick="setTripType('oneway')" id="btn-oneway" class="px-6 py-3 rounded-2xl font-semibold bg-gray-100 text-gray-600">Solo ida</button>
                     </div>
 
                     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div>
                             <label class="text-sm font-medium block mb-1">Origen</label>
-                            <select id="origin" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
+                            <select id="origin" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
                                 <option value="">Ciudad de origen</option>
                                 <option value="Bogotá">Bogotá (BOG)</option>
                                 <option value="Cali">Cali (CLO)</option>
@@ -276,7 +275,7 @@
                         </div>
                         <div>
                             <label class="text-sm font-medium block mb-1">Destino</label>
-                            <select id="destination" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
+                            <select id="destination" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">  
                                 <option value="">Ciudad de destino</option>
                                 <option value="Cartagena">Cartagena (CTG)</option>
                                 <option value="París">París (CDG)</option>
@@ -290,18 +289,18 @@
                         </div>
                         <div>
                             <label class="text-sm font-medium block mb-1">Ida</label>
-                            <input id="departureDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
+                            <input id="departureDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
                         </div>
                         <div id="returnContainer">
                             <label class="text-sm font-medium block mb-1">Vuelta</label>
-                            <input id="returnDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
+                            <input id="returnDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
                         </div>
                     </div>
 
                     <div class="grid md:grid-cols-3 gap-4 mt-6">
                         <div>
                             <label class="text-sm font-medium block mb-1">Pasajeros</label>
-                            <select id="passengers" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#F7931E]">
+                            <select id="passengers" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#0a68bd]">
                                 <option value="1">1 Pasajero</option>
                                 <option value="2">2 Pasajeros</option>
                                 <option value="3">3 Pasajeros</option>
@@ -311,7 +310,7 @@
                         </div>
                         <div>
                             <label class="text-sm font-medium block mb-1">Clase</label>
-                            <select id="flightClass" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#F7931E]">
+                            <select id="flightClass" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#0a68bd]">
                                 <option value="economy">Económica</option>
                                 <option value="premium">Premium</option>
                                 <option value="business">Business</option>
@@ -382,7 +381,7 @@
 
          <!-- Iconos -->
 
-            <section class="bg-[#69d7f7] text-white py-3">
+            <section class="bg-[#0a68bd] text-white py-3">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid md:grid-cols-3 gap-8 text-center">
 
@@ -421,7 +420,7 @@
 
       <!-- Item -->
       <div class="flex gap-4 mb-6">
-        <i class="fa-regular fa-star text-orange-500 text-xl mt-1"></i>
+        <i class="fa-regular fa-star text-[#0a68bd] text-xl mt-1"></i>
         <div>
           <h4 class="font-semibold">Acumula Puntos</h4>
           <p class="text-gray-600">
@@ -432,7 +431,7 @@
 
       <!-- Item -->
       <div class="flex gap-4 mb-6">
-        <i class="fa-solid fa-tags text-orange-500 text-xl mt-1"></i>
+        <i class="fa-solid fa-tags text-[#0a68bd] text-xl mt-1"></i>
         <div>
           <h4 class="font-semibold">Descuentos Exclusivos</h4>
           <p class="text-gray-600">
@@ -443,7 +442,7 @@
 
       <!-- Item -->
       <div class="flex gap-4 mb-8">
-        <i class="fa-solid fa-check-double text-orange-500 text-xl mt-1"></i>
+        <i class="fa-solid fa-check-double text-[#0a68bd]  text-xl mt-1"></i>
         <div>
           <h4 class="font-semibold">Check-in Prioritario</h4>
           <p class="text-gray-600">
@@ -453,7 +452,7 @@
 
         </div>
         <a class="registerAction" href="register.html">
-        <button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-8 py-3 rounded-lg font-semibold">
+        <button class="bg-[#0a68bd] [#0a68bd] hover:bg-[#074e8f] text-white px-8 py-3 rounded-lg font-semibold">
         Crear Mi Cuenta
         </button>
         </a>
@@ -502,7 +501,7 @@
             <p class="text-2xl font-bold text-[#f97316]">$400.000</p>
             <p class="text-xs text-gray-500">por noche</p>
           </div>
-          <button onclick="verDetalleHotel('2')" class="bg-cyan-400 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg">Ver hotel</button>
+          <button onclick="verDetalleHotel('2')" class="bg-[#0a68bd] hover:bg-[#074e8f] text-white px-5 py-2 rounded-lg">Ver hotel</button>
         </div>
       </div>
     </div>
@@ -525,7 +524,7 @@
             <p class="text-2xl font-bold text-[#f97316]">$1.200.000</p>
             <p class="text-xs text-gray-500">por noche</p>
           </div>
-          <button onclick="verDetalleHotel('3')" class="bg-cyan-400 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg">Ver hotel</button>
+          <button onclick="verDetalleHotel('3')" class="bg-[#0a68bd] hover:bg-[#074e8f] text-white px-5 py-2 rounded-lg">Ver hotel</button>
         </div>
       </div>
     </div>
@@ -548,7 +547,7 @@
             <p class="text-2xl font-bold text-[#f97316]">$630.000</p>
             <p class="text-xs text-gray-500">por noche</p>
           </div>
-          <button onclick="verDetalleHotel('11')" class="bg-cyan-400 hover:bg-cyan-500 text-white px-5 py-2 rounded-lg"> Ver hotel</button>
+          <button onclick="verDetalleHotel('11')" class="bg-[#0a68bd] hover:bg-[#074e8f] text-white px-5 py-2 rounded-lg"> Ver hotel</button>
         </div>
       </div>
     </div>
@@ -585,7 +584,7 @@
         </div>
         <div class="flex items-center justify-between">
           <span class="text-2xl font-bold text-[#f97316]">$4.000.000</span>
-          <button onclick="verPaquete('p7')" class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
+          <button onclick="verPaquete('p7')" class="bg-[#0a68bd] hover:bg-[#074e8f] text-white py-2 px-5 rounded-lg">Ver detalles</button>
         </div>
       </div>
     </div>
@@ -594,7 +593,7 @@
       <div class="relative">
         <img src="https://www.topcompanions.com/static/968f69b6c648cddbe63001ee8fa00399/d2f4e/Luxury-hotels-Dubai.jpg"
              class="h-56 w-full object-cover" alt="Paquete Dubai">
-        <span class="absolute top-4 right-4 bg-cyan-400 text-white px-3 py-1 rounded-full text-sm font-bold">Todo incluido</span>
+        <span class="absolute top-4 right-4 bg-[#0a68bd] text-white px-3 py-1 rounded-full text-sm font-bold">Todo incluido</span>
       </div>
       <div class="p-6">
         <h3 class="text-xl font-bold mb-2">Paquete Dubai </h3>
@@ -605,7 +604,7 @@
         </div>
         <div class="flex items-center justify-between">
           <span class="text-2xl font-bold text-[#f97316]">$15.000.000</span>
-          <button onclick="verPaquete('p4')" class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
+          <button onclick="verPaquete('p4')" class="bg-[#0a68bd] hover:bg-[#074e8f] text-white py-2 px-5 rounded-lg">Ver detalles</button>
         </div>
       </div>
     </div>
@@ -625,7 +624,7 @@
         </div>
         <div class="flex items-center justify-between">
           <span class="text-2xl font-bold text-[#f97316]">$12.500.000</span>
-          <button onclick="verPaquete('p2')" class="bg-cyan-400 hover:bg-cyan-500 text-white py-2 px-5 rounded-lg">Ver detalles</button>
+          <button onclick="verPaquete('p2')" class="bg-[#0a68bd] hover:bg-[#074e8f] text-white py-2 px-5 rounded-lg">Ver detalles</button>
         </div>
       </div>
     </div>
@@ -654,11 +653,11 @@
       </div>
       <div class="p-6 flex-grow flex flex-col justify-between">
         <div>
-          <h3 class="text-xl font-bold mb-3 text-black">San Andrés 20% OFF</h3>
+          <h3 class="text-xl font-bold mb-3 text-black">San Andrés 30% OFF</h3>
           <p class="text-gray-600 text-sm mb-3">Descubre el paraíso del mar de los siete colores con un descuento exclusivo antes de que se agoten los cupos.</p>
           <p class="text-gray-500 text-xs italic">Una experiencia diseñada para relajarse sin preocupaciones. El destino te espera.</p>
         </div>
-        <button class="w-full bg-cyan-400 text-white py-3 rounded-2xl font-bold text-base hover:bg-cyan-500 transition-colors shadow-sm mt-6">
+        <button class="w-full bg-[#0a68bd] text-white py-3 rounded-2xl font-bold text-base hover:bg-[#074e8f] transition-colors shadow-sm mt-6">
           VER DETALLES
         </button>
       </div>
@@ -677,7 +676,7 @@
           <p class="text-gray-600 text-sm mb-3">Invita a tus amigos a registrarse y recibirán un bono de $200.000 para su próximo viaje juntos.</p>
           <p class="text-gray-500 text-xs italic">Porque las mejores historias se cuentan viajando en grupo. ¡No te quedes fuera!</p>
         </div>
-        <button class="w-full bg-cyan-400 text-white py-3 rounded-2xl font-bold text-base hover:bg-cyan-500 transition-colors shadow-sm mt-6">
+        <button class="w-full bg-[#0a68bd] text-white py-3 rounded-2xl font-bold text-base hover:bg-[#074e8f] transition-colors shadow-sm mt-6">
           INVITAR AMIGOS
         </button>
       </div>
@@ -696,7 +695,7 @@
           <p class="text-gray-600 text-sm mb-3">Promoción para viajes cortos con salida inmediata, perfecta para mover reservas rápidas este fin de semana.</p>
           <p class="text-gray-500 text-xs italic">Toma un respiro de la rutina y vuela hoy mismo. La aventura está a un clic.</p>
         </div>
-        <button class="w-full bg-cyan-400 text-white py-3 rounded-2xl font-bold text-base hover:bg-cyan-500 transition-colors shadow-sm mt-6">
+        <button class="w-full bg-[#0a68bd] text-white py-3 rounded-2xl font-bold text-base hover:bg-[#074e8f] transition-colors shadow-sm mt-6">
           VER DETALLES
         </button>
       </div>
@@ -950,13 +949,13 @@
 
             if (type === 'oneway') {
                 returnContainer.style.display = 'none';
-                btnOneway.classList.add('bg-[#69d7f7]', 'text-white');
+                btnOneway.classList.add('bg-[#0a68bd]', 'text-white');
                 btnOneway.classList.remove('bg-gray-100', 'text-gray-600');
                 btnRound.classList.remove('bg-[#69d7f7]', 'text-white');
                 btnRound.classList.add('bg-gray-100', 'text-gray-600');
             } else {
                 returnContainer.style.display = 'block';
-                btnRound.classList.add('bg-[#69d7f7]', 'text-white');
+                btnRound.classList.add('bg-[#0a68bd]', 'text-white');
                 btnRound.classList.remove('bg-gray-100', 'text-gray-600');
                 btnOneway.classList.remove('bg-[#69d7f7]', 'text-white');
                 btnOneway.classList.add('bg-gray-100', 'text-gray-600');
@@ -1104,14 +1103,14 @@
             window.location.href = 'hoteles.html';
         }
 
-          // Nueva función para ir a paquetes con detalle específico
-          function verPaquete(packageId) {
-              // Guardamos el ID del paquete que queremos abrir
-              localStorage.setItem('paqueteSeleccionado', packageId);
-              
-              // Redirigimos a la página de paquetes
-              window.location.href = 'paquetes.html';
-          }
+        // Nueva función para ir a paquetes con detalle específico
+        function verPaquete(packageId) {
+            // Guardamos el ID del paquete que queremos abrir
+            localStorage.setItem('paqueteSeleccionado', packageId);
+            
+            // Redirigimos a la página de paquetes
+            window.location.href = 'paquetes.html';
+        }
 </script>
         
     </script>

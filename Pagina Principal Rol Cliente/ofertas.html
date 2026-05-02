@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>JetSky - Ofertas </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* ── Base ── */
+        html { scroll-behavior: smooth; }
+        
+        /* Tarjetas de cuenta regresiva */
+        .timer-box {
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 24px rgba(100,200,240,0.15);
+        }
+
+        /* Buscador flotante compacto */
+        .search-bar {
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.95);
+            border-radius: 1.25rem;
+            box-shadow: 0 8px 32px rgba(100,180,230,0.18), 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        /* Pills filtro */
+        .pill-filter {
+            transition: all 0.2s;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.3rem 0.9rem;
+            border-radius: 9999px;
+            border: 1.5px solid #e2e8f0;
+            background: #f8fafc;
+            color: #64748b;
+            cursor: pointer;
+        }
+        .pill-filter:hover { background: #f1f5f9; }
+        .pill-filter.active {
+            background: #0f172a;
+            color: #fff;
+            border-color: #0f172a;
+        }
+
+        /* Cards */
+
+        .card-lift {
+    transition: transform 0.35s cubic-bezier(.4,0,.2,1),
+                box-shadow 0.35s;
+    box-shadow: 0 18px 40px -12px rgba(15,23,42,0.25);
+}
+
+.card-lift:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 60px -10px rgba(15,23,42,0.35);
+}
+        .badge-hot { background: linear-gradient(90deg, #F7931E, #f59e0b); }
+       
+        /* Precio tachado */
+        .price-old { text-decoration: line-through; color: #94a3b8; font-size: 0.78rem; }
+
+        /* Barra de progreso disponibilidad */
+        .prog-bar { background: #e2e8f0; border-radius: 999px; height: 4px; overflow: hidden; }
+        .prog-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #f97316, #f59e0b); }
+
+        /* Shine hover */
+        .shine { position: relative; overflow: hidden; }
+        .shine::after {
+            content: ''; position: absolute; top: 0; left: -75%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.14), transparent);
+            transform: skewX(-20deg); transition: left 0.55s;
+        }
+        .shine:hover::after { left: 130%; }
+
+        /* Modal */
+        .modal-scroll { scrollbar-width: thin; scrollbar-color: #e2e8f0 transparent; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.4s ease both; }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <i class="fas fa-plane text-[#0a68bd] text-2xl"></i>
+            <span class="text-2xl font-bold text-[#0a68bd]">JetSky</span>
+        </div>
+        <div class="hidden md:flex items-center gap-7 text-sm font-semibold text-gray-500">
+
+            <a href="hoteles.html"  class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium transition-colors">
+                    <i class="fas fa-hotel text-base"></i>
+                    <span>Alojamiento</span>
+              </a>
+            <a href="paquetes.html" class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium transition-colors">
+                    <i class="fas fa-suitcase"></i>
+                     <span>Paquetes</span>
+            </a>
+
+            <a href="ofertas.html"  class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium transition-colors">
+                <i class="fas fa-fire"></i>
+                <span>Ofertas</span>
+            </a>
+        </div>
+        <a href="home.html">
+            <button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-5 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition">
+                <i class="fa-solid fa-arrow-left"></i> 
+                Volver al Inicio
+            </button>
+        </a>
+    </nav>
+</header>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero-ofertas text-gray-800 pt-10 pb-6 px-5">
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+
+        <!-- Título -->
+        <div class="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs font-bold tracking-widest text-orange-500 uppercase mb-4 border border-white/80">
+            <i class="fas fa-bolt"></i> Tiempo limitado
+        </div>
+        <h1 class="text-3xl md:text-4xl font-black text-gray-900 leading-tight mb-1">
+            Ofertas que no puedes <span class="text-[#f97316]">dejar pasar</span>
+        </h1>
+        <p class="text-gray-500 text-sm mb-6 max-w-md mx-auto">Precio válido hasta agotar cupos.</p>
+
+        <!-- Countdown compacto -->
+        <div class="flex justify-center gap-3 mb-7">
+            <div class="timer-box px-5 py-3 min-w-[68px] text-center">
+                <span id="dias"    class="text-2xl font-black text-gray-900 tabular-nums block">00</span>
+                <p class="text-[9px] uppercase tracking-widest text-gray-400 mt-0.5">Días</p>
+            </div>
+            <div class="flex items-center text-gray-400 font-black text-xl pb-4">:</div>
+            <div class="timer-box px-5 py-3 min-w-[68px] text-center">
+                <span id="horas"   class="text-2xl font-black text-gray-900 tabular-nums block">00</span>
+                <p class="text-[9px] uppercase tracking-widest text-gray-400 mt-0.5">Horas</p>
+            </div>
+            <div class="flex items-center text-gray-400 font-black text-xl pb-4">:</div>
+            <div class="timer-box px-5 py-3 min-w-[68px] text-center">
+                <span id="minutos" class="text-2xl font-black text-gray-900 tabular-nums block">00</span>
+                <p class="text-[9px] uppercase tracking-widest text-gray-400 mt-0.5">Min</p>
+            </div>
+            <div class="flex items-center text-gray-400 font-black text-xl pb-4">:</div>
+            <div class="timer-box px-5 py-3 min-w-[68px] text-center">
+                <span id="segundos" class="text-2xl font-black text-gray-900 tabular-nums block">00</span>
+                <p class="text-[9px] uppercase tracking-widest text-gray-400 mt-0.5">Seg</p>
+            </div>
+        </div>
+
+        <!-- Buscador compacto -->
+        <div class="search-bar inline-flex flex-wrap items-center gap-0 max-w-2xl w-full mx-auto px-1 py-1">
+            <div class="flex items-center gap-2 px-4 py-2 flex-1 min-w-[120px]">
+                <i class="fas fa-map-marker-alt text-gray-400 text-xs shrink-0"></i>
+                <input type="text" id="searchOfertas" placeholder="Buscar destino"
+                    class="w-full outline-none text-sm text-gray-600 bg-transparent placeholder-gray-400">
+            </div>
+            <div class="w-px h-5 bg-gray-200 shrink-0"></div>
+            <div class="flex items-center gap-2 px-4 py-2 shrink-0">
+                <i class="fas fa-calendar text-gray-400 text-xs shrink-0"></i>
+                <input type="date" class="outline-none text-sm text-gray-500 bg-transparent">
+            </div>
+            <div class="w-px h-5 bg-gray-200 shrink-0"></div>
+            <div class="flex items-center gap-2 px-4 py-2 shrink-0">
+                <i class="fas fa-users text-gray-400 text-xs shrink-0"></i>
+                <select class="outline-none text-sm text-gray-500 bg-transparent">
+                    <option>1 viajero</option>
+                    <option selected>2 viajeros</option>
+                    <option>3 viajeros</option>
+                    <option>4+</option>
+                </select>
+            </div>
+            <button class="shine bg-[#f97316] hover:bg-[#ea580c] text-white px-6 py-2.5 rounded-xl font-bold text-sm ">
+                <i class="fas fa-search mr-1"></i>Buscar
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ FILTROS + MAIN ═══════════ -->
+<main class="max-w-6xl mx-auto px-5 py-10">
+
+    <!-- Barra superior: pills + contador + orden -->
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div class="flex flex-wrap gap-2">
+            <button data-cat="all"      class="pill-filter active">Todas</button>
+            <button data-cat="hot"      class="pill-filter"><i class="fas fa-fire text-orange-500 mr-1"></i>Hot & Flash</button>
+            <button data-cat="caribe"   class="pill-filter"><i class="fas fa-umbrella-beach text-cyan-500 mr-1"></i>Caribe</button>
+            <button data-cat="europa"   class="pill-filter"><i class="fas fa-landmark text-indigo-500 mr-1"></i>Europa</button>
+            <button data-cat="asia"     class="pill-filter"><i class="fas fa-torii-gate text-red-500 mr-1"></i>Asia</button>
+            <button data-cat="colombia" class="pill-filter"><i class="fas fa-mountain text-green-600 mr-1"></i>Colombia</button>
+        </div>
+        <div class="flex items-center gap-3">
+            <span id="contadorOfertas" class="text-sm text-gray-400 font-medium"></span>
+            <select id="ordenSelect" onchange="ordenarOfertas()"
+                class="border border-gray-200 rounded-xl px-3 py-1.5 text-sm text-gray-600 outline-none focus:border-[#0a68bd] bg-white">
+                <option value="">Ordenar</option>
+                <option value="desc">Mayor descuento</option>
+                <option value="pa">Precio: menor a mayor</option>
+                <option value="pd">Precio: mayor a menor</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Grid -->
+
+    <div class="bg-slate-50 rounded-[3rem] p-6">
+        <div id="ofertasGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7"></div>
+    </div>
+
+    <!-- Sin resultados -->
+    <div id="noResultados" class="hidden text-center py-16 bg-white/60 rounded-3xl mt-6">
+        <i class="fas fa-tag text-5xl text-gray-300 mb-3 block"></i>
+        <p class="text-gray-400 font-medium">No hay ofertas con estos filtros</p>
+        <button id="resetFiltrosBtn" class="mt-3 text-orange-500 text-sm underline">Limpiar filtros</button>
+    </div>
+
+</main>
+
+
+    <!-- Pie de Página -->
+    <footer class="bg-[#0f172a] text-white py-11 mt-15">
+        
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
+                <div><h6 class="font-bold mb-4 uppercase text-xs tracking-widest">Compra</h6><div class="text-sm text-gray-400 space-y-2"><p class="hover:text-white cursor-pointer">Vuelos baratos</p><p class="hover:text-white cursor-pointer">Hoteles</p><p class="hover:text-white cursor-pointer">Acumula Puntos</p></div></div>
+                <div><h6 class="font-bold mb-4 uppercase text-xs tracking-widest">JetSky</h6><div class="text-sm text-gray-400 space-y-2"><p class="hover:text-white cursor-pointer">Nosotros</p><p class="hover:text-white cursor-pointer">Sostenibilidad</p><p class="hover:text-white cursor-pointer">Empleo</p></div></div>
+                <div><h6 class="font-bold mb-4 uppercase text-xs tracking-widest">Ayuda</h6><div class="text-sm text-gray-400 space-y-2"><p class="hover:text-white cursor-pointer">Soporte</p><p class="hover:text-white cursor-pointer">PQRS</p><p class="hover:text-white cursor-pointer">Check-in</p></div></div>
+                <div><h6 class="font-bold mb-4 uppercase text-xs tracking-widest">Legal</h6><div class="text-sm text-gray-400 space-y-2"><p class="hover:text-white cursor-pointer">Privacidad</p><p class="hover:text-white cursor-pointer">Términos</p><p class="hover:text-white cursor-pointer">Cookies</p></div></div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-[10px] tracking-[.3em]">© 2026 JETSKY · OFERTAS EXCLUSIVAS · DESCUENTOS DIRECTOS</div>
+        </div>
+    </footer>
+
+    <script>
+        // ---------- LAS OFERTAS ----------
+        const ofertasData = [
+            { id: 1, nombre: " San Andrés", destino: "San Andrés", categoria: "caribe", precioOriginal: 1500000, precioOferta: 999000, descuento: "33%", imagen: "https://i.pinimg.com/1200x/dd/40/2b/dd402baf5d7f6fd669458a6869e05713.jpg", duracion: "4 noches", incluye: "Hotel Decameron, vuelo ida+vuelta, desayuno, snorkel tour", badge: "Flash", hot: true, fechaLim: "2026-06-15" },
+            { id: 2, nombre: " París romántico", destino: "París", categoria: "europa", precioOriginal: 3200000, precioOferta: 2199000, descuento: "31%", imagen: "https://i.pinimg.com/1200x/42/33/4a/42334a06aded895e4296b8c79db3ddc3.jpg", duracion: "6 noches", incluye: "Hotel 4* en centro, vuelos, tour Eiffel + Louvre", badge: "Flash", hot: true },
+            { id: 3, nombre: " Cartagena Todo Incluido", destino: "Cartagena", categoria: "caribe", precioOriginal: 2100000, precioOferta: 1499000, descuento: "29%", imagen: "https://i.pinimg.com/1200x/8c/c1/b8/8cc1b8dfbd1aa135c729742ed0e74b3e.jpg", duracion: "5 noches", incluye: "Hotel en Bocagrande, comidas, city tour + islas", badge: "Recomendado", hot: false },
+            { id: 4, nombre: " Tokio Experience + JR Pass", destino: "Tokio", categoria: "asia", precioOriginal: 5600000, precioOferta: 4199000, descuento: "25%", imagen: "https://media.vogue.in/wp-content/uploads/2018/04/Your-ultimate-guide-to-Tokyo-Japan1.jpg", duracion: "8 noches", incluye: "Hotel Shibuya, vuelos, JR Pass 7d, tour guiado", badge: "Premium", hot: false },
+            { id: 5, nombre: " Eje Cafetero Mágico", destino: "Salento", categoria: "colombia", precioOriginal: 890000, precioOferta: 649000, descuento: "27%", imagen: "https://tse2.mm.bing.net/th/id/OIP.sr4XXXbRLpKO3aODFZODeAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3", duracion: "3 noches", incluye: "Finca cafetera, transporte, desayuno, tour del cafe", badge: "Eco", hot: false },
+            { id: 6, nombre: " Dubái Lujoso 7 estrellas", destino: "Dubái", categoria: "asia", precioOriginal: 9500000, precioOferta: 7499000, descuento: "21%", imagen: "https://i.pinimg.com/736x/43/bd/a0/43bda0c071719f541f526a94b0c2811b.jpg", duracion: "7 noches", incluye: "Burj vista, vuelos business class en promoción, safari", badge: "Lujo", hot: true },
+            { id: 7, nombre: " Londres Royal Experience", destino: "Londres", categoria: "europa", precioOriginal: 4100000, precioOferta: 2999000, descuento: "27%", imagen: "https://i.pinimg.com/1200x/eb/62/14/eb6214fa70b71b5c396e767bb4bcacb7.jpg", duracion: "6 noches", incluye: "Big Ben vistas, teatro West End, desayuno inglés", badge: "Top ventas", hot: false },
+            { id: 8, nombre: " Santa Marta - Tayrona", destino: "Santa Marta", categoria: "colombia", precioOriginal: 1250000, precioOferta: 849000, descuento: "32%", imagen: "https://i.pinimg.com/1200x/1f/d4/6a/1fd46a60c5e78dd69e52663205e5bc55.jpg", duracion: "4 noches", incluye: "Hotel playa, vuelo, entrada Parque Tayrona", badge: "Flash", hot: false },
+            { id: 9, nombre: " Roma & Vaticano", destino: "Roma", categoria: "europa", precioOriginal: 2800000, precioOferta: 1999000, descuento: "28%", imagen: "https://i.pinimg.com/1200x/78/f0/65/78f0656dda7e37daca3f56726eb164b8.jpg", duracion: "5 noches", incluye: "Hotel céntrico, desayuno, entradas Coliseo y Foro", badge: "Imperdible", hot: false },
+            { id: 10, nombre: " Maldivas Escapada", destino: "Maldivas", categoria: "asia", precioOriginal: 12500000, precioOferta: 8999000, descuento: "28%", imagen: "https://i.pinimg.com/1200x/87/43/03/874303bc71d3eea167e5792c8535ee9c.jpg", duracion: "7 noches", incluye: "Overwater bungalow, vuelo, pensión completa", badge: "Premium", hot: true },
+            { id: 11, nombre: " Medellín + Guatapé", destino: "Medellín", categoria: "colombia", precioOriginal: 950000, precioOferta: 699000, descuento: "26%", imagen: "https://i.pinimg.com/736x/2b/a3/66/2ba3665b4c1f8168f29f307111abe61b.jpg", duracion: "4 noches", incluye: "Hotel poblado, tour a la piedra, comida típica", badge: "Popular", hot: false },
+            { id: 12, nombre: " Cancún Todo Incluido", destino: "Cancún", categoria: "caribe", precioOriginal: 3200000, precioOferta: 2399000, descuento: "25%", imagen: "https://i.pinimg.com/736x/6b/25/b4/6b25b4a76c86080cbfda0609d60ff2fd.jpg", duracion: "5 noches", incluye: "All inclusive, vuelos, traslados", badge: "Hot", hot: true }
+        ];
+
+        let currentFilter = "all";
+        let searchText = "";
+
+function renderOfertas() {
+    const grid = document.getElementById("ofertasGrid");
+    const contadorSpan = document.getElementById("contadorOfertas");
+    const noResultadosDiv = document.getElementById("noResultados");
+    
+    let filtered = ofertasData.filter(ofer => {
+        if (currentFilter !== "all" && ofer.categoria !== currentFilter) return false;
+        if (currentFilter === "hot" && !ofer.hot) return false;
+        if (searchText.trim() !== "") {
+            const busqueda = searchText.toLowerCase();
+            return ofer.nombre.toLowerCase().includes(busqueda) || ofer.destino.toLowerCase().includes(busqueda);
+        }
+        return true;
+    });
+
+    if (filtered.length === 0) {
+        grid.innerHTML = "";
+        contadorSpan.textContent = "0 resultados";
+        noResultadosDiv.classList.remove("hidden");
+        return;
+    }
+
+    noResultadosDiv.classList.add("hidden");
+    contadorSpan.textContent = `${filtered.length} oferta${filtered.length !== 1 ? 's' : ''}`;
+
+    grid.innerHTML = filtered.map(ofer => `
+        <div class="pcard card-lift bg-white rounded-[2rem] overflow-hidden border border-gray-100 cursor-pointer group"
+             onclick="verOferta(${ofer.id})">
+            
+            <div class="relative h-52 overflow-hidden">
+                <img src="${ofer.imagen}" 
+                     class="w-full h-full object-cover transition-all duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                
+                ${ofer.hot ? `
+                <span class="badge-hot absolute top-4 left-4 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                    <i class="fas fa-fire mr-1"></i>HOT
+                </span>` : ''}
+                
+                <span class="absolute top-4 right-4 bg-white/90 text-gray-800 text-xs font-bold px-3 py-1 rounded-full">
+                    ${ofer.duracion}
+                </span>
+                
+                <div class="absolute bottom-4 left-5">
+                    <p class="text-white font-black text-xl leading-tight">${ofer.nombre}</p>
+                    <p class="text-white/75 text-xs mt-0.5">
+                        <i class="fas fa-map-marker-alt mr-1"></i>${ofer.destino}
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1">
+                            <i class="fas fa-plane mr-1"></i>Vuelo
+                        </span>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 rounded-full px-2 py-1">
+                            <i class="fas fa-hotel mr-1"></i>Hotel
+                        </span>
+                    </div>
+                    <span class="text-xs font-bold text-orange-600">-${ofer.descuento}</span>
+                </div>
+
+                <p class="text-gray-500 text-xs leading-relaxed mb-4 line-clamp-2">
+                    ${ofer.incluye}
+                </p>
+
+                <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                    <div>
+                        <p class="text-[10px] text-gray-400">Desde / persona</p>
+                        <p class="text-2xl font-black text-gray-900">
+                            $${ofer.precioOferta.toLocaleString('es-CO')}
+                        </p>
+                        <p class="text-xs text-gray-400 line-through">
+                            $${ofer.precioOriginal.toLocaleString('es-CO')}
+                        </p>
+                    </div>
+                    <button class="shine bg-gray-900 text-white px-5 py-2 rounded-2xl text-xs font-bold hover:bg-[#074e8f] transition">
+                        Ver oferta
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+        // función para ver detalle (modal tipo alert o redirección elegante)
+        window.verOferta = function(id) {
+            const oferta = ofertasData.find(o => o.id === id);
+            if (!oferta) return;
+            // modal bonito (simple alert visual estilo lightbox)
+            const modalHtml = `
+                <div id="modalOferta" class="fixed inset-0 z-[200] flex items-center justify-center p-4" style="background:rgba(0,0,0,0.75); backdrop-filter:blur(8px);">
+                    <div class="bg-white max-w-md w-full rounded-3xl shadow-2xl overflow-hidden transform transition-all animate-fade-in">
+                        <div class="relative h-44 overflow-hidden">
+                            <img src="${oferta.imagen}" class="w-full h-full object-cover">
+                            <button onclick="cerrarModalOferta()" class="absolute top-3 right-3 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center text-gray-700">✕</button>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-black text-gray-800">${oferta.nombre}</h3>
+                                <span class="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">-${oferta.descuento}</span>
+                            </div>
+                            <p class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt text-orange-400"></i> ${oferta.destino} · ${oferta.duracion}</p>
+                            <div class="bg-orange-50 p-3 rounded-xl mt-3">
+                                <p class="text-sm font-medium text-gray-700"> Incluye:</p>
+                                <p class="text-xs text-gray-600">${oferta.incluye}</p>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between">
+                                <div><span class="text-gray-400 text-sm line-through">$${oferta.precioOriginal.toLocaleString('es-CO')}</span>
+                                <div class="text-3xl font-black text-orange-600">$${oferta.precioOferta.toLocaleString('es-CO')}</div></div>
+                                <button onclick="reservarOfertaRapido(${oferta.id})" class="bg-orange-500 text-white px-6 py-2 rounded-2xl font-bold hover:bg-orange-600">Reservar ahora</button>
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-4 text-center"><i class="fas fa-lock"></i> Pago seguro · Cupos limitados</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            document.body.style.overflow = 'hidden';
+        };
+        window.cerrarModalOferta = function() {
+            const modal = document.getElementById('modalOferta');
+            if (modal) modal.remove();
+            document.body.style.overflow = '';
+        };
+        window.reservarOfertaRapido = function(id) {
+            cerrarModalOferta();
+            alert("🎉 ¡Oferta seleccionada! Redirigiendo a pago seguro (demo interactiva). En la versión definitiva se integraría con pasarela real.");
+            // Guardar en localStorage y redirigir a pago o home (simula)
+            localStorage.setItem('ofertaSeleccionada', id);
+            setTimeout(() => {
+                window.location.href = "home.html";
+            }, 1200);
+        };
+        // Limpiar filtros global
+        function resetFilters() {
+            currentFilter = "all";
+            searchText = "";
+            document.getElementById("searchOfertas").value = "";
+            document.querySelectorAll(".pill-filter").forEach(btn => btn.classList.remove("active"));
+            const defaultBtn = document.querySelector('.pill-filter[data-cat="all"]');
+            if(defaultBtn) defaultBtn.classList.add("active");
+            renderOfertas();
+        }
+        document.getElementById("resetFiltrosBtn")?.addEventListener("click", resetFilters);
+        
+        // Ordenar
+        window.ordenarOfertas = function() {
+            const v = document.getElementById("ordenSelect").value;
+            const grid = document.getElementById("ofertasGrid");
+            const cards = [...grid.children].filter(c => c.style.display !== "none");
+            cards.sort((a, b) => {
+                const idA = parseInt(a.getAttribute("onclick").match(/\d+/)[0]);
+                const idB = parseInt(b.getAttribute("onclick").match(/\d+/)[0]);
+                const oA  = ofertasData.find(o => o.id === idA);
+                const oB  = ofertasData.find(o => o.id === idB);
+                if (!oA || !oB) return 0;
+                if (v === "desc") return parseInt(oB.descuento) - parseInt(oA.descuento);
+                if (v === "pa")   return oA.precioOferta - oB.precioOferta;
+                if (v === "pd")   return oB.precioOferta - oA.precioOferta;
+                return 0;
+            });
+            cards.forEach(c => grid.appendChild(c));
+        };
+
+        // Filtros por categoría
+        document.querySelectorAll(".pill-filter").forEach(btn => {
+            btn.addEventListener("click", function(e) {
+                document.querySelectorAll(".pill-filter").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
+                currentFilter = this.getAttribute("data-cat");
+                renderOfertas();
+            });
+        });
+        
+        // Buscador
+        const searchInput = document.getElementById("searchOfertas");
+        searchInput.addEventListener("input", (e) => {
+            searchText = e.target.value;
+            renderOfertas();
+        });
+        
+        // COUNTDOWN (fecha final 15 de junio 2026 23:59:59)
+        function actualizarContador() {
+            const fechaFin = new Date(2026, 5, 15, 23, 59, 59).getTime(); // Junio 15 2026
+            const ahora = new Date().getTime();
+            const distancia = fechaFin - ahora;
+            if (distancia < 0) {
+                document.getElementById("dias").innerText = "00";
+                document.getElementById("horas").innerText = "00";
+                document.getElementById("minutos").innerText = "00";
+                document.getElementById("segundos").innerText = "00";
+                return;
+            }
+            const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((distancia % (86400000)) / (3600000));
+            const mins = Math.floor((distancia % 3600000) / 60000);
+            const segs = Math.floor((distancia % 60000) / 1000);
+            document.getElementById("dias").innerText = dias < 10 ? "0"+dias : dias;
+            document.getElementById("horas").innerText = horas < 10 ? "0"+horas : horas;
+            document.getElementById("minutos").innerText = mins < 10 ? "0"+mins : mins;
+            document.getElementById("segundos").innerText = segs < 10 ? "0"+segs : segs;
+        }
+        setInterval(actualizarContador, 1000);
+        actualizarContador();
+        
+        // Inicial
+        renderOfertas();
+
+        // Efecto extra para cerrar modal con tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (document.getElementById('modalOferta')) cerrarModalOferta();
+            }
+        });
+    </script>
+    <style>
+        @keyframes fade-in {
+            from { opacity: 0; transform: scale(0.96);}
+            to { opacity: 1; transform: scale(1);}
+        }
+        .animate-fade-in {
+            animation: fade-in 0.2s ease-out;
+        }
+    </style>
+</body>
+</html>
