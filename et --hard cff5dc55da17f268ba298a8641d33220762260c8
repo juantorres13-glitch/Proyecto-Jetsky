@@ -1,0 +1,430 @@
+[33mcommit 6e6def83418ba5b589911f98f08d019ff14cf6db[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Jonatan David Montoya <jonatan.montoya01@uceva.edu.co>
+Date:   Mon May 4 12:41:45 2026 -0500
+
+    Cambios en el diseño del perfil de asesor de aerolinea
+
+[33mcommit cff5dc55da17f268ba298a8641d33220762260c8[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Sat May 2 15:45:13 2026 -0500
+
+    Seccion de Ofertas
+
+[33mcommit a9ec78bd22734d7e4fe1dca234d5c87dddce990d[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Fri May 1 15:14:38 2026 -0500
+
+    Completado el apartado de paquetes
+
+[33mcommit d1b656a50da0184f1cc6cc1b33ff78e260d0adb7[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Thu Apr 30 21:57:03 2026 -0500
+
+    Apartado de Alojamientos/Hoteles
+
+[33mcommit 9014d42cc154bfbb8b8d0568ae975a298dbfdb50[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Wed Apr 29 14:25:07 2026 -0500
+
+    Alojamientos
+
+[33mcommit 460de553076d14f0b0497516b9c5a9ce932e4eab[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Mon Apr 27 22:11:38 2026 -0500
+
+    Pie de pagina
+
+[33mcommit 9645215dd7a2e2d5bc604563cbe44f478139ecda[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Mon Apr 27 21:00:42 2026 -0500
+
+    Mejoras de diseño
+
+[33mcommit 3864c434c92d12da3b363c87b2dc2b03cf6e6516[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Mon Apr 27 10:45:57 2026 -0500
+
+    Guardar Cambios
+
+[33mcommit 9e4b087a3eb54fe6f126996da8cc0f952f1e660b[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Fri Apr 17 22:09:36 2026 -0500
+
+    Cambios de diseño
+
+[33mcommit 3fd7e93b1a28256c86607d61d7887791d3da128e[m
+Merge: 2c78bb2 8667974
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Tue Apr 7 11:53:43 2026 -0500
+
+    Merge pull request #29 from juantorres13-glitch/Administrador
+    
+    Administrador
+
+[33mcommit 8667974f15bb61627e176224ab39d62a6c3a0e93[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 11:52:21 2026 -0500
+
+    confirmacion
+
+[33mcommit 5b35a75cc44f7f34573a401c18b74399ee1a7147[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 08:49:27 2026 -0500
+
+    Diseño e interaccion de Reportes
+
+[33mcommit c6ae26ed4d5c6ff7e44c87e32b14e4abb75ebb5b[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 08:49:00 2026 -0500
+
+    Seccion de reportes
+
+[33mcommit 292b8891fd563426a2bd16425204cea84d549e8f[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 08:48:48 2026 -0500
+
+    Implementacion de libreria Chart.js
+    Implementacion Script de reportes
+    Implementacion del render de reportes
+
+[33mcommit 730a71940dd74d7ea4a745f562aa6e0e38139b7c[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 08:33:29 2026 -0500
+
+    Interaccion de la seccion de ubicacion
+
+[33mcommit 796771841af0773711b0cf8e4c272802a89d079a[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 08:32:47 2026 -0500
+
+    Seccion de ubicacion
+
+[33mcommit 85d74e81b500d99ed9e2d11570458322166c10e8[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 08:32:33 2026 -0500
+
+    Implementacion del Script de ubicacion y la condicion para mostrar la seccion de ubicacion
+
+[33mcommit 9860f06b5f7bbdea847231b62cd9301ff20f4675[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 08:22:41 2026 -0500
+
+    Implementacion funcional de la seccion de paquetes
+
+[33mcommit 61a3945cfac270c6468ba1a5eb832d33422b916b[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 08:22:14 2026 -0500
+
+    Seccion de paquetes
+
+[33mcommit 32c1d321929e8960f85b6d313f5224debadcfe2b[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 08:21:45 2026 -0500
+
+    Implementacion del script de paquetes
+
+[33mcommit 3ee420507defeab888a7f60f7c191fff04a5375f[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 07:54:55 2026 -0500
+
+    Implementacion de "Base de datos" de tiquetes y estilo dinamico de la seccion de tiquetes
+
+[33mcommit 2fb88abf776ab12bfd518889b8e5bdea9cde5c73[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 07:54:12 2026 -0500
+
+    Seccion de Tiquetes
+
+[33mcommit cb7b69edd27b08f3efed4d3062ca0ae3b5e5e3d9[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 07:36:10 2026 -0500
+
+    Js para la seccion de Reservas
+
+[33mcommit a1708041ef66f98c28937ece74a3cf8253cd2277[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 07:35:36 2026 -0500
+
+    Js para la funcionalidad de editar, eliminar y nuevo cliente (Solo funciona eliminar)
+
+[33mcommit d7cf650d94280a4c7358b8494cdb229b633c53b7[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 07:34:41 2026 -0500
+
+    Implementacion de los estilos para la seccion de reservas
+
+[33mcommit 5e3013068432f2b13fff89e9da25f454619eec40[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 07:29:34 2026 -0500
+
+    Seccion de reservas
+
+[33mcommit b0e51ecbc0aa49e7a4f8905d6515ba19d2f9ae6d[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 07:29:03 2026 -0500
+
+    Implementacion del boton eliminar, editar y nuevo cliente
+
+[33mcommit 6582aa65f8045a503f39371c86b8c5e68a9490f1[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Tue Apr 7 07:27:55 2026 -0500
+
+    Implementacion de la seccion de reservas
+
+[33mcommit 2c78bb2c39089c3c0bb2c5527346a49401baefcb[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Apr 6 22:23:01 2026 -0500
+
+    Confirmación de compra y visualización del ticket de reserva
+
+[33mcommit 5b1a50be1db0f26f865052b3154dc312df0e3672[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Apr 6 22:19:06 2026 -0500
+
+    Implementación de pago y generación de confirmación de compra
+
+[33mcommit 647234d9b726ee532299921b200dd9e1fc5bc99c[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Apr 6 22:11:40 2026 -0500
+
+    Selección de asientos y almacenamiento de elección del usuario
+
+[33mcommit 14da435030d85333e05e69c7cbcbae77cab9e354[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Apr 6 21:59:12 2026 -0500
+
+    Registro de datos del pasajero y validación del formulario
+
+[33mcommit 6cba9ddf0708043b755b13515238d96e610b59a9[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Apr 6 21:49:13 2026 -0500
+
+    Selección de vuelo y visualización de detalles
+
+[33mcommit e12dd9a5c560032dd66f0e1fdfa23be2fa591ff1[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Apr 6 21:40:47 2026 -0500
+
+    Visualización de resultados de vuelos con renderizado dinámico
+
+[33mcommit 3cfe209b9775a5a5f03a7061518a454941b67423[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Apr 6 21:26:57 2026 -0500
+
+    Implementación de búsqueda de vuelos con formulario interactivo
+
+[33mcommit c71a878c950e5c1feb8aad83d7a4ef9fa0e22770[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Mon Apr 6 11:50:44 2026 -0500
+
+    Se ajusto el nivel visual para mostrar beneficios debajo del buscador
+
+[33mcommit b947159b320e13e338298528b2c61e9f615f97b6[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Mon Apr 6 10:34:06 2026 -0500
+
+    Se agregan los estilos relacionados a la seccion de Clientes
+
+[33mcommit e19badea0dba11232754f69587df178e75621174[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Mon Apr 6 10:33:36 2026 -0500
+
+    Implementacion de la seccion de clientes
+
+[33mcommit ef8b84bf01b762bed90f52fa0f56a3b88847fb99[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Mon Apr 6 10:33:12 2026 -0500
+
+    Implementacion de JS para la seccion de clientes
+
+[33mcommit 5f33a3c48bbfac4ab28bd0ee8ad7b01aa01162c6[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Mon Apr 6 09:59:39 2026 -0500
+
+    Cambio de ubicacion de archivos
+
+[33mcommit 554cc44f9ca0c4f2c78e9f92b1570fffb8251afd[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Mon Apr 6 09:59:19 2026 -0500
+
+    Cambio de ubicacion de archivos
+
+[33mcommit b16b3701472b352adbc1f2902b95c39ee58eb5c7[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Mon Apr 6 09:52:25 2026 -0500
+
+    Estilo del perfil de administrador
+
+[33mcommit 32e995c7ceafd6987c15d6e6ede370cbd58c9b26[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Mon Apr 6 09:51:58 2026 -0500
+
+    Navegacion del perfil de administrador
+
+[33mcommit c248a5b1699d0a259c323653d3f5462a558353b2[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Mon Apr 6 09:43:44 2026 -0500
+
+    Estilo del perfil de administrador
+
+[33mcommit 9b5a2b4b017587dc58a40fd52896d39af9096e2d[m
+Author: Cristóbal Moren <cristobal.moreno01@uceva.edu.co>
+Date:   Mon Apr 6 09:43:21 2026 -0500
+
+    Navegacion de perfil Administrador
+
+[33mcommit 9f6af4b698c4c285a09781d339059a2785dbbc09[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Sun Apr 5 20:56:49 2026 -0500
+
+    Complementación del desarrollo de usuario (búsqueda, reserva y gestión de perfil)
+
+[33mcommit aea680ea30f8a13649587f7e8627852eb7717649[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Sun Apr 5 19:54:48 2026 -0500
+
+    Implementación de proceso de pago y generación de reserva
+
+[33mcommit ce7c688b002be50c5ebd13ccace4eafb1b6b4a48[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Sun Apr 5 15:20:30 2026 -0500
+
+    Visualización de resultados de busqueda de vuelos
+
+[33mcommit 1d80fd3ab9f1ce43f94c7daed1145fd440732a07[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Sat Apr 4 23:48:00 2026 -0500
+
+    Se agrego un botón para el cambio de rol, entre los tres establecidos
+
+[33mcommit afb01feca2e18e93beb3102bfc28620fd8f95f02[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Sat Apr 4 13:34:52 2026 -0500
+
+    Mejoras en el aspecto visual de las imágenes en la sección de beneficios
+
+[33mcommit bf2900b351f36ae02b1c8e1534d55db161601084[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Sat Apr 4 08:44:49 2026 -0500
+
+    Se agregó iconos
+
+[33mcommit 6ca1f9ab4ccf8166598eebf585e7491158a695b7[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Sat Apr 4 08:32:09 2026 -0500
+
+    Se cambio la promocion
+
+[33mcommit 666db2d7f50583e1d6cada05abe07f20e3f34237[m
+Merge: 05d3e35 b1746f5
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Sat Apr 4 08:15:03 2026 -0500
+
+    Merge branch 'main' of https://github.com/juantorres13-glitch/Proyecto-Jetsky
+
+[33mcommit 05d3e355bc31f907dc33946225a008b0e5f9b016[m
+Author: Liseth Johanna Henao Cardona <johanalisetjhenao@gmail.com>
+Date:   Sat Apr 4 08:13:44 2026 -0500
+
+     Se mejora descripción en la sección de ofertas
+
+[33mcommit b1746f5379a3364f313b420dee71558590a00118[m
+Merge: e48108b 42402f5
+Author: Jonatan David Montoya <jonatan.montoya01@uceva.edu.co>
+Date:   Fri Apr 3 22:42:48 2026 -0500
+
+    Cambios repositorio
+
+[33mcommit e48108b26d3bac70e97946376281fc1a0e6b9945[m
+Author: Jonatan David Montoya <jonatan.montoya01@uceva.edu.co>
+Date:   Fri Apr 3 22:37:22 2026 -0500
+
+    Mejoras en el apartado de Gestionar Clientes
+    
+    Mejora visual de añadidura de cliente
+    
+    Mejora en el editado de clientes ya existentes
+    
+    Añadidura de cliente frecuente, tanto por estadistisca de vuelos como manualmente
+
+[33mcommit 42402f511a9695d8423a05c0fcd6d82cd7311716[m
+Author: Liseth Johanna Henao Cardona <liseth.henao01@uceva.edu.co>
+Date:   Fri Apr 3 13:21:58 2026 -0500
+
+    Agrego pagina principal del rol cliente
+
+[33mcommit f3aa6bfb2ecf2c9abd2e32688470e9f63f1a032a[m
+Author: Jonatan David Montoya <jonatan.montoya01@uceva.edu.co>
+Date:   Fri Apr 3 12:35:52 2026 -0500
+
+    Mejoras en el apartado principal del rol de asesor de aerolinea
+    
+    Mejoras visuales
+    
+    Mejoras en la Interfaz con añadidura de vuelos, actualizacion de la hora y estados del vuelo
+    
+    Añadidura de barra de busqueda del vuelo mediante (nombre de la ciudad de destino, codigo del vuelo, etc.)
+    
+    Añadidura de estadisticas generales de los vuelos
+
+[33mcommit 35b110fb3fe6999bba4cb8f40710a8fea14b54e9[m
+Author: Jonatan David Montoya <jonatan.montoya01@uceva.edu.co>
+Date:   Fri Apr 3 09:37:44 2026 -0500
+
+    Codigo asesor de aerolinea
+
+[33mcommit 2134f304699ce21e935ab9179508b114a94330f1[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Wed Apr 1 19:04:35 2026 -0500
+
+    Cambios del las pantallas de inicio y registro
+
+[33mcommit ff3a59768d1705e96e9e107ac2823e6f4ad14e97[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Wed Apr 1 18:40:01 2026 -0500
+
+    prueba de cambios
+
+[33mcommit e2f4ad52e42b113296d785a793e1145fc028485a[m
+Author: Jonatan David Montoya <jonatan.montoya01@uceva.edu.co>
+Date:   Tue Mar 31 22:47:50 2026 -0500
+
+    Prototipo del perfil de asesor de aerolineas
+    
+    En nuevos avances que se hicieron en este prototipo fueron:
+    
+    -Mejorar el campo visual tratando que no se vea muy simplista.
+    -Enlazar de cierto modo las diferentes pantallas por medio de botones (Es decir, de una pantalla presionar un botón y lo lleve a otra pantalla).
+    -Mejorar la interfaz de asignar asientos (Cada vuelo distinto sea randomisado los asientos libres ocupados y/o reservados, añadir un botón de confirmar asignación y esta misma sea guardada).
+
+[33mcommit f64f128138ff9e30a1034c990de1a7df4ad0fbb6[m
+Author: LisethHenao <liseth.henao01@uceva.edu.co>
+Date:   Tue Mar 24 10:35:12 2026 -0500
+
+    Avances de Codigo
+    
+    Realizar la pantalla principal
+
+[33mcommit c400e50222ace62b669af3f62fff423903acda1e[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Mar 9 21:44:36 2026 -0500
+
+    Update README.md
+
+[33mcommit a7a671d5b9cfe8c924032016a80f56cc2690acd8[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Mar 9 21:13:03 2026 -0500
+
+    Update README.md
+
+[33mcommit a6d55b88c8c59e9ad4fcb367e0d32c4df317eafb[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Mar 9 21:03:03 2026 -0500
+
+    Add files via upload
+
+[33mcommit 3a1055867344e709f3070e5ab3b6f16954fd984d[m
+Author: juantorres13-glitch <juan.torres13@uceva.edu.co>
+Date:   Mon Mar 9 20:29:23 2026 -0500
+
+    Primer commit - README del proyecto

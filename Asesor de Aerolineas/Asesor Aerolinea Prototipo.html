@@ -3,1132 +3,991 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asesor Aerolínea - Sistema de Gestión</title>
+    <title>JetKey · Sistema de Gestión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Css/Decoracion.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header style="background: linear-gradient(135deg, #5BC0DE, #87CEEB); color: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem; text-align: center;">
-            <h1 style="margin: 0; font-size: 2rem; font-weight: bold;">✈️ Sistema de Gestión - Asesor Aerolínea</h1>
-            <p style="margin: 0.5rem 0 0 0;">Bienvenido al panel de control para gestionar vuelos, reservas y clientes</p>
-        </header>
+<div class="app">
 
-        <!-- Navegación lateral -->
-        <div class="main-layout">
-            <aside class="sidebar">
-                <button class="nav-btn active" data-section="panel-asistente">Principal</button>
-                <button class="nav-btn" data-section="gestionar-reservas">Gestionar Reservas</button>
-                <button class="nav-btn" data-section="gestionar-clientes">Gestión de Clientes</button>
-                <button class="nav-btn" data-section="confirmar-pagos">Gestión de Pagos</button>
-                <button class="nav-btn" data-section="asignar-asientos">Asignamiento de Asientos</button>
-            </aside>
-
-            <div class="main-content">
-                <!-- PANEL ASISTENTE -->
-        <div id="panel-asistente" class="content-section active space-y-6">
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Panel de Asistente</h2>
-                <p class="text-gray-600 mb-4">Selecciona un vuelo para ver los detalles y gestionar asignaciones</p>
-
-                <!-- Dashboard rápido -->
-                <div class="dashboard-cards mb-6">
-                    <div class="dashboard-card">
-                        <h4 class="font-semibold text-gray-600">Total de vuelos del día</h4>
-                        <p id="dashboard-total-flights" class="text-3xl font-bold text-[#87CEEB]">0</p>
-                    </div>
-                    <div class="dashboard-card">
-                        <h4 class="font-semibold text-gray-600">Total de pasajeros</h4>
-                        <p id="dashboard-total-passengers" class="text-3xl font-bold text-[#87CEEB]">0</p>
-                    </div>
-                    <div class="dashboard-card">
-                        <h4 class="font-semibold text-gray-600">Vuelos retrasados</h4>
-                        <p id="dashboard-delayed-flights" class="text-3xl font-bold text-[#FF9933]">0</p>
-                    </div>
-                    <div class="dashboard-card">
-                        <h4 class="font-semibold text-gray-600">Pagos pendientes</h4>
-                        <p id="dashboard-pending-payments" class="text-3xl font-bold text-[#f97316]">0</p>
-                    </div>
-                </div>
-
-                <!-- Filtro de vuelos -->
-                <div class="mb-6">
-                    <label class="text-sm font-semibold text-gray-700 mb-2 block">Buscar vuelos</label>
-                    <div class="search-wrapper">
-                        <span class="search-icon">🔍</span>
-                        <input id="flight-search" type="text" placeholder="Buscar por código, origen, destino, estado..." class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg" />
-                    </div>
-                </div>
-
-                <!-- Flight Cards -->
-                <div id="flight-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
-            </div>
-
-            <!-- Detalles de Vuelo (Inline abajo) -->
-            <div id="flight-details" class="bg-white p-6 rounded-lg shadow-sm hidden">
-                <h3 id="flight-number-title" class="text-xl font-bold text-[#87CEEB] mb-4">Detalles del Vuelo</h3>
-                <div class="grid md:grid-cols-3 gap-6 mb-4">
-                    <div class="p-4 border border-gray-200 rounded-lg">
-                        <h4 class="font-semibold text-lg text-gray-700 mb-2">Información general</h4>
-                        <p><strong>Número:</strong> <span id="flight-number" class="text-gray-800"></span></p>
-                        <p><strong>Ruta:</strong> <span id="flight-origin" class="text-gray-800"></span> → <span id="flight-destination" class="text-gray-800"></span></p>
-                        <p><strong>Estado actual:</strong> <span id="flight-status" class="text-gray-800"></span></p>
-                        <div class="mt-2">
-                            <label class="text-sm font-semibold text-gray-600">Cambiar estado</label>
-                            <select id="flight-status-select" class="w-full mt-1 p-2 border-2 border-gray-300 rounded-lg">
-                                <option value="Programado">Programado</option>
-                                <option value="En vuelo">En vuelo</option>
-                                <option value="Retrasado">Retrasado</option>
-                                <option value="Cancelado">Cancelado</option>
-                            </select>
-                            <button id="update-flight-status-btn" class="primary mt-2">Actualizar estado</button>
-                        </div>
-                    </div>
-                    <div class="p-4 border border-gray-200 rounded-lg">
-                        <h4 class="font-semibold text-lg text-gray-700 mb-2">Horarios</h4>
-                        <p><strong>Fecha:</strong> <span id="flight-date" class="text-gray-800"></span></p>
-                        <div class="mt-2 flex items-center gap-2">
-                            <strong>Hora:</strong>
-                            <input id="flight-time-input" type="time" class="p-2 border-2 border-gray-300 rounded-lg" />
-                            <button id="update-time-btn" class="primary">Actualizar</button>
-                        </div>
-                        <p class="text-sm text-gray-500 mt-2">Hora actual: <span id="flight-time" class="text-gray-800"></span></p>
-                    </div>
-                    <div class="p-4 border border-gray-200 rounded-lg">
-                        <h4 class="font-semibold text-lg text-gray-700 mb-2">Pasajeros</h4>
-                        <p><strong>Total a bordo:</strong> <span id="flight-passengers" class="text-gray-800"></span></p>
-                    </div>
-                </div>
-                <div class="mt-4 flex gap-4">
-                    <button id="manage-seats-btn" class="primary">Gestionar Asientos</button>
-                    <button id="view-reservations-btn" class="primary">Ver Reservas</button>
-                    <button onclick="document.getElementById('flight-details').classList.add('hidden')" class="cancel">Ocultar</button>
-                </div>
-            </div>
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <div class="logo-icon">✈</div>
+            <div class="logo-text">Jet<span>Key</span></div>
         </div>
+        <div class="header-divider"></div>
+        <div class="header-subtitle">Sistema de Gestión · Asesor Aerolínea</div>
+        <div class="header-spacer"></div>
+        <div class="header-badge">🟢 En línea</div>
+    </header>
 
-        <!-- GESTIONAR RESERVAS -->
-        <div id="gestionar-reservas" class="content-section space-y-6">
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Gestionar Reservas</h2>
+    <div class="body">
 
-                    <div class="mb-4">
-                        <label for="reservation-search" class="text-sm font-semibold text-gray-700 mb-2 block">Buscar</label>
-                        <input type="text" id="reservation-search" placeholder="Buscar por vuelo, pasajero o ID..." class="w-full pl-4 pr-4 py-3 border-2 border-gray-300 rounded-lg">
+        <!-- SIDEBAR -->
+        <aside>
+            <div class="nav-group-label">Principal</div>
+            <button class="nav-btn active" data-section="panel-asistente">
+                <span class="nav-icon">🏠</span>
+                <span>Panel</span>
+            </button>
+            <div class="nav-group-label">Gestión</div>
+            <button class="nav-btn" data-section="gestionar-reservas">
+                <span class="nav-icon">📋</span>
+                <span>Reservas</span>
+            </button>
+            <button class="nav-btn" data-section="gestionar-clientes">
+                <span class="nav-icon">👥</span>
+                <span>Clientes</span>
+            </button>
+            <button class="nav-btn" data-section="confirmar-pagos">
+                <span class="nav-icon">💳</span>
+                <span>Pagos</span>
+            </button>
+            <button class="nav-btn" data-section="asignar-asientos">
+                <span class="nav-icon">💺</span>
+                <span>Asientos</span>
+            </button>
+        </aside>
+
+        <!-- MAIN -->
+        <main>
+
+            <!-- ── PANEL ASISTENTE ── -->
+            <div id="panel-asistente" class="content-section active">
+
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Vuelos del día</div>
+                        <div class="stat-value" id="dashboard-total-flights">0</div>
                     </div>
-
-                <!-- Reservations Table -->
-                <div class="overflow-x-auto">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Vuelo</th>
-                                <th>Pasajero</th>
-                                <th>Asiento</th>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reservations-tbody">
-                            <!-- Dinámicamente llenado -->
-                        </tbody>
-                    </table>
+                    <div class="stat-card success">
+                        <div class="stat-label">Total pasajeros</div>
+                        <div class="stat-value" id="dashboard-total-passengers">0</div>
+                    </div>
+                    <div class="stat-card warn">
+                        <div class="stat-label">Retrasados</div>
+                        <div class="stat-value" id="dashboard-delayed-flights">0</div>
+                    </div>
+                    <div class="stat-card danger">
+                        <div class="stat-label">Pagos pendientes</div>
+                        <div class="stat-value" id="dashboard-pending-payments">0</div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Reservation Details Modal -->
-            <div id="reservation-details" class="modal">
-                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-[#87CEEB]">
-                    <h3 id="reservation-title" class="text-xl font-bold text-[#87CEEB] mb-4">Detalles de Reserva</h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Número de Vuelo</label>
-                                <p id="res-flight" class="text-gray-800"></p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Pasajero</label>
-                                <p id="res-passenger" class="text-gray-800"></p>
+                <!-- Flights -->
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="page-title">Vuelos</div>
+                            <div class="page-subtitle">Selecciona un vuelo para gestionar</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="search-row" style="margin-bottom: 1.25rem;">
+                            <div class="search-box">
+                                <span class="icon">🔍</span>
+                                <input id="flight-search" type="text" placeholder="Buscar por código, ruta, estado...">
                             </div>
                         </div>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Asiento</label>
-                                <p id="res-seat" class="text-gray-800"></p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Estado</label>
-                                <p id="res-status" class="text-gray-800"></p>
+                        <div class="flight-grid" id="flight-cards"></div>
+                    </div>
+                </div>
+
+                <!-- Flight Details Panel -->
+                <div id="flight-details" class="flight-detail-panel hidden">
+                    <div class="detail-header">
+                        <h3 id="flight-number-title">Detalles del Vuelo</h3>
+                        <button class="close-btn" onclick="document.getElementById('flight-details').classList.add('hidden')">✕</button>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-block">
+                            <h4>Información</h4>
+                            <div class="detail-row"><label>Número de vuelo</label><p id="flight-number" style="font-family:var(--mono);font-weight:700;font-size:1rem;"></p></div>
+                            <div class="detail-row"><label>Ruta</label><p><span id="flight-origin"></span> <span style="color:var(--sky)">→</span> <span id="flight-destination"></span></p></div>
+                            <div class="detail-row" style="margin-top:0.75rem;">
+                                <label>Cambiar estado</label>
+                                <select id="flight-status-select" style="margin-top:0.25rem;">
+                                    <option value="Programado">Programado</option>
+                                    <option value="En vuelo">En vuelo</option>
+                                    <option value="Retrasado">Retrasado</option>
+                                    <option value="Cancelado">Cancelado</option>
+                                </select>
+                                <button id="update-flight-status-btn" class="btn btn-primary btn-sm" style="margin-top:0.5rem;">Actualizar</button>
                             </div>
                         </div>
+                        <div class="detail-block">
+                            <h4>Horarios</h4>
+                            <div class="detail-row"><label>Estado actual</label><p id="flight-status"></p></div>
+                            <div class="detail-row"><label>Fecha</label><p id="flight-date"></p></div>
+                            <div class="detail-row" style="margin-top:0.75rem;">
+                                <label>Hora de salida</label>
+                                <div style="display:flex;gap:0.5rem;margin-top:0.25rem;">
+                                    <input id="flight-time-input" type="time" style="flex:1;">
+                                    <button id="update-time-btn" class="btn btn-ghost btn-sm">Guardar</button>
+                                </div>
+                                <p class="mt-1" style="font-size:0.73rem;color:var(--ink-soft);">Actual: <span id="flight-time"></span></p>
+                            </div>
+                        </div>
+                        <div class="detail-block">
+                            <h4>Pasajeros</h4>
+                            <div class="detail-row"><label>A bordo</label><p id="flight-passengers" style="font-size:1.5rem;font-weight:700;font-family:var(--mono);"></p></div>
+                        </div>
                     </div>
-                    <div class="mt-6 flex gap-4">
-                        <button onclick="changeSeat('${selectedReservation.id}')" class="primary">Cambiar Asiento</button>
-                        <button onclick="updateStatus('${selectedReservation.id}')" class="primary">Actualizar Estado</button>
-                        <button onclick="document.getElementById('reservation-details').classList.remove('show')" class="cancel">Cerrar</button>
+                    <div class="detail-actions">
+                        <button id="manage-seats-btn" class="btn btn-primary">💺 Gestionar Asientos</button>
+                        <button id="view-reservations-btn" class="btn btn-ghost">📋 Ver Reservas</button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- GESTIONAR CLIENTES -->
-        <div id="gestionar-clientes" class="content-section space-y-6">
-            <!-- Header + Search + Filters -->
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Gestionar Clientes</h2>
-                    <button id="add-client-btn" class="btn-primary-sm">+ Nuevo Cliente</button>
-                </div>
-
-                <!-- Search Bar + Filtros -->
-                <div class="search-filter-container">
-                    <div class="search-wrapper">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" id="client-search" placeholder="Buscar por nombre, email o documento..." class="search-input">
+            <!-- ── GESTIONAR RESERVAS ── -->
+            <div id="gestionar-reservas" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="page-title">Reservas</div>
+                            <div class="page-subtitle">Historial y gestión de reservaciones</div>
+                        </div>
                     </div>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" id="frequent-filter">
-                        <span>⭐ Solo clientes frecuentes</span>
-                    </label>
+                    <div class="card-body" style="padding-bottom:0;">
+                        <div class="search-box" style="margin-bottom:1.25rem; max-width:400px;">
+                            <span class="icon">🔍</span>
+                            <input id="reservation-search" type="text" placeholder="Buscar por vuelo, pasajero o ID...">
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Vuelo</th>
+                                    <th>Pasajero</th>
+                                    <th>Asiento</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reservations-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- Clients Table -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="table-wrapper">
-                    <table class="clients-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Cliente</th>
-                                <th>Contacto</th>
-                                <th>Documento</th>
-                                <th>Vuelos</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="clients-tbody">
-                            <!-- Dinámicamente llenado -->
-                        </tbody>
-                    </table>
+            <!-- Reservation Detail Modal -->
+            <div id="reservation-details" class="modal-overlay">
+                <div class="modal-box">
+                    <div class="modal-header">
+                        <h3 id="reservation-title">Detalle de Reserva</h3>
+                        <button class="close-btn" onclick="document.getElementById('reservation-details').classList.remove('show')">✕</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="info-grid">
+                            <div class="info-item"><label>Vuelo</label><p id="res-flight" class="td-flight" style="font-size:1rem;"></p></div>
+                            <div class="info-item"><label>Pasajero</label><p id="res-passenger"></p></div>
+                            <div class="info-item"><label>Asiento</label><p id="res-seat"></p></div>
+                            <div class="info-item"><label>Estado</label><p id="res-status"></p></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-ghost" onclick="document.getElementById('reservation-details').classList.remove('show')">Cerrar</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Add/Edit Client Form - Colapsable -->
-            <div id="add-client-form" class="client-form-container hidden">
-                <div class="form-header">
-                    <div class="form-title-row">
+            <!-- ── GESTIONAR CLIENTES ── -->
+            <div id="gestionar-clientes" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="page-title">Clientes</div>
+                            <div class="page-subtitle">Base de datos de pasajeros</div>
+                        </div>
+                        <button id="add-client-btn" class="btn btn-primary">+ Nuevo Cliente</button>
+                    </div>
+                    <div class="card-body" style="padding-bottom:0;">
+                        <div class="search-row" style="margin-bottom:1.25rem;">
+                            <div class="search-box">
+                                <span class="icon">🔍</span>
+                                <input id="client-search" type="text" placeholder="Buscar por nombre, email o documento...">
+                            </div>
+                            <label class="check-label">
+                                <input type="checkbox" id="frequent-filter">
+                                <span>⭐ Solo frecuentes</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="clients-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Contacto</th>
+                                    <th>Documento</th>
+                                    <th>Vuelos</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clients-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Add/Edit Client Form -->
+                <div id="add-client-form" class="slide-panel hidden">
+                    <div class="panel-header">
                         <div>
                             <h3 id="form-title">Nuevo Cliente</h3>
-                            <p id="form-subtitle">Completa los datos para registrar un nuevo cliente</p>
+                            <div id="form-subtitle" style="font-size:0.78rem;color:var(--ink-soft);margin-top:0.15rem;"></div>
                         </div>
-                        <button type="button" id="close-form-btn" class="close-btn">✕</button>
+                        <button id="close-form-btn" class="btn btn-ghost btn-icon">✕</button>
                     </div>
-                </div>
-                <form id="client-form" class="client-form-grid">
-                    <div class="form-group">
-                        <label for="form-name">Nombre Completo *</label>
-                        <input type="text" id="form-name" placeholder="Ej: Juan Carlos Rodríguez" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="form-phone">Teléfono *</label>
-                        <input type="tel" id="form-phone" placeholder="+57 300 1234567" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="form-email">Correo Electrónico *</label>
-                        <input type="email" id="form-email" placeholder="correo@ejemplo.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="form-doc-number">Número de Documento *</label>
-                        <input type="text" id="form-doc-number" placeholder="Ej: 1234567890" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="form-doc-type">Tipo de Documento *</label>
-                        <select id="form-doc-type" required>
-                            <option value="">Seleccionar...</option>
-                            <option value="CC">Cédula de Ciudadanía</option>
-                            <option value="TI">Tarjeta de Identidad</option>
-                            <option value="P.P">Pasaporte</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="form-account">Número de Cuenta</label>
-                        <input type="text" id="form-account" placeholder="Ej: 4532-1234-5678">
-                    </div>
-                    <div class="form-group">
-                        <label for="form-flights">Vuelos registrados</label>
-                        <input type="number" id="form-flights" min="0" step="1" value="0" placeholder="Ej: 6">
-                        <small style="color:#64748b; margin-top:0.25rem; display:block;">Ingresa la cantidad de vuelos. 6 o más marca cliente frecuente.</small>
-                    </div>
-                    <div class="form-group" style="align-items: flex-start; justify-content: flex-start;">
-                        <label for="form-frequent" style="margin-bottom: 0.75rem;">Cliente frecuente</label>
-                        <label style="display:flex; align-items:center; gap:0.5rem; font-weight:600; color:#1f2937;">
-                            <input type="checkbox" id="form-frequent">
-                            Marcar como cliente frecuente manualmente
-                        </label>
-                    </div>
-                    <input type="hidden" id="form-client-id">
-                </form>
-                <div class="form-actions">
-                    <button type="button" id="save-client-btn" class="btn btn-primary">Guardar Cliente</button>
-                    <button type="button" id="cancel-client-btn" class="btn btn-secondary">Cancelar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- CONFIRMAR PAGOS -->
-        <div id="confirmar-pagos" class="content-section space-y-6">
-            <!-- Summary Cards -->
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-[#5BC0DE]">
-                    <h3 class="text-sm font-semibold text-gray-600 mb-2">Total Pagos</h3>
-                    <p id="total-payments" class="text-3xl font-bold text-gray-800">$0.00</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
-                    <h3 class="text-sm font-semibold text-gray-600 mb-2">Confirmados</h3>
-                    <p id="confirmed-payments" class="text-3xl font-bold text-green-600">$0.00</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500">
-                    <h3 class="text-sm font-semibold text-gray-600 mb-2">Pendientes</h3>
-                    <p id="pending-payments" class="text-3xl font-bold text-orange-600">$0.00</p>
-                </div>
-            </div>
-
-            <!-- Payments Table -->
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Confirmar Pagos</h2>
-                <div class="overflow-x-auto">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID Pago</th>
-                                <th>Reserva</th>
-                                <th>Pasajero</th>
-                                <th>Monto</th>
-                                <th>Método</th>
-                                <th>Estado</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="payments-tbody">
-                            <!-- Dinámicamente llenado -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Confirmation Modal -->
-            <div id="payment-details" class="modal">
-                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-[#87CEEB]">
-                    <h3 id="payment-title" class="text-xl font-bold text-[#87CEEB] mb-4">Confirmar Pago</h3>
-                    <div class="grid md:grid-cols-2 gap-6 mb-6">
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Pasajero</label>
-                                <p id="payment-passenger" class="text-gray-800"></p>
+                    <div class="panel-body">
+                        <div class="form-grid">
+                            <div class="form-field">
+                                <label>Nombre Completo *</label>
+                                <input type="text" id="form-name" placeholder="Ej: Juan Carlos Rodríguez">
                             </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">ID Reserva</label>
-                                <p id="payment-reservation" class="text-gray-800"></p>
+                            <div class="form-field">
+                                <label>Teléfono *</label>
+                                <input type="tel" id="form-phone" placeholder="+57 300 1234567">
+                            </div>
+                            <div class="form-field">
+                                <label>Correo Electrónico *</label>
+                                <input type="email" id="form-email" placeholder="correo@ejemplo.com">
+                            </div>
+                            <div class="form-field">
+                                <label>Número de Documento *</label>
+                                <input type="text" id="form-doc-number" placeholder="Ej: 1234567890">
+                            </div>
+                            <div class="form-field">
+                                <label>Tipo de Documento *</label>
+                                <select id="form-doc-type">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="CC">Cédula de Ciudadanía</option>
+                                    <option value="TI">Tarjeta de Identidad</option>
+                                    <option value="P.P">Pasaporte</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label>Número de Cuenta</label>
+                                <input type="text" id="form-account" placeholder="Ej: 4532-1234-5678">
+                            </div>
+                            <div class="form-field">
+                                <label>Vuelos registrados</label>
+                                <input type="number" id="form-flights" min="0" value="0">
+                                <div style="font-size:0.72rem;color:var(--ink-soft);margin-top:0.25rem;">6 o más → cliente frecuente automático</div>
+                            </div>
+                            <div class="form-field" style="justify-content:flex-end;padding-bottom:0.25rem;">
+                                <label class="check-label" style="margin-top:auto;padding-bottom:0.5rem;">
+                                    <input type="checkbox" id="form-frequent">
+                                    <span>Marcar como cliente frecuente</span>
+                                </label>
                             </div>
                         </div>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Monto</label>
-                                <p id="payment-amount" class="text-2xl font-bold text-[#87CEEB]"></p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-600">Método de Pago</label>
-                                <p id="payment-method" class="text-gray-800"></p>
-                            </div>
-                        </div>
+                        <input type="hidden" id="form-client-id">
                     </div>
-                    <div class="flex gap-4">
-                        <button id="confirm-payment-btn" class="bg-green-500 text-white px-6 py-2 rounded font-semibold hover:bg-green-600">Confirmar Pago</button>
-                        <button onclick="document.getElementById('payment-details').classList.remove('show')" class="secondary">Cancelar</button>
+                    <div class="panel-footer">
+                        <button id="cancel-client-btn" class="btn btn-ghost">Cancelar</button>
+                        <button id="save-client-btn" class="btn btn-primary">Guardar Cliente</button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- ASIGNAR ASIENTOS -->
-        <div id="asignar-asientos" class="content-section space-y-6">
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Asignar Asientos</h2>
+            <!-- ── CONFIRMAR PAGOS ── -->
+            <div id="confirmar-pagos" class="content-section">
+                <div class="payment-summary">
+                    <div class="summary-card">
+                        <div class="s-label">Total Pagos</div>
+                        <div class="s-value" id="total-payments">$0.00</div>
+                    </div>
+                    <div class="summary-card confirmed">
+                        <div class="s-label">Confirmados</div>
+                        <div class="s-value" id="confirmed-payments">$0.00</div>
+                    </div>
+                    <div class="summary-card pending">
+                        <div class="s-label">Pendientes</div>
+                        <div class="s-value" id="pending-payments">$0.00</div>
+                    </div>
+                </div>
 
-                <!-- Flight Selector -->
-                <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Seleccionar Vuelo</label>
-                    <select id="flight-selector" class="w-full md:w-96 px-4 py-3 border-2 border-gray-300 rounded-lg"></select>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="page-title">Gestión de Pagos</div>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID Pago</th>
+                                    <th>Reserva</th>
+                                    <th>Pasajero</th>
+                                    <th>Monto</th>
+                                    <th>Método</th>
+                                    <th>Estado</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payments-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- Seat Selection Area -->
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Mapa de Asientos</h3>
-                <div class="flex flex-wrap lg:flex-nowrap gap-6 items-start">
-                    <div id="seat-map" class="seat-map-grid">
-                        <!-- Dinámicamente llenado -->
+            <!-- Payment Confirm Modal -->
+            <div id="payment-details" class="modal-overlay">
+                <div class="modal-box">
+                    <div class="modal-header">
+                        <h3 id="payment-title">Confirmar Pago</h3>
+                        <button class="close-btn" onclick="document.getElementById('payment-details').classList.remove('show')">✕</button>
                     </div>
-                    <div id="seat-selection-panel" class="seat-selection-panel">
-                        <h4 class="font-semibold text-[#87CEEB] mb-2">Panel de Asiento</h4>
-                        <p id="selected-seat-info" class="text-gray-700 mb-4">Selecciona un asiento disponible en el plano del avión para ver detalles.</p>
-                        <p><strong>Vuelo:</strong> <span id="selected-seat-flight">N/A</span></p>
-                        <p><strong>Asiento:</strong> <span id="selected-seat-id">-</span></p>
-                        <p><strong>Estado:</strong> <span id="selected-seat-status">-</span></p>
-                        <div class="mt-4 flex gap-2">
-                            <button id="confirm-seat-btn" class="bg-[#87CEEB]" disabled>Confirmar Asiento</button>
-                            <button id="cancel-seat-btn" class="secondary" type="button">Cancelar</button>
+                    <div class="modal-body">
+                        <div class="info-grid">
+                            <div class="info-item"><label>Pasajero</label><p id="payment-passenger"></p></div>
+                            <div class="info-item"><label>ID Reserva</label><p id="payment-reservation" class="td-flight"></p></div>
+                            <div class="info-item"><label>Monto</label><p id="payment-amount" class="big"></p></div>
+                            <div class="info-item"><label>Método de Pago</label><p id="payment-method"></p></div>
                         </div>
-                        <div class="mt-6">
-                            <h5 class="font-semibold text-gray-800 mb-3">Estado de Asientos</h5>
-                            <div class="flex flex-wrap gap-4">
-                                <div class="flex items-center gap-2">
-                                    <div style="width: 1rem; height: 1rem; background-color: #9ca3af; border-radius: 0.25rem;"></div>
-                                    <span class="text-sm text-gray-700">Disponible</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-ghost" onclick="document.getElementById('payment-details').classList.remove('show')">Cancelar</button>
+                        <button id="confirm-payment-btn" class="btn btn-success">✓ Confirmar Pago</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── ASIGNAR ASIENTOS ── -->
+            <div id="asignar-asientos" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="page-title">Mapa de Asientos</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-field" style="max-width:360px;margin-bottom:1.5rem;">
+                            <label>Seleccionar Vuelo</label>
+                            <select id="flight-selector"></select>
+                        </div>
+                        <div class="seat-layout">
+                            <div id="seat-map" class="seat-map"></div>
+                            <div id="seat-selection-panel" class="seat-panel">
+                                <h4>Panel de Asiento</h4>
+                                <p id="selected-seat-info" style="font-size:0.8rem;color:var(--ink-soft);margin-bottom:1rem;">Selecciona un asiento disponible.</p>
+                                <div class="seat-info-row"><span>Vuelo</span><span id="selected-seat-flight">—</span></div>
+                                <div class="seat-info-row"><span>Asiento</span><span id="selected-seat-id">—</span></div>
+                                <div class="seat-info-row"><span>Estado</span><span id="selected-seat-status">—</span></div>
+                                <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+                                    <button id="confirm-seat-btn" class="btn btn-primary" disabled>Confirmar</button>
+                                    <button id="cancel-seat-btn" class="btn btn-ghost">Cancelar</button>
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <div style="width: 1rem; height: 1rem; background-color: #5BC0DE; border-radius: 0.25rem;"></div>
-                                    <span class="text-sm text-gray-700">Ocupado</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div style="width: 1rem; height: 1rem; background-color: #FF9933; border-radius: 0.25rem;"></div>
-                                    <span class="text-sm text-gray-700">Reservado</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div style="width: 1rem; height: 1rem; background-color: #1e40af; border-radius: 0.25rem;"></div>
-                                    <span class="text-sm text-gray-700">Seleccionado</span>
+                                <div class="legend">
+                                    <div class="legend-item"><div class="legend-dot available"></div>Disponible</div>
+                                    <div class="legend-item"><div class="legend-dot occupied"></div>Ocupado</div>
+                                    <div class="legend-item"><div class="legend-dot reserved"></div>Reservado</div>
+                                    <div class="legend-item"><div class="legend-dot selected"></div>Seleccionado</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        </div> <!-- cerrar asignar-asientos -->
-    </div> <!-- cerrar main-content -->
-</div> <!-- cerrar main-layout -->
-</div> <!-- cerrar container -->
 
-    <script>
-        // Data storage
-        let reservations = [
-            { id: 'R001', flightNumber: 'JK101', passenger: 'Juan Pérez', seat: 'A12', date: '2026-03-15', status: 'Confirmada' },
-            { id: 'R002', flightNumber: 'JK202', passenger: 'María García', seat: 'B5', date: '2026-03-15', status: 'Confirmada' },
-            { id: 'R003', flightNumber: 'JK101', passenger: 'Carlos Rodríguez', seat: 'C8', date: '2026-03-15', status: 'Pendiente' },
-            { id: 'R004', flightNumber: 'JK303', passenger: 'Ana Martínez', seat: 'D15', date: '2026-03-15', status: 'Confirmada' }
-        ];
+        </main>
+    </div>
+</div>
 
-        let clients = [
-            { id: 'C001', name: 'Juan Pérez', email: 'juan.perez@email.com', phone: '+57 300 1234567', documentType: 'CC', documentNumber: '1234567890', flightHistory: 5 },
-            { id: 'C002', name: 'María García', email: 'maria.garcia@email.com', phone: '+57 310 9876543', documentType: 'CC', documentNumber: '9876543210', flightHistory: 3 },
-            { id: 'C003', name: 'Carlos Rodríguez', email: 'carlos.rodriguez@email.com', phone: '+57 320 5555555', documentType: 'P.P', documentNumber: 'AB1234567', flightHistory: 12 },
-            { id: 'C004', name: 'Ana Martínez', email: 'ana.martinez@email.com', phone: '+57 315 7777777', documentType: 'CC', documentNumber: '5555555555', flightHistory: 1 }
-        ];
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
 
-        let payments = [
-            { id: 'P001', reservationId: 'R001', passenger: 'Juan Pérez', amount: 50.0, method: 'Tarjeta', status: 'Confirmado', date: '2026-03-09' },
-            { id: 'P002', reservationId: 'R003', passenger: 'Carlos Rodríguez', amount: 50.0, method: 'Débito', status: 'Pendiente', date: '2026-03-09' },
-            { id: 'P003', reservationId: 'R002', passenger: 'María García', amount: 50.0, method: 'Crédito', status: 'Confirmado', date: '2026-03-08' },
-            { id: 'P004', reservationId: 'R004', passenger: 'Ana Martínez', amount: 75.0, method: 'Tarjeta', status: 'Pendiente', date: '2026-03-10' },
-            { id: 'P005', reservationId: 'R005', passenger: 'Luis Hernández', amount: 60.0, method: 'Crédito', status: 'Pendiente', date: '2026-03-10' }
-        ];
+<script>
+    // ── TOAST NOTIFICATIONS ──
+    function toast(msg, type = 'info') {
+        const container = document.getElementById('toast-container');
+        const el = document.createElement('div');
+        el.className = `toast ${type}`;
+        const icons = { success: '✓', error: '✕', info: 'ℹ' };
+        el.innerHTML = `<span>${icons[type] || 'ℹ'}</span> ${msg}`;
+        container.appendChild(el);
+        setTimeout(() => {
+            el.style.animation = 'fadeOut 0.3s ease forwards';
+            setTimeout(() => el.remove(), 300);
+        }, 3000);
+    }
 
-        const flights = {
-            '1': { id: '1', number: 'JK101', origin: 'Bogotá', destination: 'Medellín', date: '2026-04-10', time: '07:30', passengerCount: 50, type: 'Nacional', status: 'Programado' },
-            '2': { id: '2', number: 'JK202', origin: 'Medellín', destination: 'Cartagena', date: '2026-04-10', time: '10:15', passengerCount: 44, type: 'Nacional', status: 'En vuelo' },
-            '3': { id: '3', number: 'JK303', origin: 'Cali', destination: 'Bogotá', date: '2026-04-11', time: '12:40', passengerCount: 38, type: 'Nacional', status: 'Retrasado' },
-            '4': { id: '4', number: 'JK404', origin: 'Barranquilla', destination: 'Cali', date: '2026-04-11', time: '15:50', passengerCount: 47, type: 'Nacional', status: 'Programado' },
-            '5': { id: '5', number: 'JK505', origin: 'Bogotá', destination: 'Cancún', date: '2026-04-12', time: '20:20', passengerCount: 165, type: 'Internacional', status: 'Programado' },
-            '6': { id: '6', number: 'JK606', origin: 'Medellín', destination: 'Punta Cana', date: '2026-04-12', time: '22:00', passengerCount: 152, type: 'Internacional', status: 'Programado' },
-            '7': { id: '7', number: 'JK707', origin: 'Cali', destination: 'Nueva York', date: '2026-04-13', time: '06:45', passengerCount: 180, type: 'Internacional', status: 'En vuelo' },
-            '8': { id: '8', number: 'JK808', origin: 'Cartagena', destination: 'Sao Paulo', date: '2026-04-13', time: '13:30', passengerCount: 158, type: 'Internacional', status: 'Retrasado' },
-            '9': { id: '9', number: 'JK909', origin: 'Pereira', destination: 'Lima', date: '2026-04-14', time: '09:20', passengerCount: 142, type: 'Internacional', status: 'Programado' }
+    // ── DATA ──
+    let reservations = [
+        { id: 'R001', flightNumber: 'JK101', passenger: 'Juan Pérez', seat: 'A12', date: '2026-03-15', status: 'Confirmada' },
+        { id: 'R002', flightNumber: 'JK202', passenger: 'María García', seat: 'B5', date: '2026-03-15', status: 'Confirmada' },
+        { id: 'R003', flightNumber: 'JK101', passenger: 'Carlos Rodríguez', seat: 'C8', date: '2026-03-15', status: 'Pendiente' },
+        { id: 'R004', flightNumber: 'JK303', passenger: 'Ana Martínez', seat: 'D15', date: '2026-03-15', status: 'Confirmada' }
+    ];
+
+    let clients = [];
+
+    let payments = [
+        { id: 'P001', reservationId: 'R001', passenger: 'Juan Pérez', amount: 50.0, method: 'Tarjeta', status: 'Confirmado', date: '2026-03-09' },
+        { id: 'P002', reservationId: 'R003', passenger: 'Carlos Rodríguez', amount: 50.0, method: 'Débito', status: 'Pendiente', date: '2026-03-09' },
+        { id: 'P003', reservationId: 'R002', passenger: 'María García', amount: 50.0, method: 'Crédito', status: 'Confirmado', date: '2026-03-08' },
+        { id: 'P004', reservationId: 'R004', passenger: 'Ana Martínez', amount: 75.0, method: 'Tarjeta', status: 'Pendiente', date: '2026-03-10' },
+        { id: 'P005', reservationId: 'R005', passenger: 'Luis Hernández', amount: 60.0, method: 'Crédito', status: 'Pendiente', date: '2026-03-10' }
+    ];
+
+    const flights = {
+        '1': { id: '1', number: 'JK101', origin: 'Bogotá', destination: 'Medellín', date: '2026-04-10', time: '07:30', passengerCount: 50, type: 'Nacional', status: 'Programado' },
+        '2': { id: '2', number: 'JK202', origin: 'Medellín', destination: 'Cartagena', date: '2026-04-10', time: '10:15', passengerCount: 44, type: 'Nacional', status: 'En vuelo' },
+        '3': { id: '3', number: 'JK303', origin: 'Cali', destination: 'Bogotá', date: '2026-04-11', time: '12:40', passengerCount: 38, type: 'Nacional', status: 'Retrasado' },
+        '4': { id: '4', number: 'JK404', origin: 'Barranquilla', destination: 'Cali', date: '2026-04-11', time: '15:50', passengerCount: 47, type: 'Nacional', status: 'Programado' },
+        '5': { id: '5', number: 'JK505', origin: 'Bogotá', destination: 'Cancún', date: '2026-04-12', time: '20:20', passengerCount: 165, type: 'Internacional', status: 'Programado' },
+        '6': { id: '6', number: 'JK606', origin: 'Medellín', destination: 'Punta Cana', date: '2026-04-12', time: '22:00', passengerCount: 152, type: 'Internacional', status: 'Programado' },
+        '7': { id: '7', number: 'JK707', origin: 'Cali', destination: 'Nueva York', date: '2026-04-13', time: '06:45', passengerCount: 180, type: 'Internacional', status: 'En vuelo' },
+        '8': { id: '8', number: 'JK808', origin: 'Cartagena', destination: 'Sao Paulo', date: '2026-04-13', time: '13:30', passengerCount: 158, type: 'Internacional', status: 'Retrasado' },
+        '9': { id: '9', number: 'JK909', origin: 'Pereira', destination: 'Lima', date: '2026-04-14', time: '09:20', passengerCount: 142, type: 'Internacional', status: 'Programado' }
+    };
+
+    let selectedFlight = null;
+    let selectedReservation = null;
+    let selectedPayment = null;
+
+    // ── STATUS PILL ──
+    function statusPill(status) {
+        const map = {
+            'En vuelo': 'pill-en-vuelo',
+            'Retrasado': 'pill-retrasado',
+            'Cancelado': 'pill-cancelado',
+            'Programado': 'pill-programado',
+            'Confirmada': 'pill-confirmada',
+            'Confirmado': 'pill-confirmado',
+            'Pendiente': 'pill-pendiente',
+            'Cancelada': 'pill-cancelada',
         };
+        const cls = map[status] || 'pill-programado';
+        return `<span class="pill ${cls}">${status}</span>`;
+    }
 
-        let selectedFlight = null;
-        let selectedReservation = null;
-        let selectedClient = null;
-        let selectedPayment = null;
+    // ── DASHBOARD ──
+    function updateDashboard() {
+        const arr = Object.values(flights);
+        document.getElementById('dashboard-total-flights').textContent = arr.length;
+        document.getElementById('dashboard-total-passengers').textContent = arr.reduce((s, f) => s + f.passengerCount, 0);
+        document.getElementById('dashboard-delayed-flights').textContent = arr.filter(f => f.status === 'Retrasado').length;
+        document.getElementById('dashboard-pending-payments').textContent = payments.filter(p => p.status === 'Pendiente').length;
+    }
 
-        function getStatusBadge(status) {
-            if (status === 'En vuelo') return `<span class="status-pill status-en-vuelo">● En vuelo</span>`;
-            if (status === 'Retrasado') return `<span class="status-pill status-retrasado">● Retrasado</span>`;
-            return `<span class="status-pill status-programado">● Programado</span>`;
+    // ── FLIGHT CARDS ──
+    function renderFlightCards(filter = '') {
+        const container = document.getElementById('flight-cards');
+        const search = filter.trim().toLowerCase();
+        const arr = Object.values(flights).filter(f => {
+            if (!search) return true;
+            return f.number.toLowerCase().includes(search) ||
+                   f.origin.toLowerCase().includes(search) ||
+                   f.destination.toLowerCase().includes(search) ||
+                   f.status.toLowerCase().includes(search);
+        });
+
+        if (!arr.length) {
+            container.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="icon">✈</div><div>Sin vuelos que coincidan</div></div>';
+            updateDashboard();
+            return;
         }
 
-        function updateDashboard() {
-            const flightsArr = Object.values(flights);
-            const totalFlights = flightsArr.length;
-            const totalPassengers = flightsArr.reduce((sum, f) => sum + f.passengerCount, 0);
-            const delayedFlights = flightsArr.filter(f => f.status === 'Retrasado').length;
-            const pendingPayments = payments.filter(p => p.status === 'Pendiente').length;
-
-            document.getElementById('dashboard-total-flights').textContent = totalFlights;
-            document.getElementById('dashboard-total-passengers').textContent = totalPassengers;
-            document.getElementById('dashboard-delayed-flights').textContent = delayedFlights;
-            document.getElementById('dashboard-pending-payments').textContent = pendingPayments;
-        }
-
-        function renderFlightCards(filter = '') {
-            const container = document.getElementById('flight-cards');
-            const search = filter.trim().toLowerCase();
-            const flightsArray = Object.values(flights).filter(flight => {
-                if (!search) return true;
-                return (
-                    flight.number.toLowerCase().includes(search) ||
-                    flight.origin.toLowerCase().includes(search) ||
-                    flight.destination.toLowerCase().includes(search) ||
-                    flight.status.toLowerCase().includes(search)
-                );
-            });
-
-            container.innerHTML = flightsArray.map(flight => `
-                <div class="flight-card cursor-pointer status-${flight.status.toLowerCase().replace(' ', '-')}" data-flight-id="${flight.id}">
-                    <div class="flex justify-between items-center mb-3">
-                        <div>
-                            <div class="text-lg font-extrabold text-[#0f4f78]">${flight.number}</div>
-                            <div class="text-xs text-gray-500">${flight.type}</div>
-                        </div>
-                        <div class="${flight.status.toLowerCase().replace(' ', '-')} status-pill">${flight.status}</div>
+        container.innerHTML = arr.map(f => `
+            <div class="flight-card" data-flight-id="${f.id}">
+                <div class="flight-card-top">
+                    <div>
+                        <div class="flight-number">${f.number}</div>
+                        <div class="flight-type-tag">${f.type}</div>
                     </div>
-                    <div class="space-y-1 text-gray-700">
-                        <div><strong>Ruta:</strong> ${flight.origin} → ${flight.destination}</div>
-                        <div><strong>Fecha y hora:</strong> ${flight.date} · ${flight.time}</div>
-                        <div><strong>Pasajeros:</strong> ${flight.passengerCount}</div>
-                    </div>
+                    ${statusPill(f.status)}
                 </div>
-            `).join('');
+                <div class="flight-route">
+                    <span>${f.origin}</span>
+                    <span class="route-arrow">→</span>
+                    <span>${f.destination}</span>
+                </div>
+                <div class="flight-meta">${f.date} · ${f.time}</div>
+                <div class="flight-pax">👥 ${f.passengerCount} pasajeros</div>
+            </div>
+        `).join('');
 
-            container.querySelectorAll('.flight-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const flightId = card.dataset.flightId;
-                    showFlightDetails(flightId);
-                });
-            });
-
-            updateDashboard();
-        }
-
-        function populateFlightSelector() {
-            const selector = document.getElementById('flight-selector');
-            selector.innerHTML = Object.values(flights).map(flight => `<option value="${flight.number}">${flight.number} - ${flight.origin} - ${flight.destination}</option>`).join('');
-        }
-
-        function showFlightDetails(flightId) {
-            const flight = flights[flightId];
-            if (!flight) return;
-            selectedFlight = flight;
-
-            // Highlight selected card
-            document.querySelectorAll('.flight-card').forEach(c => {
-                c.classList.remove('selected', 'status-programado', 'status-en-vuelo', 'status-retrasado', 'status-cancelado');
-                const cardId = c.dataset.flightId;
-                const status = flights[cardId]?.status || 'Programado';
-                c.classList.add(`status-${status.toLowerCase().replace(' ', '-')}`);
-            });
-
-            const card = document.querySelector(`.flight-card[data-flight-id="${flightId}"]`);
-            if (card) {
-                card.classList.add('selected');
-            }
-
-            document.getElementById('flight-number-title').textContent = `Detalles del Vuelo ${flight.number}`;
-            document.getElementById('flight-number').textContent = flight.number;
-            document.getElementById('flight-origin').textContent = flight.origin;
-            document.getElementById('flight-destination').textContent = flight.destination;
-            document.getElementById('flight-status').textContent = flight.status;
-            document.getElementById('flight-date').textContent = flight.date;
-            document.getElementById('flight-time').textContent = flight.time;
-            document.getElementById('flight-passengers').textContent = `${flight.passengerCount} pasajeros`;
-            document.getElementById('flight-time-input').value = flight.time;
-            document.getElementById('flight-status-select').value = flight.status;
-
-            document.getElementById('flight-details').classList.remove('hidden');
-        }
-
-        document.getElementById('manage-seats-btn').addEventListener('click', () => {
-            if (selectedFlight) manageSeats(selectedFlight.id);
+        container.querySelectorAll('.flight-card').forEach(card => {
+            card.addEventListener('click', () => showFlightDetails(card.dataset.flightId));
         });
 
-        document.getElementById('view-reservations-btn').addEventListener('click', () => {
-            if (selectedFlight) viewReservations(selectedFlight.number);
-        });
-
-        document.getElementById('update-time-btn').addEventListener('click', () => {
-            if (!selectedFlight) return;
-            const newTime = document.getElementById('flight-time-input').value;
-            if (!newTime) {
-                alert('Ingrese una hora válida.');
-                return;
-            }
-            selectedFlight.time = newTime;
-            document.getElementById('flight-time').textContent = newTime;
-            renderFlightCards();
-            updateDashboard();
-            alert(`Hora de vuelo actualizada a ${newTime}.`);
-        });
-
-        document.getElementById('update-flight-status-btn').addEventListener('click', () => {
-            if (!selectedFlight) return;
-            const newStatus = document.getElementById('flight-status-select').value;
-            selectedFlight.status = newStatus;
-            document.getElementById('flight-status').textContent = newStatus;
-            renderFlightCards();
-            showFlightDetails(selectedFlight.id);
-            updateDashboard();
-        });
-
-        // Navigation
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const sectionId = this.dataset.section;
-                
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-                
-                this.classList.add('active');
-                document.getElementById(sectionId).classList.add('active');
-                
-                // Initialize data for section
-                if (sectionId === 'panel-asistente') {
-                    renderFlightCards();
-                } else if (sectionId === 'gestionar-reservas') {
-                    renderReservations();
-                } else if (sectionId === 'gestionar-clientes') {
-                    renderClients();
-                } else if (sectionId === 'confirmar-pagos') {
-                    renderPayments();
-                } else if (sectionId === 'asignar-asientos') {
-                    renderSeatMap();
-                }
-            });
-        });
-
-        // Panel Asistente se maneja con renderFlightCards y showFlightDetails()
-
-        function manageSeats(flightId) {
-            const flight = flights[flightId];
-            if (!flight) return;
-
-            // Navigate to assign seats section
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.querySelector('[data-section="asignar-asientos"]').classList.add('active');
-            document.getElementById('asignar-asientos').classList.add('active');
-
-            document.getElementById('flight-selector').value = flight.number;
-            renderSeatMap();
-            document.getElementById('flight-details').classList.add('hidden');
-        }
-
-        function viewReservations(flightNumber) {
-            // Navigate to manage reservations section
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.querySelector('[data-section="gestionar-reservas"]').classList.add('active');
-            document.getElementById('gestionar-reservas').classList.add('active');
-            renderReservations(`flightNumber:${flightNumber}`);
-            document.getElementById('flight-details').classList.add('hidden');
-        }
-
-        // Gestionar Reservas
-        function renderReservations(filter = '') {
-            const tbody = document.getElementById('reservations-tbody');
-            let filtered = reservations;
-            
-            if (filter.startsWith('flightNumber:')) {
-                const flightNum = filter.split(':')[1];
-                filtered = reservations.filter(r => r.flightNumber === flightNum);
-            } else {
-                filtered = reservations.filter(r => 
-                    r.passenger.toLowerCase().includes(filter.toLowerCase()) ||
-                    r.flightNumber.toLowerCase().includes(filter.toLowerCase()) ||
-                    r.id.toLowerCase().includes(filter.toLowerCase())
-                );
-            }
-
-            tbody.innerHTML = filtered.map(res => `
-                <tr>
-                    <td>${res.id}</td>
-                    <td style="color: #87CEEB; font-weight: 600;">${res.flightNumber}</td>
-                    <td>${res.passenger}</td>
-                    <td>${res.seat}</td>
-                    <td>${res.date}</td>
-                    <td>
-                        <span style="font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: 9999px; ${res.status === 'Confirmada' ? 'background-color: #dcfce7; color: #166534;' : 'background-color: #ffedd5; color: #9a3412;'}">
-                            ${res.status}
-                        </span>
-                    </td>
-                    <td>
-                        <button onclick="viewReservationDetails('${res.id}')" class="action-icon view" title="Ver detalles">👁️</button>
-                        <button onclick="cancelReservation('${res.id}')" class="action-icon delete" title="Eliminar reserva">🗑️</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function viewReservationDetails(id) {
-            const res = reservations.find(r => r.id === id);
-            if (res) {
-                selectedReservation = res;
-                document.getElementById('reservation-title').textContent = `Detalles de Reserva ${res.id}`;
-                document.getElementById('res-flight').textContent = res.flightNumber;
-                document.getElementById('res-passenger').textContent = res.passenger;
-                document.getElementById('res-seat').textContent = res.seat;
-                document.getElementById('res-status').textContent = res.status;
-                document.getElementById('reservation-details').classList.add('show');
-            }
-        }
-
-        function cancelReservation(id) {
-            if (confirm('¿Está seguro que desea cancelar esta reserva?')) {
-                const res = reservations.find(r => r.id === id);
-                if (res) res.status = 'Cancelada';
-                alert('Reserva cancelada exitosamente');
-                renderReservations();
-            }
-        }
-
-        function changeSeat(id) {
-            alert('Funcionalidad para cambiar asiento próximamente disponible.');
-        }
-
-        function updateStatus(id) {
-            alert('Funcionalidad para actualizar estado próximamente disponible.');
-        }
-
-        document.getElementById('reservation-search')?.addEventListener('input', (e) => {
-            renderReservations(e.target.value);
-        });
-
-        document.getElementById('flight-search')?.addEventListener('input', (e) => {
-            renderFlightCards(e.target.value);
-        });
-
-        // Gestionar Clientes
-        // GESTIONAR CLIENTES - Sistema Completo
-        let selectedClientId = null;
-
-        // Inicializar clientes desde localStorage o dados por defecto
-        function initClients() {
-            const stored = localStorage.getItem('clients');
-            if (stored) {
-                clients = JSON.parse(stored).map(client => ({
-                    ...client,
-                    isFrequent: client.isFrequent || false
-                }));
-            } else {
-                // Datos iniciales (C003 tiene 12 vuelos - es cliente frecuente)
-                clients = [
-                    { id: 'C001', name: 'Juan Pérez', email: 'juan.perez@email.com', phone: '+57 300 1234567', documentType: 'CC', documentNumber: '1234567890', account: '4532-1111-1111', flightHistory: 5, isFrequent: false },
-                    { id: 'C002', name: 'María García', email: 'maria.garcia@email.com', phone: '+57 310 9876543', documentType: 'CC', documentNumber: '9876543210', account: '4532-2222-2222', flightHistory: 3, isFrequent: false },
-                    { id: 'C003', name: 'Carlos Rodríguez', email: 'carlos.rodriguez@email.com', phone: '+57 320 5555555', documentType: 'P.P', documentNumber: 'AB1234567', account: '4532-3333-3333', flightHistory: 12, isFrequent: false },
-                    { id: 'C004', name: 'Ana Martínez', email: 'ana.martinez@email.com', phone: '+57 315 7777777', documentType: 'CC', documentNumber: '5555555555', account: '4532-4444-4444', flightHistory: 1, isFrequent: false }
-                ];
-                saveClients();
-            }
-        }
-
-        // Guardar clientes en localStorage
-        function saveClients() {
-            localStorage.setItem('clients', JSON.stringify(clients));
-        }
-
-        // Renderizar tabla de clientes con todas las características
-        function renderClients(filter = '', frequentOnly = false) {
-            const tbody = document.getElementById('clients-tbody');
-            let filtered = clients;
-
-            // Aplicar filtro de búsqueda
-            if (filter.trim()) {
-                filtered = filtered.filter(c => 
-                    c.name.toLowerCase().includes(filter.toLowerCase()) ||
-                    c.email.toLowerCase().includes(filter.toLowerCase()) ||
-                    c.documentNumber.includes(filter)
-                );
-            }
-
-            // Aplicar filtro de clientes frecuentes
-            if (frequentOnly) {
-                filtered = filtered.filter(c => c.flightHistory > 5 || c.isFrequent);
-            }
-
-            tbody.innerHTML = filtered.map(client => {
-                const isFrequent = client.flightHistory > 5 || client.isFrequent;
-                const frequentBadge = isFrequent ? '⭐' : '';
-                
-                return `
-                    <tr>
-                        <td>${client.id}</td>
-                        <td>
-                            <div class="client-name">
-                                ${client.name}
-                                ${frequentBadge ? `<span class="client-frequent-badge">${frequentBadge}</span>` : ''}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="contact-cell">
-                                <div>${client.phone}</div>
-                                <div class="contact-email">
-                                    <a href="mailto:${client.email}" title="Enviar email">${client.email}</a>
-                                    <a href="mailto:${client.email}" class="email-icon" title="Enviar email">✉️</a>
-                                    <a href="https://wa.me/${client.phone.replace(/\D/g, '')}" target="_blank" class="whatsapp-icon" title="Enviar WhatsApp">💬</a>
-                                </div>
-                            </div>
-                        </td>
-                        <td>${client.documentType} ${client.documentNumber}</td>
-                        <td>
-                            <div class="flight-badge">
-                                🛫 ${client.flightHistory}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="action-btn edit" onclick="editClient('${client.id}')" title="Editar cliente">✏️</button>
-                                <button class="action-btn" onclick="toggleFrequent('${client.id}')" title="Alternar cliente frecuente">${isFrequent ? '⭐' : '☆'}</button>
-                                <button class="action-btn delete" onclick="deleteClient('${client.id}')" title="Eliminar cliente">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        // Mostrar formulario para agregar nuevo cliente
-        function showAddClientForm() {
-            selectedClientId = null;
-            document.getElementById('form-title').textContent = 'Nuevo Cliente';
-            document.getElementById('form-subtitle').textContent = 'Completa los datos para registrar un nuevo cliente';
-            document.getElementById('client-form').reset();
-            document.getElementById('form-client-id').value = '';
-            document.getElementById('form-frequent').checked = false;
-            document.getElementById('add-client-form').classList.remove('hidden');
-            document.getElementById('form-name').focus();
-        }
-
-        // Cerrar formulario
-        function closeAddClientForm() {
-            document.getElementById('add-client-form').classList.add('hidden');
-            selectedClientId = null;
-        }
-
-        // Editar cliente
-        function editClient(id) {
-            const client = clients.find(c => c.id === id);
-            if (!client) return;
-
-            selectedClientId = id;
-            document.getElementById('form-title').textContent = 'Editar Cliente';
-            document.getElementById('form-subtitle').textContent = `Modificación de datos para: ${client.name}`;
-            
-            document.getElementById('form-name').value = client.name;
-            document.getElementById('form-phone').value = client.phone;
-            document.getElementById('form-email').value = client.email;
-            document.getElementById('form-doc-number').value = client.documentNumber;
-            document.getElementById('form-doc-type').value = client.documentType;
-            document.getElementById('form-account').value = client.account || '';
-            document.getElementById('form-flights').value = client.flightHistory ?? 0;
-            document.getElementById('form-frequent').checked = Boolean(client.isFrequent);
-            document.getElementById('form-client-id').value = id;
-
-            document.getElementById('add-client-form').classList.remove('hidden');
-            document.getElementById('form-name').focus();
-        }
-
-        // Guardar cliente (nuevo o editar)
-        function saveClient() {
-            const name = document.getElementById('form-name').value.trim();
-            const phone = document.getElementById('form-phone').value.trim();
-            const email = document.getElementById('form-email').value.trim();
-            const docNumber = document.getElementById('form-doc-number').value.trim();
-            const docType = document.getElementById('form-doc-type').value;
-            const account = document.getElementById('form-account').value.trim();
-            let flightHistory = parseInt(document.getElementById('form-flights').value, 10);
-            if (Number.isNaN(flightHistory) || flightHistory < 0) {
-                flightHistory = 0;
-            }
-
-            // Validar campos obligatorios
-            if (!name || !phone || !email || !docNumber || !docType) {
-                alert('Por favor complete todos los campos obligatorios (marcados con *)');
-                return;
-            }
-
-            // Validar email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Por favor ingrese un email válido');
-                return;
-            }
-
-            const clientId = document.getElementById('form-client-id').value;
-
-            const manualFrequent = document.getElementById('form-frequent').checked;
-            if (clientId) {
-                // Editar cliente existente
-                const client = clients.find(c => c.id === clientId);
-                if (client) {
-                    client.name = name;
-                    client.phone = phone;
-                    client.email = email;
-                    client.documentNumber = docNumber;
-                    client.documentType = docType;
-                    client.account = account;
-                    client.flightHistory = flightHistory;
-                    client.isFrequent = manualFrequent;
-                    alert('Cliente actualizado exitosamente');
-                }
-            } else {
-                // Crear nuevo cliente
-                const newId = `C${String(clients.length + 1).padStart(3, '0')}`;
-                clients.push({
-                    id: newId,
-                    name,
-                    phone,
-                    email,
-                    documentNumber: docNumber,
-                    documentType: docType,
-                    account,
-                    flightHistory,
-                    isFrequent: manualFrequent
-                });
-                alert('Cliente agregado exitosamente');
-            }
-
-            saveClients();
-            closeAddClientForm();
-            renderClients();
-        }
-
-        function toggleFrequent(id) {
-            const client = clients.find(c => c.id === id);
-            if (!client) return;
-            client.isFrequent = !client.isFrequent;
-            saveClients();
-            renderClients(document.getElementById('client-search').value, document.getElementById('frequent-filter').checked);
-        }
-
-        // Eliminar cliente con confirmación
-        function deleteClient(id) {
-            const client = clients.find(c => c.id === id);
-            if (!client) return;
-
-            if (confirm(`¿Está seguro que desea eliminar al cliente "${client.name}"? Esta acción no se puede deshacer.`)) {
-                clients = clients.filter(c => c.id !== id);
-                saveClients();
-                renderClients();
-                alert('Cliente eliminado exitosamente');
-            }
-        }
-
-        // Event listeners para formulario
-        document.getElementById('add-client-btn')?.addEventListener('click', showAddClientForm);
-        document.getElementById('close-form-btn')?.addEventListener('click', closeAddClientForm);
-        document.getElementById('cancel-client-btn')?.addEventListener('click', closeAddClientForm);
-        document.getElementById('save-client-btn')?.addEventListener('click', saveClient);
-
-        // Búsqueda en tiempo real
-        document.getElementById('client-search')?.addEventListener('input', (e) => {
-            const frequentOnly = document.getElementById('frequent-filter').checked;
-            renderClients(e.target.value, frequentOnly);
-        });
-
-        // Filtro de clientes frecuentes
-        document.getElementById('frequent-filter')?.addEventListener('change', (e) => {
-            const searchValue = document.getElementById('client-search').value;
-            renderClients(searchValue, e.target.checked);
-        });
-
-        // Inicializar clientes al cargar
-
-        // Confirmar Pagos
-        function renderPayments() {
-            const tbody = document.getElementById('payments-tbody');
-            tbody.innerHTML = payments.map(payment => `
-                <tr>
-                    <td>${payment.id}</td>
-                    <td style="color: #87CEEB; font-weight: 600;">${payment.reservationId}</td>
-                    <td>${payment.passenger}</td>
-                    <td style="font-weight: 600;">$${payment.amount.toFixed(2)}</td>
-                    <td>${payment.method === 'Débito' ? 'Débito' : payment.method === 'Crédito' ? 'Crédito' : payment.method}</td>
-                    <td>
-                        <span style="font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: 9999px; ${payment.status === 'Confirmado' ? 'background-color: #dcfce7; color: #166534;' : payment.status === 'Pendiente' ? 'background-color: #ffedd5; color: #9a3412;' : 'background-color: #fee2e2; color: #991b1b;'}">
-                            ${payment.status}
-                        </span>
-                    </td>
-                    <td>
-                        ${payment.status === 'Pendiente' ? `<button onclick="confirmPayment('${payment.id}')" style="background-color: #5BC0DE; color: white; padding: 0.25rem 1rem; border-radius: 0.375rem; border: none; cursor: pointer; font-size: 0.875rem; font-weight: 600;">Confirmar</button>` : '<span style="display: flex; align-items: center; gap: 0.5rem; color: #16a34a;"><span style="font-weight: 600; font-size: 0.875rem;">✓ Pagado</span></span>'}
-                    </td>
-                </tr>
-            `).join('');
-
-            updatePaymentSummary();
-        }
-
-        function updatePaymentSummary() {
-            const pending = payments.filter(p => p.status === 'Pendiente').reduce((sum, p) => sum + p.amount, 0);
-            const confirmed = payments.filter(p => p.status === 'Confirmado').reduce((sum, p) => sum + p.amount, 0);
-            const total = pending + confirmed;
-
-            document.getElementById('total-payments').textContent = `$${total.toFixed(2)}`;
-            document.getElementById('confirmed-payments').textContent = `$${confirmed.toFixed(2)}`;
-            document.getElementById('pending-payments').textContent = `$${pending.toFixed(2)}`;
-        }
-
-        function confirmPayment(id) {
-            selectedPayment = payments.find(p => p.id === id);
-            if (selectedPayment) {
-                document.getElementById('payment-title').textContent = `Confirmar Pago ${selectedPayment.id}`;
-                document.getElementById('payment-passenger').textContent = selectedPayment.passenger;
-                document.getElementById('payment-reservation').textContent = selectedPayment.reservationId;
-                document.getElementById('payment-amount').textContent = `$${selectedPayment.amount.toFixed(2)}`;
-                document.getElementById('payment-method').textContent = selectedPayment.method;
-                document.getElementById('payment-details').classList.add('show');
-            }
-        }
-
-        document.getElementById('confirm-payment-btn')?.addEventListener('click', () => {
-            if (selectedPayment) {
-                const payment = payments.find(p => p.id === selectedPayment.id);
-                if (payment) {
-                    payment.status = 'Confirmado';
-                    alert(`Pago ${selectedPayment.id} confirmado exitosamente`);
-                    document.getElementById('payment-details').classList.remove('show');
-                    renderPayments();
-                }
-            }
-        });
-
-        // Asignar Asientos
-        let selectedSeat = null;
-
-        function getRandomSeats(totalSeats, count) {
-            const seats = [];
-            for (let i = 1; i <= 15; i++) {
-                ['A', 'B', 'C', 'D', 'E', 'F'].forEach(col => seats.push(`${col}${i}`));
-            }
-            const shuffled = seats.sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, count);
-        }
-
-        function loadSeatData(flightNumber) {
-            const key = `seats_${flightNumber}`;
-            const data = localStorage.getItem(key);
-            if (data) {
-                return JSON.parse(data);
-            } else {
-                // Generar aleatorios si no existe
-                const occupied = getRandomSeats(90, Math.floor(Math.random() * 20) + 10); // 10-30 ocupados
-                const reserved = getRandomSeats(90, Math.floor(Math.random() * 15) + 5); // 5-20 reservados
-                const seatData = { occupied, reserved };
-                localStorage.setItem(key, JSON.stringify(seatData));
-                return seatData;
-            }
-        }
-
-        function saveSeatData(flightNumber, seatData) {
-            const key = `seats_${flightNumber}`;
-            localStorage.setItem(key, JSON.stringify(seatData));
-        }
-
-        function renderSeatMap() {
-            const seatMap = document.getElementById('seat-map');
-            seatMap.innerHTML = '';
-
-            const rows = 15;
-            const columns = ['A', 'B', 'C', 'D', 'E', 'F'];
-            const flightNumber = document.getElementById('flight-selector').value;
-            const seatData = loadSeatData(flightNumber);
-
-            document.getElementById('selected-seat-flight').textContent = flightNumber;
-            document.getElementById('selected-seat-id').textContent = '-';
-            document.getElementById('selected-seat-status').textContent = 'Ninguno';
-            document.getElementById('selected-seat-info').textContent = 'Selecciona un asiento disponible para confirmar.';
-            document.getElementById('confirm-seat-btn').disabled = true;
-
-            for (let i = 1; i <= rows; i++) {
-                for (let col of columns) {
-                    const seatId = `${col}${i}`;
-                    let status = 'available';
-
-                    if (seatData.occupied.includes(seatId)) status = 'occupied';
-                    else if (seatData.reserved.includes(seatId)) status = 'reserved';
-
-                    const seat = document.createElement('div');
-                    seat.className = `seat-box ${status}`;
-                    seat.textContent = seatId;
-
-                    if (status === 'available') {
-                        seat.addEventListener('click', () => {
-                            selectedSeat = seatId;
-                            document.querySelectorAll('.seat-box').forEach(s => s.classList.remove('selected'));
-                            seat.classList.add('selected');
-
-                            document.getElementById('selected-seat-id').textContent = seatId;
-                            document.getElementById('selected-seat-status').textContent = 'Disponible';
-                            document.getElementById('selected-seat-info').textContent = `Vuelo ${flightNumber} · Asiento ${seatId} seleccionado.`;
-                            document.getElementById('confirm-seat-btn').disabled = false;
-                        });
-                    }
-
-                    seatMap.appendChild(seat);
-                }
-            }
-        }
-
-        document.getElementById('flight-selector')?.addEventListener('change', () => {
-            renderSeatMap();
-        });
-
-        document.getElementById('confirm-seat-btn')?.addEventListener('click', () => {
-            if (!selectedSeat) return;
-            const flightNumber = document.getElementById('flight-selector').value;
-            const seatData = loadSeatData(flightNumber);
-            if (!seatData.reserved.includes(selectedSeat)) {
-                seatData.reserved.push(selectedSeat);
-                saveSeatData(flightNumber, seatData);
-
-                // Aumentar contador de pasajeros en ese vuelo
-                const flight = Object.values(flights).find(f => f.number === flightNumber);
-                if (flight) {
-                    flight.passengerCount += 1;
-                    if (selectedFlight && selectedFlight.number === flightNumber) {
-                        selectedFlight.passengerCount = flight.passengerCount;
-                        document.getElementById('flight-passengers').textContent = `${flight.passengerCount} pasajeros`;
-                    }
-                }
-
-                renderFlightCards();
-            }
-
-            alert(`Asiento ${selectedSeat} confirmado en el vuelo ${flightNumber}.`);
-            document.getElementById('selected-seat-info').textContent = `Asiento ${selectedSeat} confirmado.`;
-            document.getElementById('confirm-seat-btn').disabled = true;
-            selectedSeat = null;
-            renderSeatMap();
-        });
-
-        document.getElementById('cancel-seat-btn')?.addEventListener('click', () => {
-            selectedSeat = null;
-            document.getElementById('selected-seat-id').textContent = '-';
-            document.getElementById('selected-seat-status').textContent = 'Ninguno';
-            document.getElementById('selected-seat-info').textContent = 'Selecciona un asiento disponible para confirmar.';
-            document.getElementById('confirm-seat-btn').disabled = true;
-            document.querySelectorAll('.seat-box').forEach(s => s.classList.remove('selected'));
-        });
-
-        // Initialize
+        updateDashboard();
+    }
+
+    function showFlightDetails(flightId) {
+        const f = flights[flightId];
+        if (!f) return;
+        selectedFlight = f;
+
+        document.querySelectorAll('.flight-card').forEach(c => c.classList.remove('selected'));
+        document.querySelector(`.flight-card[data-flight-id="${flightId}"]`)?.classList.add('selected');
+
+        document.getElementById('flight-number-title').textContent = `Vuelo ${f.number}`;
+        document.getElementById('flight-number').textContent = f.number;
+        document.getElementById('flight-origin').textContent = f.origin;
+        document.getElementById('flight-destination').textContent = f.destination;
+        document.getElementById('flight-status').innerHTML = statusPill(f.status);
+        document.getElementById('flight-date').textContent = f.date;
+        document.getElementById('flight-time').textContent = f.time;
+        document.getElementById('flight-passengers').textContent = f.passengerCount;
+        document.getElementById('flight-time-input').value = f.time;
+        document.getElementById('flight-status-select').value = f.status;
+        document.getElementById('flight-details').classList.remove('hidden');
+    }
+
+    document.getElementById('flight-search')?.addEventListener('input', e => renderFlightCards(e.target.value));
+
+    document.getElementById('update-time-btn')?.addEventListener('click', () => {
+        if (!selectedFlight) return;
+        const t = document.getElementById('flight-time-input').value;
+        if (!t) { toast('Ingrese una hora válida', 'error'); return; }
+        selectedFlight.time = t;
+        document.getElementById('flight-time').textContent = t;
         renderFlightCards();
-        populateFlightSelector();
-        renderReservations();
-        initClients();
-        renderClients();
-        renderPayments();
+        toast(`Hora actualizada a ${t}`, 'success');
+    });
+
+    document.getElementById('update-flight-status-btn')?.addEventListener('click', () => {
+        if (!selectedFlight) return;
+        const s = document.getElementById('flight-status-select').value;
+        selectedFlight.status = s;
+        document.getElementById('flight-status').innerHTML = statusPill(s);
+        renderFlightCards();
+        showFlightDetails(selectedFlight.id);
+        toast(`Estado actualizado: ${s}`, 'success');
+    });
+
+    document.getElementById('manage-seats-btn')?.addEventListener('click', () => {
+        if (selectedFlight) manageSeats(selectedFlight.id);
+    });
+
+    document.getElementById('view-reservations-btn')?.addEventListener('click', () => {
+        if (selectedFlight) viewReservations(selectedFlight.number);
+    });
+
+    function manageSeats(flightId) {
+        const f = flights[flightId];
+        if (!f) return;
+        navigateTo('asignar-asientos');
+        document.getElementById('flight-selector').value = f.number;
         renderSeatMap();
-    </script>
+        document.getElementById('flight-details').classList.add('hidden');
+    }
+
+    function viewReservations(flightNumber) {
+        navigateTo('gestionar-reservas');
+        renderReservations(`flightNumber:${flightNumber}`);
+        document.getElementById('flight-details').classList.add('hidden');
+    }
+
+    // ── NAVIGATION ──
+    function navigateTo(sectionId) {
+        document.querySelectorAll('.nav-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.section === sectionId);
+        });
+        document.querySelectorAll('.content-section').forEach(s => {
+            s.classList.toggle('active', s.id === sectionId);
+        });
+    }
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.section;
+            navigateTo(id);
+            if (id === 'panel-asistente') renderFlightCards();
+            else if (id === 'gestionar-reservas') renderReservations();
+            else if (id === 'gestionar-clientes') renderClients();
+            else if (id === 'confirmar-pagos') renderPayments();
+            else if (id === 'asignar-asientos') renderSeatMap();
+        });
+    });
+
+    // ── RESERVAS ──
+    function renderReservations(filter = '') {
+        const tbody = document.getElementById('reservations-tbody');
+        let data = reservations;
+        if (filter.startsWith('flightNumber:')) {
+            const fn = filter.split(':')[1];
+            data = reservations.filter(r => r.flightNumber === fn);
+        } else if (filter) {
+            data = reservations.filter(r =>
+                r.passenger.toLowerCase().includes(filter.toLowerCase()) ||
+                r.flightNumber.toLowerCase().includes(filter.toLowerCase()) ||
+                r.id.toLowerCase().includes(filter.toLowerCase())
+            );
+        }
+
+        if (!data.length) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--ink-soft);">Sin reservas</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = data.map(r => `
+            <tr>
+                <td style="font-family:var(--mono);font-size:0.78rem;color:var(--ink-soft);">${r.id}</td>
+                <td class="td-flight">${r.flightNumber}</td>
+                <td>${r.passenger}</td>
+                <td style="font-family:var(--mono);">${r.seat}</td>
+                <td style="color:var(--ink-soft);">${r.date}</td>
+                <td>${statusPill(r.status)}</td>
+                <td>
+                    <div class="action-group">
+                        <button class="btn btn-ghost btn-sm btn-icon" onclick="viewReservationDetails('${r.id}')" title="Ver">👁</button>
+                        <button class="btn btn-danger btn-sm btn-icon" onclick="cancelReservation('${r.id}')" title="Cancelar">🗑</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    document.getElementById('reservation-search')?.addEventListener('input', e => renderReservations(e.target.value));
+
+    function viewReservationDetails(id) {
+        const r = reservations.find(x => x.id === id);
+        if (!r) return;
+        selectedReservation = r;
+        document.getElementById('reservation-title').textContent = `Reserva ${r.id}`;
+        document.getElementById('res-flight').textContent = r.flightNumber;
+        document.getElementById('res-passenger').textContent = r.passenger;
+        document.getElementById('res-seat').textContent = r.seat;
+        document.getElementById('res-status').innerHTML = statusPill(r.status);
+        document.getElementById('reservation-details').classList.add('show');
+    }
+
+    function cancelReservation(id) {
+        if (!confirm('¿Cancelar esta reserva?')) return;
+        const r = reservations.find(x => x.id === id);
+        if (r) { r.status = 'Cancelada'; renderReservations(); toast('Reserva cancelada', 'success'); }
+    }
+
+    // ── CLIENTES ──
+    function initClients() {
+        const stored = localStorage.getItem('clients');
+        if (stored) {
+            clients = JSON.parse(stored).map(c => ({ ...c, isFrequent: c.isFrequent || false }));
+        } else {
+            clients = [
+                { id: 'C001', name: 'Juan Pérez', email: 'juan.perez@email.com', phone: '+57 300 1234567', documentType: 'CC', documentNumber: '1234567890', account: '4532-1111-1111', flightHistory: 5, isFrequent: false },
+                { id: 'C002', name: 'María García', email: 'maria.garcia@email.com', phone: '+57 310 9876543', documentType: 'CC', documentNumber: '9876543210', account: '4532-2222-2222', flightHistory: 3, isFrequent: false },
+                { id: 'C003', name: 'Carlos Rodríguez', email: 'carlos.rodriguez@email.com', phone: '+57 320 5555555', documentType: 'P.P', documentNumber: 'AB1234567', account: '4532-3333-3333', flightHistory: 12, isFrequent: false },
+                { id: 'C004', name: 'Ana Martínez', email: 'ana.martinez@email.com', phone: '+57 315 7777777', documentType: 'CC', documentNumber: '5555555555', account: '4532-4444-4444', flightHistory: 1, isFrequent: false }
+            ];
+            saveClients();
+        }
+    }
+
+    function saveClients() { localStorage.setItem('clients', JSON.stringify(clients)); }
+
+    function renderClients(filter = '', frequentOnly = false) {
+        let data = clients;
+        if (filter.trim()) {
+            data = data.filter(c =>
+                c.name.toLowerCase().includes(filter.toLowerCase()) ||
+                c.email.toLowerCase().includes(filter.toLowerCase()) ||
+                c.documentNumber.includes(filter)
+            );
+        }
+        if (frequentOnly) data = data.filter(c => c.flightHistory > 5 || c.isFrequent);
+
+        const tbody = document.getElementById('clients-tbody');
+        if (!data.length) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--ink-soft);">Sin clientes</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = data.map(c => {
+            const freq = c.flightHistory > 5 || c.isFrequent;
+            return `
+            <tr>
+                <td style="font-family:var(--mono);font-size:0.78rem;color:var(--ink-soft);">${c.id}</td>
+                <td>
+                    <span style="font-weight:600;">${c.name}</span>
+                    ${freq ? '<span class="frequent-badge">⭐ Frecuente</span>' : ''}
+                </td>
+                <td>
+                    <div style="font-size:0.82rem;">${c.phone}</div>
+                    <div style="font-size:0.75rem;color:var(--ink-soft);">${c.email}</div>
+                </td>
+                <td style="font-family:var(--mono);font-size:0.8rem;">${c.documentType} ${c.documentNumber}</td>
+                <td style="font-family:var(--mono);font-weight:600;color:var(--sky-dark);">${c.flightHistory}</td>
+                <td>
+                    <div class="action-group">
+                        <button class="btn btn-ghost btn-sm btn-icon" onclick="editClient('${c.id}')" title="Editar">✏️</button>
+                        <button class="btn btn-ghost btn-sm btn-icon" onclick="toggleFrequent('${c.id}')" title="Frecuente">${freq ? '⭐' : '☆'}</button>
+                        <button class="btn btn-danger btn-sm btn-icon" onclick="deleteClient('${c.id}')" title="Eliminar">🗑</button>
+                    </div>
+                </td>
+            </tr>
+            `;
+        }).join('');
+    }
+
+    function showAddClientForm() {
+        document.getElementById('form-title').textContent = 'Nuevo Cliente';
+        document.getElementById('form-subtitle').textContent = 'Completa los datos para registrar un nuevo cliente';
+        document.getElementById('form-name').value = '';
+        document.getElementById('form-phone').value = '';
+        document.getElementById('form-email').value = '';
+        document.getElementById('form-doc-number').value = '';
+        document.getElementById('form-doc-type').value = '';
+        document.getElementById('form-account').value = '';
+        document.getElementById('form-flights').value = '0';
+        document.getElementById('form-frequent').checked = false;
+        document.getElementById('form-client-id').value = '';
+        document.getElementById('add-client-form').classList.remove('hidden');
+        document.getElementById('form-name').focus();
+    }
+
+    function closeAddClientForm() {
+        document.getElementById('add-client-form').classList.add('hidden');
+    }
+
+    function editClient(id) {
+        const c = clients.find(x => x.id === id);
+        if (!c) return;
+        document.getElementById('form-title').textContent = 'Editar Cliente';
+        document.getElementById('form-subtitle').textContent = `Modificar datos de: ${c.name}`;
+        document.getElementById('form-name').value = c.name;
+        document.getElementById('form-phone').value = c.phone;
+        document.getElementById('form-email').value = c.email;
+        document.getElementById('form-doc-number').value = c.documentNumber;
+        document.getElementById('form-doc-type').value = c.documentType;
+        document.getElementById('form-account').value = c.account || '';
+        document.getElementById('form-flights').value = c.flightHistory ?? 0;
+        document.getElementById('form-frequent').checked = Boolean(c.isFrequent);
+        document.getElementById('form-client-id').value = id;
+        document.getElementById('add-client-form').classList.remove('hidden');
+        document.getElementById('form-name').focus();
+    }
+
+    function saveClient() {
+        const name = document.getElementById('form-name').value.trim();
+        const phone = document.getElementById('form-phone').value.trim();
+        const email = document.getElementById('form-email').value.trim();
+        const docNumber = document.getElementById('form-doc-number').value.trim();
+        const docType = document.getElementById('form-doc-type').value;
+        const account = document.getElementById('form-account').value.trim();
+        let flightHistory = parseInt(document.getElementById('form-flights').value, 10);
+        if (Number.isNaN(flightHistory) || flightHistory < 0) flightHistory = 0;
+        const manualFrequent = document.getElementById('form-frequent').checked;
+
+        if (!name || !phone || !email || !docNumber || !docType) {
+            toast('Completa todos los campos obligatorios', 'error'); return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            toast('Email inválido', 'error'); return;
+        }
+
+        const clientId = document.getElementById('form-client-id').value;
+        if (clientId) {
+            const c = clients.find(x => x.id === clientId);
+            if (c) {
+                Object.assign(c, { name, phone, email, documentNumber: docNumber, documentType: docType, account, flightHistory, isFrequent: manualFrequent });
+                toast('Cliente actualizado', 'success');
+            }
+        } else {
+            const newId = `C${String(clients.length + 1).padStart(3, '0')}`;
+            clients.push({ id: newId, name, phone, email, documentNumber: docNumber, documentType: docType, account, flightHistory, isFrequent: manualFrequent });
+            toast('Cliente agregado', 'success');
+        }
+
+        saveClients();
+        closeAddClientForm();
+        renderClients();
+    }
+
+    function toggleFrequent(id) {
+        const c = clients.find(x => x.id === id);
+        if (!c) return;
+        c.isFrequent = !c.isFrequent;
+        saveClients();
+        renderClients(document.getElementById('client-search').value, document.getElementById('frequent-filter').checked);
+    }
+
+    function deleteClient(id) {
+        const c = clients.find(x => x.id === id);
+        if (!c) return;
+        if (!confirm(`¿Eliminar a "${c.name}"?`)) return;
+        clients = clients.filter(x => x.id !== id);
+        saveClients();
+        renderClients();
+        toast('Cliente eliminado', 'success');
+    }
+
+    document.getElementById('add-client-btn')?.addEventListener('click', showAddClientForm);
+    document.getElementById('close-form-btn')?.addEventListener('click', closeAddClientForm);
+    document.getElementById('cancel-client-btn')?.addEventListener('click', closeAddClientForm);
+    document.getElementById('save-client-btn')?.addEventListener('click', saveClient);
+    document.getElementById('client-search')?.addEventListener('input', e => {
+        renderClients(e.target.value, document.getElementById('frequent-filter').checked);
+    });
+    document.getElementById('frequent-filter')?.addEventListener('change', e => {
+        renderClients(document.getElementById('client-search').value, e.target.checked);
+    });
+
+    // ── PAGOS ──
+    function renderPayments() {
+        const tbody = document.getElementById('payments-tbody');
+        tbody.innerHTML = payments.map(p => `
+            <tr>
+                <td style="font-family:var(--mono);font-size:0.78rem;color:var(--ink-soft);">${p.id}</td>
+                <td class="td-flight">${p.reservationId}</td>
+                <td>${p.passenger}</td>
+                <td class="td-amount">$${p.amount.toFixed(2)}</td>
+                <td>${p.method}</td>
+                <td>${statusPill(p.status)}</td>
+                <td>
+                    ${p.status === 'Pendiente'
+                        ? `<button class="btn btn-primary btn-sm" onclick="confirmPayment('${p.id}')">Confirmar</button>`
+                        : `<span style="color:var(--green);font-size:0.8rem;font-weight:600;">✓ Pagado</span>`}
+                </td>
+            </tr>
+        `).join('');
+        updatePaymentSummary();
+    }
+
+    function updatePaymentSummary() {
+        const pending = payments.filter(p => p.status === 'Pendiente').reduce((s, p) => s + p.amount, 0);
+        const confirmed = payments.filter(p => p.status === 'Confirmado').reduce((s, p) => s + p.amount, 0);
+        document.getElementById('total-payments').textContent = `$${(pending + confirmed).toFixed(2)}`;
+        document.getElementById('confirmed-payments').textContent = `$${confirmed.toFixed(2)}`;
+        document.getElementById('pending-payments').textContent = `$${pending.toFixed(2)}`;
+    }
+
+    function confirmPayment(id) {
+        selectedPayment = payments.find(p => p.id === id);
+        if (!selectedPayment) return;
+        document.getElementById('payment-title').textContent = `Confirmar Pago ${selectedPayment.id}`;
+        document.getElementById('payment-passenger').textContent = selectedPayment.passenger;
+        document.getElementById('payment-reservation').textContent = selectedPayment.reservationId;
+        document.getElementById('payment-amount').textContent = `$${selectedPayment.amount.toFixed(2)}`;
+        document.getElementById('payment-method').textContent = selectedPayment.method;
+        document.getElementById('payment-details').classList.add('show');
+    }
+
+    document.getElementById('confirm-payment-btn')?.addEventListener('click', () => {
+        if (!selectedPayment) return;
+        const p = payments.find(x => x.id === selectedPayment.id);
+        if (p) {
+            p.status = 'Confirmado';
+            toast(`Pago ${selectedPayment.id} confirmado`, 'success');
+            document.getElementById('payment-details').classList.remove('show');
+            renderPayments();
+        }
+    });
+
+    // ── ASIENTOS ──
+    let selectedSeat = null;
+
+    function getRandomSeats(count, exclude = []) {
+        const seats = [];
+        for (let i = 1; i <= 15; i++) ['A','B','C','D','E','F'].forEach(c => seats.push(`${c}${i}`));
+        const available = seats.filter(s => !exclude.includes(s));
+        return available.sort(() => 0.5 - Math.random()).slice(0, count);
+    }
+
+    function loadSeatData(flightNumber) {
+        const key = `seats_${flightNumber}`;
+        const data = localStorage.getItem(key);
+        if (data) return JSON.parse(data);
+        const occupied = getRandomSeats(Math.floor(Math.random() * 20) + 10);
+        const reserved = getRandomSeats(Math.floor(Math.random() * 15) + 5, occupied);
+        const seatData = { occupied, reserved };
+        localStorage.setItem(key, JSON.stringify(seatData));
+        return seatData;
+    }
+
+    function saveSeatData(flightNumber, seatData) {
+        localStorage.setItem(`seats_${flightNumber}`, JSON.stringify(seatData));
+    }
+
+    function populateFlightSelector() {
+        const sel = document.getElementById('flight-selector');
+        sel.innerHTML = Object.values(flights).map(f => `<option value="${f.number}">${f.number} · ${f.origin} → ${f.destination}</option>`).join('');
+    }
+
+    function renderSeatMap() {
+        const seatMap = document.getElementById('seat-map');
+        seatMap.innerHTML = '';
+        const flightNumber = document.getElementById('flight-selector').value;
+        const seatData = loadSeatData(flightNumber);
+
+        document.getElementById('selected-seat-flight').textContent = flightNumber;
+        document.getElementById('selected-seat-id').textContent = '—';
+        document.getElementById('selected-seat-status').textContent = '—';
+        document.getElementById('selected-seat-info').textContent = 'Selecciona un asiento disponible.';
+        document.getElementById('confirm-seat-btn').disabled = true;
+        selectedSeat = null;
+
+        for (let i = 1; i <= 15; i++) {
+            for (let col of ['A','B','C','D','E','F']) {
+                const seatId = `${col}${i}`;
+                let status = 'available';
+                if (seatData.occupied.includes(seatId)) status = 'occupied';
+                else if (seatData.reserved.includes(seatId)) status = 'reserved';
+
+                const el = document.createElement('div');
+                el.className = `seat ${status}`;
+                el.textContent = seatId;
+
+                if (status === 'available') {
+                    el.addEventListener('click', () => {
+                        selectedSeat = seatId;
+                        document.querySelectorAll('.seat').forEach(s => s.classList.remove('selected'));
+                        el.classList.add('selected');
+                        document.getElementById('selected-seat-id').textContent = seatId;
+                        document.getElementById('selected-seat-status').textContent = 'Disponible';
+                        document.getElementById('selected-seat-info').textContent = `Asiento ${seatId} seleccionado · Vuelo ${flightNumber}`;
+                        document.getElementById('confirm-seat-btn').disabled = false;
+                    });
+                }
+                seatMap.appendChild(el);
+            }
+        }
+    }
+
+    document.getElementById('flight-selector')?.addEventListener('change', renderSeatMap);
+
+    document.getElementById('confirm-seat-btn')?.addEventListener('click', () => {
+        if (!selectedSeat) return;
+        const flightNumber = document.getElementById('flight-selector').value;
+        const seatData = loadSeatData(flightNumber);
+        if (!seatData.reserved.includes(selectedSeat)) {
+            seatData.reserved.push(selectedSeat);
+            saveSeatData(flightNumber, seatData);
+            const f = Object.values(flights).find(x => x.number === flightNumber);
+            if (f) f.passengerCount += 1;
+            renderFlightCards();
+        }
+        toast(`Asiento ${selectedSeat} confirmado en ${flightNumber}`, 'success');
+        document.getElementById('selected-seat-info').textContent = `Asiento ${selectedSeat} confirmado.`;
+        document.getElementById('confirm-seat-btn').disabled = true;
+        selectedSeat = null;
+        renderSeatMap();
+    });
+
+    document.getElementById('cancel-seat-btn')?.addEventListener('click', () => {
+        selectedSeat = null;
+        document.getElementById('selected-seat-id').textContent = '—';
+        document.getElementById('selected-seat-status').textContent = '—';
+        document.getElementById('selected-seat-info').textContent = 'Selecciona un asiento disponible.';
+        document.getElementById('confirm-seat-btn').disabled = true;
+        document.querySelectorAll('.seat').forEach(s => s.classList.remove('selected'));
+    });
+
+    // ── INIT ──
+    renderFlightCards();
+    populateFlightSelector();
+    renderReservations();
+    initClients();
+    renderClients();
+    renderPayments();
+    renderSeatMap();
+</script>
 </body>
 </html>
-
