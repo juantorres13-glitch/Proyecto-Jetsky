@@ -386,10 +386,31 @@
                                     <div class="legend-item"><div class="legend-dot available"></div>Disponible</div>
                                     <div class="legend-item"><div class="legend-dot occupied"></div>Ocupado</div>
                                     <div class="legend-item"><div class="legend-dot reserved"></div>Reservado</div>
-                                    <div class="legend-item"><div class="legend-dot selected"></div>Seleccionado</div>
+                                    <div class="legend-item">
+                                        <div class="legend-dot selected"></div>Seleccionado</div>
+                                </div>
+                                
+                                <!-- Resumen de Asientos -->
+                                <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+                                    <div style="font-size:0.75rem;color:var(--ink-soft);text-transform:uppercase;font-weight:600;letter-spacing:0.5px;margin-bottom:0.75rem;">Resumen de Asientos</div>
+                                    <div style="display:grid;grid-template-columns:1fr;gap:0.75rem;">
+                                        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem;background:rgba(173,216,230,0.15);border-left:3px solid var(--sky-light);border-radius:6px;">
+                                            <span style="font-size:0.8rem;color:var(--ink-soft);">Disponibles</span>
+                                            <span style="font-size:1.4rem;font-weight:700;color:var(--sky-light);font-family:var(--mono);" id="available-count">0</span>
+                                        </div>
+                                        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem;background:rgba(46,127,168,0.1);border-left:3px solid var(--sky-dark);border-radius:6px;">
+                                            <span style="font-size:0.8rem;color:var(--ink-soft);">Ocupados</span>
+                                            <span style="font-size:1.4rem;font-weight:700;color:var(--sky-dark);font-family:var(--mono);" id="occupied-count">0</span>
+                                        </div>
+                                        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem;background:rgba(245,158,11,0.1);border-left:3px solid var(--orange);border-radius:6px;">
+                                            <span style="font-size:0.8rem;color:var(--ink-soft);">Reservados</span>
+                                            <span style="font-size:1.4rem;font-weight:700;color:var(--orange);font-family:var(--mono);" id="reserved-count">0</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -924,12 +945,21 @@
         document.getElementById('confirm-seat-btn').disabled = true;
         selectedSeat = null;
 
+        let availableCount = 0, occupiedCount = 0, reservedCount = 0;
+
         for (let i = 1; i <= 15; i++) {
             for (let col of ['A','B','C','D','E','F']) {
                 const seatId = `${col}${i}`;
                 let status = 'available';
-                if (seatData.occupied.includes(seatId)) status = 'occupied';
-                else if (seatData.reserved.includes(seatId)) status = 'reserved';
+                if (seatData.occupied.includes(seatId)) {
+                    status = 'occupied';
+                    occupiedCount++;
+                } else if (seatData.reserved.includes(seatId)) {
+                    status = 'reserved';
+                    reservedCount++;
+                } else {
+                    availableCount++;
+                }
 
                 const el = document.createElement('div');
                 el.className = `seat ${status}`;
@@ -949,6 +979,11 @@
                 seatMap.appendChild(el);
             }
         }
+
+        // Actualizar contadores
+        document.getElementById('available-count').textContent = availableCount;
+        document.getElementById('occupied-count').textContent = occupiedCount;
+        document.getElementById('reserved-count').textContent = reservedCount;
     }
 
     document.getElementById('flight-selector')?.addEventListener('change', renderSeatMap);
