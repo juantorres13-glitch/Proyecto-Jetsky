@@ -20,7 +20,7 @@
         <div class="header-divider"></div>
         <div class="header-subtitle">Sistema de Gestión · Asesor Aerolínea</div>
         <div class="header-spacer"></div>
-        <div class="header-badge"> En línea</div>
+        <div class="header-badge"> 🟢 En línea</div>
     </header>
 
     <div class="body">
@@ -88,7 +88,7 @@
                     <div class="card-body">
                         <div class="search-row" style="margin-bottom: 1.25rem;">
                             <div class="search-box">
-                                <span class="icon">🔍</span>
+                                <span class="icon"></span>
                                 <input id="flight-search" type="text" placeholder="Buscar por código, ruta, estado...">
                             </div>
                         </div>
@@ -137,8 +137,8 @@
                         </div>
                     </div>
                     <div class="detail-actions">
-                        <button id="manage-seats-btn" class="btn btn-primary">💺 Gestionar Asientos</button>
-                        <button id="view-reservations-btn" class="btn btn-ghost">📋 Ver Reservas</button>
+                        <button id="manage-seats-btn" class="btn btn-primary"> Gestionar Asientos</button>
+                        <button id="view-reservations-btn" class="btn btn-ghost"> Ver Reservas</button>
                     </div>
                 </div>
             </div>
@@ -154,7 +154,7 @@
                     </div>
                     <div class="card-body" style="padding-bottom:0;">
                         <div class="search-box" style="margin-bottom:1.25rem; max-width:400px;">
-                            <span class="icon">🔍</span>
+                            <span class="icon"></span>
                             <input id="reservation-search" type="text" placeholder="Buscar por vuelo, pasajero o ID...">
                         </div>
                     </div>
@@ -211,7 +211,7 @@
                     <div class="card-body" style="padding-bottom:0;">
                         <div class="search-row" style="margin-bottom:1.25rem;">
                             <div class="search-box">
-                                <span class="icon">🔍</span>
+                                <span class="icon"></span>
                                 <input id="client-search" type="text" placeholder="Buscar por nombre, email o documento...">
                             </div>
                             <label class="check-label">
@@ -530,7 +530,7 @@
                     <span>${f.destination}</span>
                 </div>
                 <div class="flight-meta">${f.date} · ${f.time}</div>
-                <div class="flight-pax">👥 ${f.passengerCount} pasajeros</div>
+                <div class="flight-pax"> ${f.passengerCount} pasajeros</div>
             </div>
         `).join('');
 
