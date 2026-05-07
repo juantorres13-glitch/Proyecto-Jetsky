@@ -86,7 +86,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="search-row" style="margin-bottom: 1.25rem;">
+                        <div class="search-row" class="mb-5-inline">
                             <div class="search-box">
                                 <span class="icon"></span>
                                 <input id="flight-search" type="text" placeholder="Buscar por código, ruta, estado...">
@@ -105,35 +105,35 @@
                     <div class="detail-grid">
                         <div class="detail-block">
                             <h4>Información</h4>
-                            <div class="detail-row"><label>Número de vuelo</label><p id="flight-number" style="font-family:var(--mono);font-weight:700;font-size:1rem;"></p></div>
-                            <div class="detail-row"><label>Ruta</label><p><span id="flight-origin"></span> <span style="color:var(--sky)">→</span> <span id="flight-destination"></span></p></div>
-                            <div class="detail-row" style="margin-top:0.75rem;">
+                            <div class="detail-row"><label>Número de vuelo</label><p id="flight-number" class="mono-lg-bold"></p></div>
+                            <div class="detail-row"><label>Ruta</label><p><span id="flight-origin"></span> <span class="text-sky">→</span> <span id="flight-destination"></span></p></div>
+                            <div class="detail-row" class="mt-3-inline">
                                 <label>Cambiar estado</label>
-                                <select id="flight-status-select" style="margin-top:0.25rem;">
+                                <select id="flight-status-select" title="Cambiar estado del vuelo">
                                     <option value="Programado">Programado</option>
                                     <option value="En vuelo">En vuelo</option>
                                     <option value="Retrasado">Retrasado</option>
                                     <option value="Cancelado">Cancelado</option>
                                 </select>
-                                <button id="update-flight-status-btn" class="btn btn-primary btn-sm" style="margin-top:0.5rem;">Actualizar</button>
+                                <button id="update-flight-status-btn" class="btn btn-primary btn-sm" class="mt-2-inline">Actualizar</button>
                             </div>
                         </div>
                         <div class="detail-block">
                             <h4>Horarios</h4>
                             <div class="detail-row"><label>Estado actual</label><p id="flight-status"></p></div>
                             <div class="detail-row"><label>Fecha</label><p id="flight-date"></p></div>
-                            <div class="detail-row" style="margin-top:0.75rem;">
+                            <div class="detail-row" class="mt-3-inline">
                                 <label>Hora de salida</label>
-                                <div style="display:flex;gap:0.5rem;margin-top:0.25rem;">
-                                    <input id="flight-time-input" type="time" style="flex:1;">
+                                <div class="flex-gap-row">
+                                    <input id="flight-time-input" type="time" title="Hora de salida" class="input-flex">
                                     <button id="update-time-btn" class="btn btn-ghost btn-sm">Guardar</button>
                                 </div>
-                                <p class="mt-1" style="font-size:0.73rem;color:var(--ink-soft);">Actual: <span id="flight-time"></span></p>
+                                <p class="mt-1" class="text-xs-soft">Actual: <span id="flight-time"></span></p>
                             </div>
                         </div>
                         <div class="detail-block">
                             <h4>Pasajeros</h4>
-                            <div class="detail-row"><label>A bordo</label><p id="flight-passengers" style="font-size:1.5rem;font-weight:700;font-family:var(--mono);"></p></div>
+                            <div class="detail-row"><label>A bordo</label><p id="flight-passengers" class="mono-stat"></p></div>
                         </div>
                     </div>
                     <div class="detail-actions">
@@ -152,8 +152,8 @@
                             <div class="page-subtitle">Historial y gestión de reservaciones</div>
                         </div>
                     </div>
-                    <div class="card-body" style="padding-bottom:0;">
-                        <div class="search-box" style="margin-bottom:1.25rem; max-width:400px;">
+                    <div class="card-body" class="pb-0">
+                        <div class="search-box" class="search-filter-wrap">
                             <span class="icon"></span>
                             <input id="reservation-search" type="text" placeholder="Buscar por vuelo, pasajero o ID...">
                         </div>
@@ -186,7 +186,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="info-grid">
-                            <div class="info-item"><label>Vuelo</label><p id="res-flight" class="td-flight" style="font-size:1rem;"></p></div>
+                            <div class="info-item"><label>Vuelo</label><p id="res-flight" class="td-flight" class="text-base-font"></p></div>
                             <div class="info-item"><label>Pasajero</label><p id="res-passenger"></p></div>
                             <div class="info-item"><label>Asiento</label><p id="res-seat"></p></div>
                             <div class="info-item"><label>Estado</label><p id="res-status"></p></div>
@@ -208,8 +208,8 @@
                         </div>
                         <button id="add-client-btn" class="btn btn-primary">+ Nuevo Cliente</button>
                     </div>
-                    <div class="card-body" style="padding-bottom:0;">
-                        <div class="search-row" style="margin-bottom:1.25rem;">
+                    <div class="card-body" class="pb-0">
+                        <div class="search-row mb-5-inline">
                             <div class="search-box">
                                 <span class="icon"></span>
                                 <input id="client-search" type="text" placeholder="Buscar por nombre, email o documento...">
@@ -242,7 +242,7 @@
                     <div class="panel-header">
                         <div>
                             <h3 id="form-title">Nuevo Cliente</h3>
-                            <div id="form-subtitle" style="font-size:0.78rem;color:var(--ink-soft);margin-top:0.15rem;"></div>
+                            <div id="form-subtitle" class="form-subtitle-text"></div>
                         </div>
                         <button id="close-form-btn" class="btn btn-ghost btn-icon">✕</button>
                     </div>
@@ -266,7 +266,7 @@
                             </div>
                             <div class="form-field">
                                 <label>Tipo de Documento *</label>
-                                <select id="form-doc-type">
+                                <select id="form-doc-type" title="Tipo de documento">
                                     <option value="">Seleccionar...</option>
                                     <option value="CC">Cédula de Ciudadanía</option>
                                     <option value="TI">Tarjeta de Identidad</option>
@@ -279,11 +279,11 @@
                             </div>
                             <div class="form-field">
                                 <label>Vuelos registrados</label>
-                                <input type="number" id="form-flights" min="0" value="0">
-                                <div style="font-size:0.72rem;color:var(--ink-soft);margin-top:0.25rem;">6 o más → cliente frecuente automático</div>
+                                <input type="number" id="form-flights" min="0" value="0" title="Vuelos registrados" placeholder="0">
+                                <div class="hint-text">6 o más → cliente frecuente automático</div>
                             </div>
-                            <div class="form-field" style="justify-content:flex-end;padding-bottom:0.25rem;">
-                                <label class="check-label" style="margin-top:auto;padding-bottom:0.5rem;">
+                            <div class="form-field" class="form-field-end">
+                                <label class="check-label" class="check-bottom">
                                     <input type="checkbox" id="form-frequent">
                                     <span>Marcar como cliente frecuente</span>
                                 </label>
@@ -367,19 +367,19 @@
                         <div class="page-title">Mapa de Asientos</div>
                     </div>
                     <div class="card-body">
-                        <div class="form-field" style="max-width:360px;margin-bottom:1.5rem;">
+                        <div class="form-field" class="selector-field">
                             <label>Seleccionar Vuelo</label>
-                            <select id="flight-selector"></select>
+                            <select id="flight-selector" title="Seleccionar vuelo"></select>
                         </div>
                         <div class="seat-layout">
                             <div id="seat-map" class="seat-map"></div>
                             <div id="seat-selection-panel" class="seat-panel">
                                 <h4>Panel de Asiento</h4>
-                                <p id="selected-seat-info" style="font-size:0.8rem;color:var(--ink-soft);margin-bottom:1rem;">Selecciona un asiento disponible.</p>
+                                <p id="selected-seat-info" class="seat-hint-text">Selecciona un asiento disponible.</p>
                                 <div class="seat-info-row"><span>Vuelo</span><span id="selected-seat-flight">—</span></div>
                                 <div class="seat-info-row"><span>Asiento</span><span id="selected-seat-id">—</span></div>
                                 <div class="seat-info-row"><span>Estado</span><span id="selected-seat-status">—</span></div>
-                                <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+                                <div class="seat-actions">
                                     <button id="confirm-seat-btn" class="btn btn-primary" disabled>Confirmar</button>
                                     <button id="cancel-seat-btn" class="btn btn-ghost">Cancelar</button>
                                 </div>
@@ -392,20 +392,20 @@
                                 </div>
                                 
                                 <!-- Resumen de Asientos -->
-                                <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
-                                    <div style="font-size:0.75rem;color:var(--ink-soft);text-transform:uppercase;font-weight:600;letter-spacing:0.5px;margin-bottom:0.75rem;">Resumen de Asientos</div>
-                                    <div style="display:grid;grid-template-columns:1fr;gap:0.75rem;">
-                                        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem;background:rgba(173,216,230,0.15);border-left:3px solid var(--sky-light);border-radius:6px;">
-                                            <span style="font-size:0.8rem;color:var(--ink-soft);">Disponibles</span>
-                                            <span style="font-size:1.4rem;font-weight:700;color:var(--sky-light);font-family:var(--mono);" id="available-count">0</span>
+                                <div class="seat-summary-section">
+                                    <div class="seat-summary-label">Resumen de Asientos</div>
+                                    <div class="seat-summary-grid">
+                                        <div class="seat-stat-row available-row">
+                                            <span class="seat-stat-label">Disponibles</span>
+                                            <span class="seat-stat-count available-count" id="available-count">0</span>
                                         </div>
-                                        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem;background:rgba(46,127,168,0.1);border-left:3px solid var(--sky-dark);border-radius:6px;">
-                                            <span style="font-size:0.8rem;color:var(--ink-soft);">Ocupados</span>
-                                            <span style="font-size:1.4rem;font-weight:700;color:var(--sky-dark);font-family:var(--mono);" id="occupied-count">0</span>
+                                        <div class="seat-stat-row occupied-row">
+                                            <span class="seat-stat-label">Ocupados</span>
+                                            <span class="seat-stat-count occupied-count" id="occupied-count">0</span>
                                         </div>
-                                        <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem;background:rgba(245,158,11,0.1);border-left:3px solid var(--orange);border-radius:6px;">
-                                            <span style="font-size:0.8rem;color:var(--ink-soft);">Reservados</span>
-                                            <span style="font-size:1.4rem;font-weight:700;color:var(--orange);font-family:var(--mono);" id="reserved-count">0</span>
+                                        <div class="seat-stat-row reserved-row">
+                                            <span class="seat-stat-label">Reservados</span>
+                                            <span class="seat-stat-count reserved-count" id="reserved-count">0</span>
                                         </div>
                                     </div>
                                 </div>

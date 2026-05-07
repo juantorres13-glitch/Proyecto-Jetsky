@@ -642,6 +642,7 @@ tbody tr:hover td { background: var(--cloud); }
   position: fixed;
   inset: 0;
   background: rgba(15,25,35,0.35);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   z-index: 200;
   align-items: center;
@@ -999,3 +1000,54 @@ tbody tr:hover td { background: var(--cloud); }
   .nav-btn span:not(.nav-icon) { display: none; }
   main { padding: 1rem; }
 }
+
+/* ── UTILITY CLASSES (migradas de estilos en línea) ── */
+.mb-5-inline { margin-bottom: 1.25rem; }
+.mt-1-inline { margin-top: 0.25rem; }
+.mt-2-inline { margin-top: 0.5rem; }
+.mt-3-inline { margin-top: 0.75rem; }
+.pb-0 { padding-bottom: 0; }
+.text-sky { color: var(--sky); }
+.text-base-font { font-size: 1rem; }
+.text-xs-soft { font-size: 0.73rem; color: var(--ink-soft); }
+.hint-text { font-size: 0.72rem; color: var(--ink-soft); margin-top: 0.25rem; }
+.form-subtitle-text { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.15rem; }
+
+/* Mono styles */
+.mono-lg-bold { font-family: var(--mono); font-weight: 700; font-size: 1rem; }
+.mono-stat { font-size: 1.5rem; font-weight: 700; font-family: var(--mono); }
+
+/* Flex helpers */
+.flex-gap-row { display: flex; gap: 0.5rem; margin-top: 0.25rem; }
+.seat-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+.input-flex { flex: 1; }
+
+/* Form helpers */
+.search-filter-wrap { margin-bottom: 1.25rem; max-width: 400px; }
+.form-field-end { justify-content: flex-end; padding-bottom: 0.25rem; }
+.check-bottom { margin-top: auto; padding-bottom: 0.5rem; }
+.selector-field { max-width: 360px; margin-bottom: 1.5rem; }
+
+/* Seat panel helpers */
+.seat-hint-text { font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 1rem; }
+.seat-summary-section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.seat-summary-label {
+  font-size: 0.75rem; color: var(--ink-soft); text-transform: uppercase;
+  font-weight: 600; letter-spacing: 0.5px; margin-bottom: 0.75rem;
+}
+.seat-summary-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+
+/* Seat stat rows */
+.seat-stat-row {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem; border-radius: 6px;
+}
+.available-row { background: rgba(173,216,230,0.15); border-left: 3px solid var(--sky-light); }
+.occupied-row  { background: rgba(46,127,168,0.1);  border-left: 3px solid var(--sky-dark); }
+.reserved-row  { background: rgba(245,158,11,0.1);  border-left: 3px solid var(--orange); }
+.seat-stat-label { font-size: 0.8rem; color: var(--ink-soft); }
+.seat-stat-count { font-size: 1.4rem; font-weight: 700; font-family: var(--mono); }
+.available-count { color: var(--sky-light); }
+.occupied-count  { color: var(--sky-dark); }
+.reserved-count  { color: var(--orange); }
