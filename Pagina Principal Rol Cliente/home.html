@@ -124,7 +124,7 @@
             </div>
             <div class="flex items-center gap-4">
                 <div class="relative">
-                    <button id="profileToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium flex items-center gap-2 hover:border-[#69d7f7] focus:outline-none focus:ring-2 focus:ring-[#69d7f7]" aria-expanded="false" aria-haspopup="menu">
+                    <button id="profileToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium flex items-center gap-2 hover:border-[#0a68bd] focus:outline-none focus:ring-2 focus:ring-[#0a68bd]" aria-expanded="false" aria-haspopup="menu">
                         <span id="activeRoleLabel" class="font-semibold">Cliente</span>
                         <i class="fa-solid fa-chevron-down text-sm"></i>
                     </button>
@@ -141,7 +141,7 @@
                         </button>
                     </div>
                 </div>
-                <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#69d7f7] focus:outline-none focus:ring-2 focus:ring-[#69d7f7]">
+                <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#0a68bd] focus:outline-none focus:ring-2 focus:ring-[#0a68bd]">
                     Cuenta
                 </button>
                 <a id="registerLink" href="register.html"><button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-6 py-3 rounded-xl font-medium">Registrarse</button></a>
@@ -156,7 +156,7 @@
                     <h2 class="text-2xl font-bold text-[#0F172A]">Mi cuenta</h2>
                     <p class="text-sm text-gray-500">Tus datos guardados en JetSky.</p>
                 </div>
-                <button id="closeAccountModal" type="button" class="text-gray-500 hover:text-[#69d7f7] text-xl">
+                <button id="closeAccountModal" type="button" class="text-gray-500 hover:text-[#0a68bd] text-xl">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -884,233 +884,184 @@
             window.location.href = 'index-integrated.html';
         }
 
-        document.getElementById('searchForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const origin = document.getElementById('origin').value;
-            const destination = document.getElementById('destination').value;
-            const date = document.getElementById('departureDate').value;
-            const flightClass = document.getElementById('flightClass').value;
+        // ==================== BÚSQUEDA ====================
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-            if (!origin || !destination || !date) {
-                alert('Por favor completa los campos requeridos.');
-                return;
-            }
+        const origin = document.getElementById('origin').value;
+        const destination = document.getElementById('destination').value;
+        const date = document.getElementById('departureDate').value;
+        const flightClass = document.getElementById('flightClass').value;
+        const passengers = parseInt(document.getElementById('passengers').value, 10) || 1;
 
-            currentFlightResults = generateFlightResults(origin, destination, date, flightClass);
-            const container = document.getElementById('flightsContainer');
-            container.innerHTML = '';
-
-            currentFlightResults.forEach(flight => {
-                const totalPrice = flight.price * (parseInt(document.getElementById('passengers').value, 10) || 1);
-                const cardHTML = `
-                <div class="bg-white rounded-3xl shadow-lg p-6 cursor-pointer hover:border-[#69d7f7] border border-transparent">
-                    <div class="flex flex-col md:flex-row justify-between gap-4">
-                        <div>
-                            <p class="font-bold text-xl text-[#0F172A]">${flight.flightNumber}</p>
-                            <p class="text-gray-600">${flight.origin} → ${flight.destination}</p>
-                            <p class="text-sm text-gray-500 mt-2">${flight.date} • ${flight.departureTime} - ${flight.arrivalTime}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-2xl font-bold text-[#f89f37]">$${flight.price.toLocaleString('es-CO')}</p>
-                            <p class="text-sm text-gray-500">Por pasajero</p>
-                        </div>
-                    </div>
-                    <div class="grid sm:grid-cols-2 gap-4 mt-6 text-sm text-gray-600">
-                        <div class="space-y-2">
-                            <p><strong>Clase:</strong> ${flight.seatClass}</p>
-                            <p><strong>Duración:</strong> ${flight.duration}</p>
-                        </div>
-                        <div class="space-y-2 text-right sm:text-left">
-                            <p><strong>Avión:</strong> ${flight.aircraft}</p>
-                            <p><strong>Asientos:</strong> ${flight.seatsAvailable} disponibles</p>
-                        </div>
-                    </div>
-                    <div class="mt-5 border-t pt-4 flex justify-between items-center text-sm text-gray-500">
-                        <span>${parseInt(document.getElementById('passengers').value, 10) || 1} pasajero(s)</span>
-                        <span class="font-semibold text-[#0F172A]">Total: $${totalPrice.toLocaleString('es-CO')}</span>
-                    </div>
-                    <div class="mt-4">
-                        <button onclick="reserveFlight('${flight.id}')" class="w-full bg-[#f89f37] hover:bg-[#e68817] text-white py-2 rounded-lg font-semibold">Reservar</button>
-                    </div>
-                </div>`;
-                container.innerHTML += cardHTML;
-            });
-
-            document.getElementById('resultsSection').classList.remove('hidden');
-            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
-        });
-
-        // Función que gestiona la selección de tipo de viaje
-      
-        function setTripType(type) {
-            const returnContainer = document.getElementById('returnContainer');
-            const btnRound = document.getElementById('btn-round');
-            const btnOneway = document.getElementById('btn-oneway');
-
-            if (type === 'oneway') {
-                returnContainer.style.display = 'none';
-                btnOneway.classList.add('bg-[#0a68bd]', 'text-white');
-                btnOneway.classList.remove('bg-gray-100', 'text-gray-600');
-                btnRound.classList.remove('bg-[#69d7f7]', 'text-white');
-                btnRound.classList.add('bg-gray-100', 'text-gray-600');
-            } else {
-                returnContainer.style.display = 'block';
-                btnRound.classList.add('bg-[#0a68bd]', 'text-white');
-                btnRound.classList.remove('bg-gray-100', 'text-gray-600');
-                btnOneway.classList.remove('bg-[#69d7f7]', 'text-white');
-                btnOneway.classList.add('bg-gray-100', 'text-gray-600');
-            }
-        }
-
-        // Muestra solo la sección seleccionada desde el menú superior.
-        function filterCatalogSection(sectionId) {
-            const sections = document.querySelectorAll('[data-catalog-section]');
-            const buttons = document.querySelectorAll('[data-section-filter]');
-
-            sections.forEach(section => {
-                const shouldShow = section.dataset.catalogSection === sectionId;
-                section.classList.toggle('catalog-hidden', !shouldShow);
-                section.classList.toggle('hidden', !shouldShow);
-            });
-
-            buttons.forEach(button => {
-                const isActive = button.dataset.sectionFilter === sectionId;
-                button.classList.toggle('catalog-filter-active', isActive);
-            });
-
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-
-        // Inicializa el estado de botones al cargar la página
-        document.addEventListener('DOMContentLoaded', function() {
-            setTripType('roundtrip');
-            updateHeaderForAccount();
-        });
-
-        // Lógica de selector de roles dentro del área de Perfil
-        const profileToggle = document.getElementById('profileToggle');
-        const roleDropdown = document.getElementById('roleDropdown');
-        const activeRoleLabel = document.getElementById('activeRoleLabel');
-        const roleButtons = document.querySelectorAll('.role-option');
-
-        const roleNames = {
-            'Cliente': 'Cliente',
-            'Asesor de aerolínea': 'Asesor',
-            'Administrativo': 'Admin'
-        };
-
-        profileToggle.addEventListener('click', () => {
-            const isOpen = !roleDropdown.classList.contains('hidden');
-            roleDropdown.classList.toggle('hidden', isOpen);
-            profileToggle.setAttribute('aria-expanded', String(!isOpen));
-        });
-
-        roleButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const role = button.getAttribute('data-role');
-                activeRoleLabel.textContent = roleNames[role] || role;
-
-                roleButtons.forEach(btn => {
-                    btn.classList.remove('role-option-active');
-                    const badge = btn.querySelector('.role-badge');
-                    if (badge) badge.remove();
-                });
-
-                button.classList.add('role-option-active');
-                const badge = document.createElement('span');
-                badge.className = 'role-badge';
-                badge.textContent = 'Activo';
-                button.appendChild(badge);
-                roleDropdown.classList.add('hidden');
-                profileToggle.setAttribute('aria-expanded', 'false');
-            });
-        });
-
-        const accountToggle = document.getElementById('accountToggle');
-        const accountModal = document.getElementById('accountModal');
-        const closeAccountModal = document.getElementById('closeAccountModal');
-        const accountName = document.getElementById('accountName');
-        const accountEmail = document.getElementById('accountEmail');
-        const accountPhone = document.getElementById('accountPhone');
-        const accountRole = document.getElementById('accountRole');
-        const registerLink = document.getElementById('registerLink');
-        const flightDetailsModal = document.getElementById('flightDetailsModal');
-        const closeFlightDetailsModal = document.getElementById('closeFlightDetailsModal');
-
-        function loadAccountInfo() {
-            const savedProfile = localStorage.getItem('jetskyUserProfile');
-            if (!savedProfile) return null;
-            try {
-                return JSON.parse(savedProfile);
-            } catch (error) {
-                return null;
-            }
-        }
-
-        function updateHeaderForAccount() {
-            // Mantener el botón de registro visible para nuevos usuarios.
-            // Si el usuario ya está registrado, igual puede ver la opción de crear otra cuenta.
+        if (!origin || !destination || !date) {
+            alert('Por favor completa los campos requeridos (Origen, Destino y Fecha).');
             return;
         }
 
-        function closeFlightDetails() {
-            if (flightDetailsModal) {
-                flightDetailsModal.classList.add('hidden');
-            }
+        // Guardar datos para index-integrated.html
+        const searchData = {
+            origin: origin,
+            destination: destination,
+            date: date,
+            passengers: passengers,
+            class: flightClass
+        };
+
+        localStorage.setItem('homeSearchData', JSON.stringify(searchData));
+
+        // Redirigir al flujo completo
+        window.location.href = 'index-integrated.html';
+    });
+
+    // ==================== TIPO DE VIAJE ====================
+    function setTripType(type) {
+        const returnContainer = document.getElementById('returnContainer');
+        const btnRound = document.getElementById('btn-round');
+        const btnOneway = document.getElementById('btn-oneway');
+
+        if (type === 'oneway') {
+            returnContainer.style.display = 'none';
+            btnOneway.classList.add('bg-[#0a68bd]', 'text-white');
+            btnOneway.classList.remove('bg-gray-100', 'text-gray-600');
+            btnRound.classList.remove('bg-[#69d7f7]', 'text-white');
+            btnRound.classList.add('bg-gray-100', 'text-gray-600');
+        } else {
+            returnContainer.style.display = 'block';
+            btnRound.classList.add('bg-[#0a68bd]', 'text-white');
+            btnRound.classList.remove('bg-gray-100', 'text-gray-600');
+            btnOneway.classList.remove('bg-[#69d7f7]', 'text-white');
+            btnOneway.classList.add('bg-gray-100', 'text-gray-600');
+        }
+    }
+
+    // ==================== CATÁLOGO (Hoteles, Paquetes, Ofertas) ====================
+    function filterCatalogSection(sectionId) {
+        const sections = document.querySelectorAll('[data-catalog-section]');
+        const buttons = document.querySelectorAll('[data-section-filter]');
+
+        sections.forEach(section => {
+            const shouldShow = section.dataset.catalogSection === sectionId;
+            section.classList.toggle('catalog-hidden', !shouldShow);
+            section.classList.toggle('hidden', !shouldShow);
+        });
+
+        buttons.forEach(button => {
+            const isActive = button.dataset.sectionFilter === sectionId;
+            button.classList.toggle('catalog-filter-active', isActive);
+        });
+
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // ==================== ROLES Y CUENTA ====================
+    const profileToggle = document.getElementById('profileToggle');
+    const roleDropdown = document.getElementById('roleDropdown');
+    const activeRoleLabel = document.getElementById('activeRoleLabel');
+    const roleButtons = document.querySelectorAll('.role-option');
+
+    const roleNames = {
+        'Cliente': 'Cliente',
+        'Asesor de aerolínea': 'Asesor',
+        'Administrativo': 'Admin'
+    };
+
+    profileToggle.addEventListener('click', () => {
+        const isOpen = !roleDropdown.classList.contains('hidden');
+        roleDropdown.classList.toggle('hidden', isOpen);
+        profileToggle.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    roleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const role = button.getAttribute('data-role');
+            activeRoleLabel.textContent = roleNames[role] || role;
+
+            roleButtons.forEach(btn => {
+                btn.classList.remove('role-option-active');
+                const badge = btn.querySelector('.role-badge');
+                if (badge) badge.remove();
+            });
+
+            button.classList.add('role-option-active');
+            const badge = document.createElement('span');
+            badge.className = 'role-badge';
+            badge.textContent = 'Activo';
+            button.appendChild(badge);
+            roleDropdown.classList.add('hidden');
+            profileToggle.setAttribute('aria-expanded', 'false');
+        });
+    });
+
+    function loadAccountInfo() {
+        const savedProfile = localStorage.getItem('jetskyUserProfile');
+        if (!savedProfile) return null;
+        try {
+            return JSON.parse(savedProfile);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function openAccountModal() {
+        const profile = loadAccountInfo();
+        if (!profile) {
+            window.location.href = 'register.html';
+            return;
         }
 
-        function openAccountModal() {
-            const profile = loadAccountInfo();
-            if (!profile) {
-                window.location.href = 'register.html';
-                return;
-            }
+        document.getElementById('accountName').textContent = profile.nombreCompleto || 'Cliente';
+        document.getElementById('accountEmail').textContent = profile.email || 'No disponible';
+        document.getElementById('accountPhone').textContent = profile.phone || 'No disponible';
+        document.getElementById('accountRole').textContent = activeRoleLabel.textContent || 'Cliente';
+        document.getElementById('accountModal').classList.remove('hidden');
+    }
 
-            accountName.textContent = profile.nombreCompleto || `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || 'Cliente';
-            accountEmail.textContent = profile.email || 'No disponible';
-            accountPhone.textContent = profile.phone || 'No disponible';
-            accountRole.textContent = activeRoleLabel.textContent || 'Cliente';
-            accountModal.classList.remove('hidden');
-        }
+    // ==================== INICIALIZACIÓN ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        setTripType('roundtrip');
+    });
 
-        accountToggle.addEventListener('click', openAccountModal);
+    // Eventos de cuenta
+    const accountToggle = document.getElementById('accountToggle');
+    const accountModal = document.getElementById('accountModal');
+    const closeAccountModal = document.getElementById('closeAccountModal');
+
+    if (accountToggle) accountToggle.addEventListener('click', openAccountModal);
+    if (closeAccountModal) {
         closeAccountModal.addEventListener('click', () => {
             accountModal.classList.add('hidden');
         });
-        if (closeFlightDetailsModal) {
-            closeFlightDetailsModal.addEventListener('click', closeFlightDetails);
+    }
+
+    // Cerrar modales al hacer clic fuera
+    document.addEventListener('click', (event) => {
+        if (profileToggle && roleDropdown && 
+            !profileToggle.contains(event.target) && 
+            !roleDropdown.contains(event.target)) {
+            roleDropdown.classList.add('hidden');
         }
 
-        document.addEventListener('click', (event) => {
-            if (!profileToggle.contains(event.target) && !roleDropdown.contains(event.target)) {
-                roleDropdown.classList.add('hidden');
-                profileToggle.setAttribute('aria-expanded', 'false');
-            }
-
-            if (!accountModal.contains(event.target) && !accountToggle.contains(event.target)) {
-                accountModal.classList.add('hidden');
-            }
-        });
-
-
-        function verDetalleHotel(id) {
-            // Guardamos el ID del hotel seleccionado para que la página de hoteles sepa cuál abrir
-            localStorage.setItem('hotelSeleccionadoId', id);
-            // Redirigimos a la página de alojamientos
-            window.location.href = 'hoteles.html';
+        if (accountModal && accountToggle && 
+            !accountModal.contains(event.target) && 
+            !accountToggle.contains(event.target)) {
+            accountModal.classList.add('hidden');
         }
+    });
 
-        // Nueva función para ir a paquetes con detalle específico
-        function verPaquete(packageId) {
-            // Guardamos el ID del paquete que queremos abrir
-            localStorage.setItem('paqueteSeleccionado', packageId);
-            
-            // Redirigimos a la página de paquetes
-            window.location.href = 'paquetes.html';
-        }
+    // Funciones de Hoteles y Paquetes
+    function verDetalleHotel(id) {
+        localStorage.setItem('hotelSeleccionadoId', id);
+        window.location.href = 'hoteles.html';
+    }
+
+    function verPaquete(packageId) {
+        localStorage.setItem('paqueteSeleccionado', packageId);
+        window.location.href = 'paquetes.html';
+    }
 </script>
         
     </script>

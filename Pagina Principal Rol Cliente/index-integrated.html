@@ -3,859 +3,901 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetSky - Vuela a cualquier destino</title>
+    <title>JetSky - Reserva tu vuelo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
-        :root { --primary: #F7931E; --secondary: #69d7f7; --dark: #0F172A; }
+        /* =============================
+           VARIABLES DE COLOR JETSKY
+           Azul principal: #0a68bd
+           Naranja/dorado: #f89f37
+           Fondo suave: from-blue-50 to-white
+        ============================= */
 
-        /* FLUJO GENERAL */
-        .section { display: none; } .section.active { display: block; }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5); z-index: 40; display: flex; align-items: center; justify-content: center; }
-        .modal-overlay.hidden { display: none; }
+        /* Solo la sección activa se muestra; el resto queda oculto */
+        .section { display: none; }
+        .section.active { display: block; }
 
-        /* FILTROS CATÁLOGO */
-        .catalog-filter-active { color: var(--secondary); }
-        .catalog-hidden { display: none; }
+        /* ── Mapa de asientos ── */
+        .seat-grid {
+            display: grid;
+            /* 3 columnas izq + 1 número de fila (centro) + 3 columnas der */
+            grid-template-columns: repeat(3, 40px) 30px repeat(3, 40px);
+            gap: 6px;
+            justify-content: center;
+        }
+        .seat {
+            width: 40px; height: 40px;
+            border-radius: 8px;
+            font-size: 11px; font-weight: 600;
+            cursor: pointer; border: none;
+            transition: transform .15s, background .15s;
+        }
+        .seat:hover:not(.occupied) { transform: scale(1.1); }
+        .seat.available  { background: #e0f2fe; color: #0369a1; }
+        .seat.selected   { background: #0a68bd; color: white; }
+        .seat.occupied   { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
+        .row-number      { display:flex; align-items:center; justify-content:center;
+                           font-size:11px; color:#9ca3af; }
 
-        /* PERFIL Y ROLES */
-        .role-dropdown, .account-modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.48); display: flex; align-items: center; justify-content: center; z-index: 60; }
-        .role-dropdown.dropdown-mode { position: absolute; right: 0; top: 100%; inset: auto; background: white; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12); width: 14rem; margin-top: 0.75rem; }
-        .role-dropdown.hidden, .account-modal-overlay.hidden { display: none; }
+        /* Leyenda de asientos */
+        .seat-legend { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+        .seat-legend-item { display:flex; align-items:center; gap:6px; font-size:13px; }
+        .seat-legend-box  { width:20px; height:20px; border-radius:4px; }
+        .seat-legend-box.available { background:#e0f2fe; }
+        .seat-legend-box.selected  { background:#0a68bd; }
+        .seat-legend-box.occupied  { background:#e5e7eb; }
 
-        .role-option { width: 100%; text-align: left; padding: 0.85rem 1rem; font-size: 0.95rem; color: var(--dark); background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+        /* ── Tarjetas de vuelo ── */
+        .flight-card {
+            transition: border-color .2s, box-shadow .2s;
+            border: 2px solid transparent;
+        }
+        .flight-card:hover {
+            border-color: #0a68bd;
+            box-shadow: 0 8px 24px rgba(10,104,189,.12);
+        }
+
+        /* ── Modal cuenta ── */
+        .account-modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(15,23,42,.45);
+            display: flex; align-items: center; justify-content: center;
+            padding: 1.5rem; z-index: 60;
+        }
+        .account-modal-overlay.hidden { display: none; }
+        .account-modal {
+            width: 100%; max-width: 32rem;
+            background: white; border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 30px 80px rgba(15,23,42,.18);
+        }
+        .account-field {
+            background: #f8fafc; border-radius: 1rem; padding: 1rem;
+        }
+
+        /* ── Dropdown de roles ── */
+        .role-dropdown {
+            position: absolute; right: 0; margin-top: .75rem;
+            width: 14rem; background: white;
+            border: 1px solid #e2e8f0; border-radius: 1rem;
+            box-shadow: 0 20px 50px rgba(15,23,42,.12); z-index: 50;
+        }
+        .role-option {
+            width: 100%; text-align: left; padding: .85rem 1rem;
+            font-size: .95rem; color: #0f172a; background: transparent;
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+        }
         .role-option:hover, .role-option-active { background: #eff6ff; }
+        .role-badge {
+            background: #dbeafe; color: #1d4ed8;
+            font-size: .75rem; font-weight: 700;
+            padding: .25rem .5rem; border-radius: 9999px;
+        }
 
-        .role-badge { background: #dbeafe; color: #1d4ed8; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: 9999px; }
-
-        .account-modal { width: 100%; max-width: 32rem; background: white; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18); }
-        .account-field { background: #f8fafc; border-radius: 1rem; padding: 1rem; }
-
-        /* RESULTADOS Y DETALLES */
-        .flight-card { background: white; border: 2px solid #e5e7eb; border-radius: 1rem; padding: 1.5rem; cursor: pointer; transition: all 0.3s; }
-        .flight-card:hover { border-color: var(--secondary); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-
-        /* ASIENTOS */
-        .seat-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; }
-        .seat { width: 42px; height: 42px; border-radius: 0.5rem; border: 2px solid #d1d5db; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; transition: all 0.2s; }
-        .seat.available { background: #d1fae5; border-color: #10b981; color: #065f46; }
-        .seat.available:hover { scale: 1.1; background: #a7f3d0; }
-        .seat.occupied { background: #e5e7eb; border-color: #9ca3af; cursor: not-allowed; }
-        .seat.selected { background: var(--secondary); border-color: #0891b2; color: white; scale: 1.15; }
-
-        /* FORMA DE PAGO */
-        .payment-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: start; }
-        .payment-card, .payment-summary { background: white; border-radius: 1.75rem; padding: 2rem; box-shadow: 0 25px 70px rgba(15, 23, 42, 0.08); }
-        .payment-summary { position: sticky; top: 2rem; }
-        .payment-summary h3 { margin-bottom: 1.25rem; }
-        .payment-summary p { line-height: 1.75; }
-        .payment-summary .summary-line { display: flex; justify-content: space-between; align-items: flex-start; padding: 0.9rem 0; border-bottom: 1px solid #e5e7eb; }
-        .payment-summary .summary-line span:first-child { color: #6b7280; }
-        .payment-summary .summary-line span:last-child { font-weight: 700; color: #0f172a; text-align: right; }
-        .payment-summary .summary-line:last-child { border-bottom: none; }
-        .payment-summary .summary-total { margin-top: 1.8rem; font-size: 1.1rem; font-weight: 700; color: #111827; letter-spacing: 0.02em; }
-        .payment-summary .summary-total + .text-4xl { margin-top: 0.75rem; }
-
-        .seat-map-wrapper { background: #f8fafc; border-radius: 2rem; padding: 1.5rem; }
-        .seat-map-label { background: #cffafe; color: #0369a1; font-weight: 700; display: inline-flex; padding: 0.75rem 1rem; border-radius: 9999px; margin-bottom: 1.5rem; }
-        .seat-legend { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-        .seat-legend-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; color: #334155; }
-        .seat-legend-box { width: 18px; height: 18px; border-radius: 0.35rem; border: 2px solid transparent; display: inline-flex; align-items: center; justify-content: center; }
-        .seat-legend-box.available { background: #d1fae5; border-color: #10b981; }
-        .seat-legend-box.selected { background: var(--secondary); border-color: #0891b2; }
-        .seat-legend-box.occupied { background: #e5e7eb; border-color: #9ca3af; }
-        .seat-grid { display: grid; grid-template-columns: repeat(3, minmax(60px, 1fr)) 45px repeat(3, minmax(60px, 1fr)); gap: 0.75rem; justify-items: center; align-items: center; }
-        .seat-grid .row-number { font-weight: 700; color: #475569; font-size: 0.9rem; }
-        .seat { width: 60px; height: 60px; border-radius: 1rem; border: 2px solid #d1d5db; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; transition: transform 0.2s ease, background 0.2s ease; }
-        .seat.available { background: #d1fae5; border-color: #10b981; color: #065f46; }
-        .seat.available:hover { transform: scale(1.05); background: #a7f3d0; }
-        .seat.occupied { background: #e5e7eb; border-color: #9ca3af; cursor: not-allowed; color: #6b7280; }
-        .seat.selected { background: var(--secondary); border-color: #0891b2; color: white; transform: scale(1.08); }
-
-        /* PASOS */
-        .step-indicator { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .step-number { width: 40px; height: 40px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--dark); }
-        .step-number.active { background: var(--secondary); color: white; }
-        .step-line { flex: 1; height: 2px; background: #e5e7eb; margin: 0 1rem; }
+        /* ── Resumen de pago ── */
+        .payment-card {
+            background: white; border-radius: 1.5rem;
+            box-shadow: 0 4px 24px rgba(10,104,189,.1); padding: 2rem;
+        }
+        .payment-summary {
+            background: white; border-radius: 1.5rem;
+            box-shadow: 0 4px 24px rgba(10,104,189,.1); padding: 2rem;
+            height: fit-content;
+        }
+        .summary-line {
+            display: flex; justify-content: space-between;
+            padding: .5rem 0; border-bottom: 1px solid #f1f5f9;
+        }
+        .summary-total {
+            font-size: .75rem; text-transform: uppercase;
+            letter-spacing: .15em; color: #94a3b8; margin-top: 1rem;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
 
-    <!-- HEADER CON NAVEGACIÓN -->
-    <header class="bg-white shadow-sm">
-        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <i class="fas fa-plane text-[#69d7f7] text-2xl"></i>
-                <span class="text-2xl font-bold text-[#69d7f7]">JetSky</span>
-            </div>
-            
-            <div class="hidden md:flex items-center gap-10">
-                <button type="button" onclick="filterCatalogSection('alojamiento')" data-section-filter="alojamiento" class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium">
-                    <i class="fas fa-hotel text-base"></i>Alojamiento
-                </button>
-                <button type="button" onclick="filterCatalogSection('paquetes')" data-section-filter="paquetes" class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium">
-                   <i class="fas fa-suitcase"></i>Paquetes
-                </button>
-                <button type="button" onclick="filterCatalogSection('ofertas')" data-section-filter="ofertas" class="flex items-center gap-2 text-gray-700 hover:text-[#69d7f7] font-medium">
-                    <i class="fas fa-fire"></i>Ofertas
-                </button>
-            </div>
+<!-- =============================================
+     HEADER — aparece en todas las pantallas
+============================================= -->
+<header class="bg-white shadow-sm sticky top-0 z-40">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
 
-            <div class="flex items-center gap-4">
-                <div class="relative">
-                    <button id="profileToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium flex items-center gap-2 hover:border-[#69d7f7]" aria-expanded="false">
-                        <span id="activeRoleLabel" class="font-semibold">Cliente</span>
-                        <i class="fa-solid fa-chevron-down text-sm"></i>
+        <!-- Logo — al hacer clic vuelve a home.html -->
+        <a href="home.html" class="flex items-center gap-2">
+            <i class="fas fa-plane text-[#0a68bd] text-2xl"></i>
+            <span class="text-2xl font-bold text-[#0a68bd]">JetSky</span>
+        </a>
+
+        <!-- Links de navegación -->
+        <div class="hidden md:flex items-center gap-10">
+            <a href="hoteles.html"  class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium">
+                <i class="fas fa-hotel"></i> Alojamiento
+            </a>
+            <a href="paquetes.html" class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium">
+                <i class="fas fa-suitcase"></i> Paquetes
+            </a>
+            <a href="ofertas.html"  class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium">
+                <i class="fas fa-fire"></i> Ofertas
+            </a>
+        </div>
+
+        <!-- Botones de cuenta / rol -->
+        <div class="flex items-center gap-4">
+            <!-- Selector de rol -->
+            <div class="relative">
+                <button id="profileToggle" type="button"
+                    class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium flex items-center gap-2 hover:border-[#0a68bd]"
+                    aria-expanded="false">
+                    <span id="activeRoleLabel" class="font-semibold">Cliente</span>
+                    <i class="fa-solid fa-chevron-down text-sm"></i>
+                </button>
+                <div id="roleDropdown" class="role-dropdown hidden">
+                    <button type="button" class="role-option role-option-active" data-role="Cliente">
+                        <span>Cliente</span><span class="role-badge">Activo</span>
                     </button>
-                    <div id="roleDropdown" class="role-dropdown hidden dropdown-mode">
-                        <button type="button" class="role-option role-option-active" data-role="Cliente">
-                            <span>Cliente</span>
-                            <span class="role-badge">Activo</span>
-                        </button>
-                        <button type="button" class="role-option" data-role="Asesor de aerolínea">
-                            <span>Asesor</span>
-                        </button>
-                        <button type="button" class="role-option" data-role="Administrativo">
-                            <span>Admin</span>
-                        </button>
-                    </div>
+                    <button type="button" class="role-option" data-role="Asesor de aerolínea">
+                        <span>Asesor</span>
+                    </button>
+                    <button type="button" class="role-option" data-role="Administrativo">
+                        <span>Admin</span>
+                    </button>
                 </div>
-                <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#69d7f7]">Cuenta</button>
-                <button onclick="goToSection('register')" class="bg-[#f89f37] hover:bg-[#e68817] text-white px-6 py-3 rounded-xl font-medium">Registrarse</button>
             </div>
-        </nav>
-    </header>
 
-    <!-- MODAL DE CUENTA -->
-    <div id="accountModalOverlay" class="account-modal-overlay hidden">
-        <div class="account-modal">
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h2 class="text-2xl font-bold text-[#0F172A]">Mi cuenta</h2>
-                    <p class="text-sm text-gray-500">Tus datos guardados en JetSky.</p>
-                </div>
-                <button onclick="closeAccountModal()" class="text-gray-500 hover:text-[#69d7f7] text-xl">
-                    <i class="fa-solid fa-xmark"></i>
+            <button id="accountToggle" type="button"
+                class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#0a68bd]">
+                Cuenta
+            </button>
+
+            <a href="register.html">
+                <button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-6 py-3 rounded-xl font-medium">
+                    Registrarse
                 </button>
+            </a>
+        </div>
+    </nav>
+</header>
+
+<!-- =============================================
+     MODAL DE CUENTA
+============================================= -->
+<div id="accountModalOverlay" class="account-modal-overlay hidden">
+    <div class="account-modal">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-[#0F172A]">Mi cuenta</h2>
+                <p class="text-sm text-gray-500">Tus datos guardados en JetSky.</p>
             </div>
-            <div class="space-y-4">
-                <div class="account-field">
-                    <p class="text-xs uppercase text-gray-400">Nombre</p>
-                    <p id="accountName" class="font-semibold">Usuario</p>
+            <button onclick="closeAccountModal()" class="text-gray-500 hover:text-[#0a68bd] text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="space-y-4">
+            <div class="account-field">
+                <p class="text-xs uppercase text-gray-400">Nombre</p>
+                <p id="accountName" class="font-semibold">Usuario</p>
+            </div>
+            <div class="account-field">
+                <p class="text-xs uppercase text-gray-400">Email</p>
+                <p id="accountEmail" class="font-semibold">usuario@ejemplo.com</p>
+            </div>
+            <div class="account-field">
+                <p class="text-xs uppercase text-gray-400">Teléfono</p>
+                <p id="accountPhone" class="font-semibold">+57 000 000 0000</p>
+            </div>
+            <div class="account-field flex items-center justify-between">
+                <div>
+                    <p class="text-xs uppercase text-gray-400">Rol</p>
+                    <p id="accountRole" class="font-semibold">Cliente</p>
                 </div>
-                <div class="account-field">
-                    <p class="text-xs uppercase text-gray-400">Email</p>
-                    <p id="accountEmail" class="font-semibold">usuario@ejemplo.com</p>
-                </div>
-                <div class="account-field">
-                    <p class="text-xs uppercase text-gray-400">Teléfono</p>
-                    <p id="accountPhone" class="font-semibold">+57 000 000 0000</p>
-                </div>
-                <div class="account-field flex items-center justify-between">
-                    <div>
-                        <p class="text-xs uppercase text-gray-400">Rol</p>
-                        <p id="accountRole" class="font-semibold">Cliente</p>
-                    </div>
-                    <span class="px-3 py-1 rounded-full bg-[#dbeafe] text-[#1d4ed8] text-sm font-semibold">Activo</span>
-                </div>
+                <span class="px-3 py-1 rounded-full bg-[#dbeafe] text-[#1d4ed8] text-sm font-semibold">Activo</span>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- SECCIÓN: INICIO (HOME) -->
-    <section id="home" class="section active relative py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8">
-                <h1 class="text-5xl md:text-6xl font-bold leading-tight">Vuela a Cualquier<br><span class="text-[#69d7f7]">Destino Soñado</span></h1>
-                <p class="text-xl text-gray-600 mt-4">Descubre el mundo con JetSky. Más de 200 destinos esperándote.</p>
-            </div>
+<!-- =============================================
+     PASO 1 — RESULTADOS DE VUELOS
+     (Se llena automáticamente al llegar desde home.html)
+============================================= -->
+<section id="results" class="section active py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl p-8">
-                <form id="searchForm" onsubmit="searchFlights(event)">
-                    <div class="flex gap-4 mb-6">
-                        <button type="button" onclick="setTripType('roundtrip')" id="btn-round" class="px-6 py-3 rounded-2xl font-semibold bg-[#69d7f7] text-white">Ida y vuelta</button>
-                        <button type="button" onclick="setTripType('oneway')" id="btn-oneway" class="px-6 py-3 rounded-2xl font-semibold bg-gray-100 text-gray-600">Solo ida</button>
-                    </div>
+        <!-- Botón "Volver a búsqueda" → regresa a home.html -->
+        <a href="home.html"
+           class="mb-6 inline-flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium">
+            <i class="fa-solid fa-arrow-left"></i> Volver a búsqueda
+        </a>
 
-                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div>
-                            <label class="text-sm font-medium block mb-1">Origen</label>
-                            <select id="origin" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
-                                <option value="">Ciudad de origen</option>
-                                <option value="Bogotá">Bogotá (BOG)</option>
-                                <option value="Cali">Cali (CLO)</option>
-                                <option value="Medellín">Medellín (MDE)</option>
-                                <option value="Madrid">Madrid (MAD)</option>
-                                <option value="Barcelona">Barcelona (BCN)</option>
-                                <option value="Nueva York">Nueva York (JFK)</option>
-                                <option value="Río de Janeiro">Río de Janeiro (GIG)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium block mb-1">Destino</label>
-                            <select id="destination" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
-                                <option value="">Ciudad de destino</option>
-                                <option value="Cartagena">Cartagena (CTG)</option>
-                                <option value="París">París (CDG)</option>
-                                <option value="Londres">Londres (LHR)</option>
-                                <option value="Tokio">Tokio (HND)</option>
-                                <option value="Dubái">Dubái (DXB)</option>
-                                <option value="Madrid">Madrid (MAD)</option>
-                                <option value="Roma">Roma (FCO)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium block mb-1">Ida</label>
-                            <input id="departureDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
-                        </div>
-                        <div id="returnContainer">
-                            <label class="text-sm font-medium block mb-1">Vuelta</label>
-                            <input id="returnDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#F7931E]">
-                        </div>
-                    </div>
+        <h2 class="text-3xl font-bold mb-2 text-[#0F172A]">Vuelos disponibles</h2>
+        <p id="searchSummary" class="text-gray-500 mb-6"></p>
 
-                    <div class="grid md:grid-cols-3 gap-4 mt-6">
-                        <div>
-                            <label class="text-sm font-medium block mb-1">Pasajeros</label>
-                            <select id="passengers" class="w-full h-12 px-4 border rounded-2xl">
-                                <option value="1">1 Pasajero</option>
-                                <option value="2">2 Pasajeros</option>
-                                <option value="3">3 Pasajeros</option>
-                                <option value="4">4 Pasajeros</option>
-                                <option value="5">5+ Pasajeros</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium block mb-1">Clase</label>
-                            <select id="flightClass" class="w-full h-12 px-4 border rounded-2xl">
-                                <option value="economy">Económica</option>
-                                <option value="premium">Premium</option>
-                                <option value="business">Business</option>
-                                <option value="first">Primera Clase</option>
-                            </select>
-                        </div>
-                        <div class="flex items-end">
-                            <button type="submit" class="w-full h-12 bg-[#f89f37] hover:bg-[#e68817] text-white rounded-2xl flex items-center justify-center gap-2 font-semibold">
-                                <i class="fa-solid fa-magnifying-glass"></i>Buscar
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
+        <!-- Aquí se insertan las tarjetas de vuelo con JavaScript -->
+        <div id="flightsContainer" class="space-y-4"></div>
+    </div>
+</section>
 
-    <!-- SECCIÓN: RESULTADOS DE VUELOS -->
-    <section id="results" class="section py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <button onclick="goToSection('home')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
-                <i class="fa-solid fa-arrow-left"></i>Volver a búsqueda
-            </button>
-            <h2 class="text-3xl font-bold mb-6 text-[#0F172A]">Vuelos disponibles</h2>
-            <div id="flightsContainer" class="space-y-4"></div>
-        </div>
-    </section>
+<!-- =============================================
+     PASO 2 — DETALLES DEL VUELO SELECCIONADO
+============================================= -->
+<section id="flight-details" class="section py-12">
+    <div class="max-w-5xl mx-auto px-4">
 
-    <!-- SECCIÓN: DETALLES DEL VUELO -->
-    <section id="flight-details" class="section py-12">
-        <div class="max-w-5xl mx-auto px-4">
-            <button onclick="goToSection('results')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
-                <i class="fa-solid fa-arrow-left"></i>Volver a resultados
-            </button>
-            <div class="bg-white rounded-3xl shadow-xl p-8">
-                <h2 class="text-3xl font-bold text-center mb-10 text-[#0F172A]">Resumen de tu Vuelo</h2>
-                <div id="detailsInfo" class="grid md:grid-cols-2 gap-10 mb-12"></div>
-                <div class="border-t pt-8">
-                    <h3 class="font-bold text-xl mb-6 text-[#0F172A]">Servicios incluidos</h3>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Equipaje de mano (10kg)</span></div>
-                        <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Equipaje de bodega (23kg)</span></div>
-                        <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Selección de asiento</span></div>
-                        <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Snacks y bebidas</span></div>
-                    </div>
-                </div>
-                <div class="mt-12 flex justify-between">
-                    <button onclick="goToSection('results')" class="px-8 py-3 border border-gray-300 rounded-2xl">Cancelar</button>
-                    <button onclick="goToSection('seats')" class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-3 rounded-2xl font-semibold">Continuar</button>
+        <!-- Volver a la lista de vuelos -->
+        <button onclick="mostrarSeccion('results')"
+            class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium">
+            <i class="fa-solid fa-arrow-left"></i> Volver a resultados
+        </button>
+
+        <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-center mb-10 text-[#0F172A]">Resumen de tu Vuelo</h2>
+
+            <!-- Este div se llena dinámicamente cuando el usuario elige un vuelo -->
+            <div id="detailsInfo" class="grid md:grid-cols-2 gap-10 mb-12"></div>
+
+            <!-- Servicios incluidos (fijos para todos los vuelos) -->
+            <div class="border-t pt-8">
+                <h3 class="font-bold text-xl mb-6 text-[#0F172A]">Servicios incluidos</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Equipaje de mano (10 kg)</span></div>
+                    <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Equipaje de bodega (23 kg)</span></div>
+                    <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Selección de asiento</span></div>
+                    <div class="flex items-center gap-3"><i class="fa-solid fa-check text-green-600"></i><span>Snacks y bebidas</span></div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- SECCIÓN: SELECCIÓN DE ASIENTOS -->
-    <section id="seats" class="section py-12">
-        <div class="max-w-5xl mx-auto px-4">
-            <button onclick="goToSection('flight-details')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
-                <i class="fa-solid fa-arrow-left"></i>Volver
-            </button>
-            <div class="bg-white rounded-3xl shadow-xl p-8">
-                <h2 class="text-3xl font-bold text-center mb-2 text-[#0F172A]">Selecciona tus asientos</h2>
-                <p class="text-center text-gray-600 mb-6">Selecciona <span class="font-semibold text-[#f89f37]" id="selectedSeatsGoal">1</span> asiento(s)</p>
-                <div class="seat-legend mb-6">
-                    <div class="seat-legend-item"><span class="seat-legend-box available"></span>Disponible</div>
-                    <div class="seat-legend-item"><span class="seat-legend-box selected"></span>Seleccionado</div>
-                    <div class="seat-legend-item"><span class="seat-legend-box occupied"></span>Ocupado</div>
-                </div>
-                <div class="seat-map-wrapper mb-8">
-                    <div class="seat-map-label">Cabina del piloto</div>
-                    <div id="seatsGrid" class="seat-grid mt-6"></div>
-                </div>
-                <div class="text-center mb-8">
-                    <p class="text-lg font-semibold">Asientos seleccionados: <span id="selectedSeatsCount">0</span>/<span id="totalPassengers">1</span></p>
-                </div>
-                <div class="flex justify-between">
-                    <button onclick="goToSection('flight-details')" class="px-8 py-3 border border-gray-300 rounded-2xl">Atrás</button>
-                    <button onclick="continueToPassenger()" class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-3 rounded-2xl font-semibold">Continuar</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN: DATOS DEL PASAJERO -->
-    <section id="passenger" class="section py-12">
-        <div class="max-w-3xl mx-auto px-4">
-            <button onclick="goToSection('seats')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
-                <i class="fa-solid fa-arrow-left"></i>Volver
-            </button>
-            <div class="bg-white rounded-3xl shadow-xl p-8">
-                <h2 class="text-3xl font-bold text-center mb-8 text-[#0F172A]">Información del Pasajero</h2>
-                <form id="passengerForm" onsubmit="savePassenger(event)">
-                    <div class="space-y-4">
-                        <input type="text" id="passengerName" placeholder="Nombre completo" class="w-full px-4 py-3 border rounded-lg" required>
-                        <input type="email" id="passengerEmail" placeholder="Email" class="w-full px-4 py-3 border rounded-lg" required>
-                        <input type="tel" id="passengerPhone" placeholder="Teléfono" class="w-full px-4 py-3 border rounded-lg" required>
-                        <input type="text" id="passengerDocument" placeholder="Número de documento" class="w-full px-4 py-3 border rounded-lg" required>
-                    </div>
-                    <div class="flex justify-between mt-8">
-                        <button type="button" onclick="goToSection('seats')" class="px-8 py-3 border border-gray-300 rounded-2xl">Atrás</button>
-                        <button type="submit" class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-3 rounded-2xl font-semibold">Continuar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN: PAGO -->
-    <section id="payment" class="section py-12">
-        <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-[1.9fr_1fr] gap-8">
-            <div>
-                <button onclick="goToSection('passenger')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
-                    <i class="fa-solid fa-arrow-left"></i>Volver
+            <div class="mt-12 flex justify-between">
+                <button onclick="mostrarSeccion('results')"
+                    class="px-8 py-3 border border-gray-300 rounded-2xl hover:border-[#0a68bd]">
+                    Cancelar
                 </button>
-                <div class="payment-card">
-                    <h2 class="text-3xl font-bold mb-6 text-[#0F172A]">Información de Pago</h2>
-                    <form id="paymentForm" onsubmit="processPayment(event)">
-                        <div class="space-y-4">
-                            <input type="text" id="cardNumber" placeholder="Número de Tarjeta *" maxlength="19" class="w-full px-4 py-4 border rounded-2xl" required>
-                            <input type="text" id="cardName" placeholder="Nombre en la Tarjeta *" class="w-full px-4 py-4 border rounded-2xl" required>
-                            <div class="grid grid-cols-2 gap-4">
-                                <input type="text" id="cardExpiry" placeholder="MM/AA *" class="px-4 py-4 border rounded-2xl" required>
-                                <input type="text" id="cardCvv" placeholder="CVV *" maxlength="3" class="px-4 py-4 border rounded-2xl" required>
-                            </div>
-                        </div>
-                        <div class="mt-6 rounded-3xl bg-[#eff6ff] p-5 flex items-center gap-4 text-[#0F172A]">
-                            <div class="w-12 h-12 rounded-2xl bg-[#dbeafe] flex items-center justify-center text-[#0369a1]">
-                                <i class="fa-solid fa-shield-halved"></i>
-                            </div>
-                            <div>
-                                <p class="font-semibold">Pago Seguro</p>
-                                <p class="text-sm text-gray-600">Tus datos personales están protegidos y solo serán utilizados para procesar tu reserva.</p>
-                            </div>
-                        </div>
-                        <button type="submit" class="w-full mt-8 bg-[#f89f37] hover:bg-[#e68817] text-white py-4 rounded-2xl font-semibold">Pagar Ahora</button>
-                    </form>
-                </div>
-            </div>
-            <div class="payment-summary">
-                <h3 class="font-bold text-2xl mb-6">Resumen de tu Reserva</h3>
-                <div id="summaryDetails" class="space-y-3 text-sm text-gray-600 mb-6">
-                    <div class="summary-line"><span>Vuelo:</span><span id="summaryFlight">-</span></div>
-                    <div class="summary-line"><span>Ruta:</span><span id="summaryRoute">-</span></div>
-                    <div class="summary-line"><span>Fecha:</span><span id="summaryDate">-</span></div>
-                    <div class="summary-line"><span>Horario:</span><span id="summaryTime">-</span></div>
-                    <div class="summary-line"><span>Pasajeros:</span><span id="summaryPassengers">1</span></div>
-                    <div class="summary-line"><span>Asientos:</span><span id="summarySeats">-</span></div>
-                </div>
-                <div class="summary-total">Total a Pagar</div>
-                <div class="text-4xl font-extrabold text-[#f89f37] mt-4">$<span id="totalPrice">0</span></div>
-                <div class="text-right text-xs text-gray-400 mt-1">COP</div>
+                <button onclick="mostrarSeccion('seats')"
+                    class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-3 rounded-2xl font-semibold">
+                    Continuar →
+                </button>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- SECCIÓN: CONFIRMACIÓN -->
-    <section id="confirmation" class="section py-12">
-        <div class="max-w-3xl mx-auto px-4">
-            <div class="bg-white rounded-3xl shadow-xl p-12 text-center">
-                <div class="mb-8">
-                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fa-solid fa-check text-4xl text-green-600"></i>
-                    </div>
-                    <h2 class="text-4xl font-bold text-slate-900 mb-2">¡Reserva Confirmada!</h2>
-                    <p class="text-lg text-gray-600">Tu vuelo ha sido reservado exitosamente</p>
-                </div>
-                <div class="bg-sky-400 text-white rounded-3xl p-8 mb-8">
-                    <p class="text-xs uppercase tracking-[0.24em] opacity-90 mb-3">Código de Reserva</p>
-                    <p class="text-5xl font-bold" id="confirmationCode">-</p>
-                </div>
-                <div class="grid gap-6 lg:grid-cols-[1fr_1fr] text-left">
-                    <div class="space-y-4 bg-slate-50 rounded-3xl p-6">
-                        <p class="text-sm uppercase tracking-[0.2em] text-slate-500">Detalles del Vuelo</p>
-                        <div class="grid gap-3 text-sm text-slate-700">
-                            <div class="flex justify-between"><span class="font-medium">Vuelo</span><span id="detailFlightNumber">-</span></div>
-                            <div class="flex justify-between"><span class="font-medium">Ruta</span><span id="detailRoute">-</span></div>
-                            <div class="flex justify-between"><span class="font-medium">Fecha</span><span id="detailDate">-</span></div>
-                            <div class="flex justify-between"><span class="font-medium">Horario</span><span id="detailTime">-</span></div>
-                            <div class="flex justify-between"><span class="font-medium">Asientos</span><span id="detailSeats">-</span></div>
-                        </div>
-                    </div>
-                    <div class="space-y-4 bg-slate-50 rounded-3xl p-6">
-                        <p class="text-sm uppercase tracking-[0.2em] text-slate-500">Pasajero</p>
-                        <div class="grid gap-3 text-sm text-slate-700">
-                            <div class="flex justify-between"><span class="font-medium">Nombre</span><span id="detailPassengerName">-</span></div>
-                            <div class="flex justify-between"><span class="font-medium">Email</span><span id="detailPassengerEmail">-</span></div>
-                            <div class="flex justify-between"><span class="font-medium">Teléfono</span><span id="detailPassengerPhone">-</span></div>
-                            <div class="flex justify-between"><span class="font-medium">Total Pagado</span><span id="detailTotalPaid" class="font-semibold text-[#f89f37]">$0</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-8 bg-blue-50 rounded-3xl p-5 mb-8 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-sky-700">
-                        <i class="fa-solid fa-envelope"></i>
-                    </div>
-                    <p class="text-sm text-slate-700">Hemos enviado los detalles a <strong id="confirmEmail">-</strong>. Revisa tu bandeja de entrada.</p>
-                </div>
-                <div class="flex flex-col gap-4 sm:flex-row justify-center">
-                    <button type="button" onclick="window.location.href='home.html'" class="w-full sm:w-auto bg-sky-400 hover:bg-sky-500 text-white px-10 py-3 rounded-2xl font-semibold">Hacer otra reserva</button>
-                    <button type="button" onclick="window.location.href='dashboard.html'" class="w-full sm:w-auto bg-[#f89f37] hover:bg-[#e68817] text-white px-10 py-3 rounded-2xl font-semibold">Ir a Mi Panel</button>
-                </div>
+<!-- =============================================
+     PASO 3 — SELECCIÓN DE ASIENTOS
+============================================= -->
+<section id="seats" class="section py-12">
+    <div class="max-w-5xl mx-auto px-4">
+
+        <button onclick="mostrarSeccion('flight-details')"
+            class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium">
+            <i class="fa-solid fa-arrow-left"></i> Volver
+        </button>
+
+        <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-center mb-2 text-[#0F172A]">Selecciona tus asientos</h2>
+            <p class="text-center text-gray-600 mb-6">
+                Debes seleccionar <span class="font-semibold text-[#f89f37]" id="selectedSeatsGoal">1</span> asiento(s)
+            </p>
+
+            <!-- Leyenda de colores -->
+            <div class="seat-legend mb-6">
+                <div class="seat-legend-item"><span class="seat-legend-box available"></span> Disponible</div>
+                <div class="seat-legend-item"><span class="seat-legend-box selected"></span> Seleccionado</div>
+                <div class="seat-legend-item"><span class="seat-legend-box occupied"></span> Ocupado</div>
+            </div>
+
+            <!-- Cabina del avión -->
+            <div class="text-center mb-3">
+                <span class="bg-gray-200 text-gray-500 text-xs px-4 py-1 rounded-full">🛫 Frente del avión</span>
+            </div>
+            <div id="seatsGrid" class="seat-grid mb-6"></div>
+
+            <p class="text-center text-lg font-semibold mt-4">
+                Seleccionados: <span id="selectedSeatsCount">0</span> / <span id="totalPassengers">1</span>
+            </p>
+
+            <div class="flex justify-between mt-8">
+                <button onclick="mostrarSeccion('flight-details')"
+                    class="px-8 py-3 border border-gray-300 rounded-2xl hover:border-[#0a68bd]">
+                    Atrás
+                </button>
+                <button onclick="continuarAPasajero()"
+                    class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-3 rounded-2xl font-semibold">
+                    Continuar →
+                </button>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- SECCIÓN: REGISTRO (REUTILIZAR SI EXISTE) -->
-    <section id="register" class="section py-12">
-        <div class="max-w-3xl mx-auto px-4">
-            <button onclick="goToSection('home')" class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#69d7f7]">
-                <i class="fa-solid fa-arrow-left"></i>Volver
+<!-- =============================================
+     PASO 4 — DATOS DEL PASAJERO
+============================================= -->
+<section id="passenger" class="section py-12">
+    <div class="max-w-3xl mx-auto px-4">
+
+        <button onclick="mostrarSeccion('seats')"
+            class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium">
+            <i class="fa-solid fa-arrow-left"></i> Volver
+        </button>
+
+        <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h2 class="text-3xl font-bold text-center mb-8 text-[#0F172A]">Información del Pasajero</h2>
+
+            <form id="passengerForm" onsubmit="guardarPasajero(event)">
+                <div class="space-y-4">
+                    <input type="text"  id="passengerName"     placeholder="Nombre completo"      class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:border-[#0a68bd]" required>
+                    <input type="email" id="passengerEmail"    placeholder="Correo electrónico"   class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:border-[#0a68bd]" required>
+                    <input type="tel"   id="passengerPhone"    placeholder="Teléfono"             class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:border-[#0a68bd]" required>
+                    <input type="text"  id="passengerDocument" placeholder="Número de documento"  class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:border-[#0a68bd]" required>
+                </div>
+                <div class="flex justify-between mt-8">
+                    <button type="button" onclick="mostrarSeccion('seats')"
+                        class="px-8 py-3 border border-gray-300 rounded-2xl hover:border-[#0a68bd]">
+                        Atrás
+                    </button>
+                    <button type="submit"
+                        class="bg-[#f89f37] hover:bg-[#e68817] text-white px-12 py-3 rounded-2xl font-semibold">
+                        Continuar →
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================
+     PASO 5 — PAGO
+============================================= -->
+<section id="payment" class="section py-12">
+    <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-[1.9fr_1fr] gap-8">
+
+        <!-- Formulario de pago -->
+        <div>
+            <button onclick="mostrarSeccion('passenger')"
+                class="mb-6 flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium">
+                <i class="fa-solid fa-arrow-left"></i> Volver
             </button>
-            <div class="bg-white rounded-3xl shadow-xl p-8">
-                <h2 class="text-3xl font-bold mb-6 text-[#0F172A]">Crear Mi Cuenta</h2>
-                <form id="registerForm" onsubmit="registerUser(event)">
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <input type="text" id="regFirstName" placeholder="Nombre" class="px-4 py-3 border rounded-lg" required>
-                        <input type="text" id="regLastName" placeholder="Apellido" class="px-4 py-3 border rounded-lg" required>
+
+            <div class="payment-card">
+                <h2 class="text-3xl font-bold mb-6 text-[#0F172A]">Información de Pago</h2>
+
+                <form id="paymentForm" onsubmit="procesarPago(event)">
+                    <div class="space-y-4">
+                        <input type="text" id="cardNumber"  placeholder="Número de tarjeta (16 dígitos) *" maxlength="19"
+                            class="w-full px-4 py-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]" required>
+                        <input type="text" id="cardName"    placeholder="Nombre en la tarjeta *"
+                            class="w-full px-4 py-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]" required>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" id="cardExpiry" placeholder="MM/AA *"
+                                class="px-4 py-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]" required>
+                            <input type="text" id="cardCvv"    placeholder="CVV *" maxlength="3"
+                                class="px-4 py-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]" required>
+                        </div>
                     </div>
-                    <input type="email" id="regEmail" placeholder="Email" class="w-full px-4 py-3 border rounded-lg mt-4" required>
-                    <input type="tel" id="regPhone" placeholder="Teléfono" class="w-full px-4 py-3 border rounded-lg mt-4" required>
-                    <div class="grid md:grid-cols-2 gap-4 mt-4">
-                        <input type="password" id="regPassword" placeholder="Contraseña (min 8 caracteres)" class="px-4 py-3 border rounded-lg" required>
-                        <input type="password" id="regPasswordConfirm" placeholder="Confirmar contraseña" class="px-4 py-3 border rounded-lg" required>
+
+                    <!-- Aviso de seguridad -->
+                    <div class="mt-6 rounded-3xl bg-[#eff6ff] p-5 flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-[#dbeafe] flex items-center justify-center text-[#0369a1]">
+                            <i class="fa-solid fa-shield-halved text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-[#0F172A]">Pago Seguro</p>
+                            <p class="text-sm text-gray-600">Tus datos están protegidos y solo se usarán para procesar tu reserva.</p>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 mt-4">
-                        <input type="checkbox" id="regTerms" required>
-                        <label for="regTerms" class="text-sm">Acepto términos y condiciones</label>
-                    </div>
-                    <button type="submit" class="w-full mt-6 bg-[#f89f37] hover:bg-[#e68817] text-white py-3 rounded-2xl font-semibold">Registrarse</button>
+
+                    <button type="submit"
+                        class="w-full mt-8 bg-[#f89f37] hover:bg-[#e68817] text-white py-4 rounded-2xl font-semibold text-lg">
+                        Pagar Ahora
+                    </button>
                 </form>
             </div>
         </div>
-    </section>
 
-    <script>
-        // ===== VARIABLES GLOBALES =====
-        let currentFlight = {}, selectedSeats = [], searchData = {}, tripType = 'roundtrip';
-        const roleNames = {'Cliente':'Cliente', 'Asesor de aerolínea':'Asesor', 'Administrativo':'Admin'};
-
-        // ===== NAVEGACIÓN SECCIONES =====
-        function goToSection(sectionId) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            window.scrollTo(0, 0);
-            if (sectionId === 'seats') {
-                initSeats();
-            }
-        }
-
-        // ===== BÚSQUEDA DE VUELOS =====
-        function searchFlights(e) {
-            e.preventDefault();
-            searchData = {
-                origin: document.getElementById('origin').value,
-                destination: document.getElementById('destination').value,
-                date: document.getElementById('departureDate').value,
-                passengers: parseInt(document.getElementById('passengers').value, 10) || 1,
-                class: document.getElementById('flightClass').value
-            };
-            localStorage.setItem('searchData', JSON.stringify(searchData));
-            selectedSeats = [];
-            localStorage.removeItem('selectedSeats');
-
-            const flights = generateFlights(searchData.origin, searchData.destination, searchData.date, searchData.class);
-            renderFlights(flights);
-            goToSection('results');
-        }
-
-        function generateFlights(origin, dest, date, cls) {
-            const basePrice = 450000;
-            const multipliers = {economy:1, premium:1.5, business:2.5, first:4};
-            const durations = ['6h 30m', '6h 15m', '6h 20m'];
-            const aircrafts = ['Airbus A320', 'Boeing 737 MAX', 'Airbus A330'];
-            const seatClass = {economy:'Económica', premium:'Premium', business:'Business', first:'Primera Clase'}[cls] || 'Económica';
-            const m = multipliers[cls] || 1;
-            return [
-                {id:1, flightNumber:'JS-4782', origin, destination:dest, date, departureTime:'08:00', arrivalTime:'14:30', duration:durations[0], aircraft:aircrafts[0], seatClass, price:Math.floor(basePrice * m), seats:15},
-                {id:2, flightNumber:'JS-9123', origin, destination:dest, date, departureTime:'12:30', arrivalTime:'18:45', duration:durations[1], aircraft:aircrafts[1], seatClass, price:Math.floor((basePrice-80000) * m), seats:8},
-                {id:3, flightNumber:'JS-5614', origin, destination:dest, date, departureTime:'18:00', arrivalTime:'00:20', duration:durations[2], aircraft:aircrafts[2], seatClass, price:Math.floor((basePrice-50000) * m), seats:20}
-            ];
-        }
-
-        function renderFlights(flights) {
-            const container = document.getElementById('flightsContainer');
-            container.innerHTML = flights.map(f => {
-                const totalPrice = f.price * (searchData.passengers || 1);
-                return `
-                <div class="flight-card bg-white rounded-3xl shadow-lg p-6 cursor-pointer hover:border-[#69d7f7] border border-transparent" onclick="selectFlight(${f.id}, '${f.flightNumber}', '${f.origin}', '${f.destination}', ${f.price}, '${f.date}', '${f.departureTime}', '${f.arrivalTime}')">
-                    <div class="flex flex-col md:flex-row justify-between gap-4">
-                        <div>
-                            <p class="font-bold text-xl text-[#0F172A]">${f.flightNumber}</p>
-                            <p class="text-gray-600">${f.origin} → ${f.destination}</p>
-                            <p class="text-sm text-gray-500 mt-2">${f.date} • ${f.departureTime} - ${f.arrivalTime}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-2xl font-bold text-[#f89f37]">$${f.price.toLocaleString('es-CO')}</p>
-                            <p class="text-sm text-gray-500">Por pasajero</p>
-                        </div>
-                    </div>
-                    <div class="grid sm:grid-cols-2 gap-4 mt-6 text-sm text-gray-600">
-                        <div class="space-y-2">
-                            <p><strong>Clase:</strong> ${f.seatClass}</p>
-                            <p><strong>Duración:</strong> ${f.duration}</p>
-                        </div>
-                        <div class="space-y-2 text-right sm:text-left">
-                            <p><strong>Avión:</strong> ${f.aircraft}</p>
-                            <p><strong>Asientos:</strong> ${f.seats} disponibles</p>
-                        </div>
-                    </div>
-                    <div class="mt-5 border-t pt-4 flex justify-between items-center text-sm text-gray-500">
-                        <span>${searchData.passengers} pasajero(s)</span>
-                        <span class="font-semibold text-[#0F172A]">Total: $${totalPrice.toLocaleString('es-CO')}</span>
-                    </div>
-                </div>
-            `;
-            }).join('');
-        }
-
-        function selectFlight(id, number, origin, dest, price, date, departureTime, arrivalTime) {
-            currentFlight = {id, flightNumber: number, origin, destination: dest, price, date, departureTime, arrivalTime};
-            localStorage.setItem('selectedFlight', JSON.stringify(currentFlight));
-
-            const totalPrice = price * (searchData.passengers || 1);
-            const info = `
-            <div>
-                <div class="flex items-center gap-4"><i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
-                <div><p class="text-sm text-gray-500">Vuelo</p><p class="text-2xl font-bold">${number}</p></div></div>
-                <div class="flex items-center gap-4 mt-4"><i class="fa-solid fa-map-marker-alt text-4xl text-[#69d7f7]"></i>
-                <div><p class="text-sm text-gray-500">Ruta</p><p class="text-2xl font-bold">${origin} → ${dest}</p></div></div>
+        <!-- Resumen lateral -->
+        <div class="payment-summary">
+            <h3 class="font-bold text-2xl mb-6 text-[#0F172A]">Resumen de tu Reserva</h3>
+            <div class="space-y-1 text-sm text-gray-600 mb-6">
+                <div class="summary-line"><span>Vuelo</span>      <span id="summaryFlight">-</span></div>
+                <div class="summary-line"><span>Ruta</span>       <span id="summaryRoute">-</span></div>
+                <div class="summary-line"><span>Fecha</span>      <span id="summaryDate">-</span></div>
+                <div class="summary-line"><span>Horario</span>    <span id="summaryTime">-</span></div>
+                <div class="summary-line"><span>Pasajeros</span>  <span id="summaryPassengers">1</span></div>
+                <div class="summary-line"><span>Asientos</span>   <span id="summarySeats">-</span></div>
             </div>
-            <div class="bg-blue-50 rounded-2xl p-6">
-                <p class="text-base text-gray-500">Precio por pasajero</p>
-                <p class="text-3xl font-bold text-[#f89f37]">$${price.toLocaleString('es-CO')}</p>
-                <p class="text-sm text-gray-600 mt-2">${searchData.passengers} pasajero(s)</p>
-                <p class="text-sm font-semibold text-[#0F172A] mt-2">Total: $${totalPrice.toLocaleString('es-CO')}</p>
+            <div class="summary-total">Total a Pagar</div>
+            <div class="text-4xl font-extrabold text-[#f89f37] mt-2">
+                $<span id="totalPrice">0</span>
             </div>
-            `;
-            document.getElementById('detailsInfo').innerHTML = info;
-            goToSection('flight-details');
-        }
+            <div class="text-right text-xs text-gray-400 mt-1">COP</div>
+        </div>
+    </div>
+</section>
 
-        function restoreHomeBooking() {
-            const homeSearchData = JSON.parse(localStorage.getItem('homeSearchData') || 'null');
-            const homeSelectedFlight = JSON.parse(localStorage.getItem('homeSelectedFlight') || 'null');
-            if (!homeSearchData) return;
+<!-- =============================================
+     PASO 6 — CONFIRMACIÓN DE RESERVA
+============================================= -->
+<section id="confirmation" class="section py-12">
+    <div class="max-w-3xl mx-auto px-4">
+        <div class="bg-white rounded-3xl shadow-xl p-12 text-center">
 
-            searchData = homeSearchData;
-            document.getElementById('origin').value = searchData.origin || '';
-            document.getElementById('destination').value = searchData.destination || '';
-            document.getElementById('departureDate').value = searchData.date || '';
-            document.getElementById('passengers').value = searchData.passengers || 1;
-            document.getElementById('flightClass').value = searchData.class || 'economy';
-
-            const flights = generateFlights(searchData.origin, searchData.destination, searchData.date, searchData.class);
-            renderFlights(flights);
-            goToSection('results');
-
-            if (homeSelectedFlight) {
-                currentFlight = homeSelectedFlight;
-                const totalPrice = currentFlight.price * (searchData.passengers || 1);
-                const info = `
-                <div>
-                    <div class="flex items-center gap-4"><i class="fa-solid fa-plane text-4xl text-[#69d7f7]"></i>
-                    <div><p class="text-sm text-gray-500">Vuelo</p><p class="text-2xl font-bold">${currentFlight.flightNumber}</p></div></div>
-                    <div class="flex items-center gap-4 mt-4"><i class="fa-solid fa-map-marker-alt text-4xl text-[#69d7f7]"></i>
-                    <div><p class="text-sm text-gray-500">Ruta</p><p class="text-2xl font-bold">${currentFlight.origin} → ${currentFlight.destination}</p></div></div>
+            <!-- Ícono de éxito -->
+            <div class="mb-8">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-check text-4xl text-green-600"></i>
                 </div>
-                <div class="bg-blue-50 rounded-2xl p-6">
-                    <p class="text-base text-gray-500">Precio por pasajero</p>
-                    <p class="text-3xl font-bold text-[#f89f37]">$${currentFlight.price.toLocaleString('es-CO')}</p>
-                    <p class="text-sm text-gray-600 mt-2">${searchData.passengers} pasajero(s)</p>
-                    <p class="text-sm font-semibold text-[#0F172A] mt-2">Total: $${totalPrice.toLocaleString('es-CO')}</p>
+                <h2 class="text-4xl font-bold text-slate-900 mb-2">¡Reserva Confirmada!</h2>
+                <p class="text-lg text-gray-600">Tu vuelo ha sido reservado exitosamente</p>
+            </div>
+
+            <!-- Código de reserva -->
+            <div class="bg-[#0a68bd] text-white rounded-3xl p-8 mb-8">
+                <p class="text-xs uppercase tracking-widest opacity-90 mb-3">Código de Reserva</p>
+                <p class="text-5xl font-bold" id="confirmationCode">-</p>
+            </div>
+
+            <!-- Detalles del vuelo y pasajero -->
+            <div class="grid gap-6 lg:grid-cols-2 text-left">
+                <div class="space-y-4 bg-slate-50 rounded-3xl p-6">
+                    <p class="text-sm uppercase tracking-widest text-slate-500">Detalles del Vuelo</p>
+                    <div class="grid gap-3 text-sm text-slate-700">
+                        <div class="flex justify-between"><span class="font-medium">Vuelo</span>  <span id="confFlightNumber">-</span></div>
+                        <div class="flex justify-between"><span class="font-medium">Ruta</span>   <span id="confRoute">-</span></div>
+                        <div class="flex justify-between"><span class="font-medium">Fecha</span>  <span id="confDate">-</span></div>
+                        <div class="flex justify-between"><span class="font-medium">Horario</span><span id="confTime">-</span></div>
+                        <div class="flex justify-between"><span class="font-medium">Asientos</span><span id="confSeats">-</span></div>
+                    </div>
                 </div>
-                `;
-                document.getElementById('detailsInfo').innerHTML = info;
-                goToSection('flight-details');
-                localStorage.removeItem('homeSelectedFlight');
+                <div class="space-y-4 bg-slate-50 rounded-3xl p-6">
+                    <p class="text-sm uppercase tracking-widest text-slate-500">Pasajero</p>
+                    <div class="grid gap-3 text-sm text-slate-700">
+                        <div class="flex justify-between"><span class="font-medium">Nombre</span>       <span id="confPassengerName">-</span></div>
+                        <div class="flex justify-between"><span class="font-medium">Email</span>        <span id="confPassengerEmail">-</span></div>
+                        <div class="flex justify-between"><span class="font-medium">Teléfono</span>     <span id="confPassengerPhone">-</span></div>
+                        <div class="flex justify-between"><span class="font-medium">Total Pagado</span> <span id="confTotalPaid" class="font-semibold text-[#f89f37]">$0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aviso de email -->
+            <div class="mt-8 bg-blue-50 rounded-3xl p-5 mb-8 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-[#0a68bd]">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <p class="text-sm text-slate-700 text-left">
+                    Hemos enviado los detalles a <strong id="confirmEmail">-</strong>.
+                    Revisa tu bandeja de entrada.
+                </p>
+            </div>
+
+            <!-- Botones finales -->
+            <div class="flex flex-col gap-4 sm:flex-row justify-center">
+                <button type="button" onclick="window.location.href='home.html'"
+                    class="w-full sm:w-auto bg-[#0a68bd] hover:bg-[#074e8f] text-white px-10 py-3 rounded-2xl font-semibold">
+                    Hacer otra reserva
+                </button>
+                <button type="button" onclick="window.location.href='dashboard.html'"
+                    class="w-full sm:w-auto bg-[#f89f37] hover:bg-[#e68817] text-white px-10 py-3 rounded-2xl font-semibold">
+                    Ir a Mi Panel
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- =============================================
+     JAVASCRIPT — LÓGICA DEL FLUJO
+============================================= -->
+<script>
+    // ─────────────────────────────────────────
+    // VARIABLES GLOBALES que viajan entre pasos
+    // ─────────────────────────────────────────
+    let vueloActual   = {};   // Vuelo que el usuario seleccionó
+    let asientosElegidos = []; // IDs de los asientos elegidos (ej: ['A1','B1'])
+    let datosBusqueda = {};   // Origen, destino, fecha, pasajeros, clase
+    const nombresRol  = { 'Cliente':'Cliente', 'Asesor de aerolínea':'Asesor', 'Administrativo':'Admin' };
+
+    // ─────────────────────────────────────────
+    // FUNCIÓN CENTRAL DE NAVEGACIÓN
+    // Oculta todas las secciones y muestra solo la pedida
+    // ─────────────────────────────────────────
+    function mostrarSeccion(idSeccion) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(idSeccion).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Si navegamos a asientos, inicializamos el mapa
+        if (idSeccion === 'seats') inicializarAsientos();
+    }
+
+    // ─────────────────────────────────────────
+    // GENERADOR DE VUELOS DE PRUEBA
+    // Crea 3 opciones con precios según la clase elegida
+    // ─────────────────────────────────────────
+    function generarVuelos(origen, destino, fecha, clase) {
+        const precioBase = 450000;
+        const multiplicadores = { economy: 1, premium: 1.5, business: 2.5, first: 4 };
+        const etiquetaClase = { economy:'Económica', premium:'Premium', business:'Business', first:'Primera Clase' };
+        const m = multiplicadores[clase] || 1;
+
+        return [
+            { id:1, flightNumber:'JS-4782', origen, destino, fecha,
+              salida:'08:00', llegada:'14:30', duracion:'6h 30m',
+              avion:'Airbus A320',   clase: etiquetaClase[clase], precio: Math.floor(precioBase * m),           asientosLibres: 15 },
+            { id:2, flightNumber:'JS-9123', origen, destino, fecha,
+              salida:'12:30', llegada:'18:45', duracion:'6h 15m',
+              avion:'Boeing 737 MAX', clase: etiquetaClase[clase], precio: Math.floor((precioBase - 80000) * m), asientosLibres: 8  },
+            { id:3, flightNumber:'JS-5614', origen, destino, fecha,
+              salida:'18:00', llegada:'00:20', duracion:'6h 20m',
+              avion:'Airbus A330',   clase: etiquetaClase[clase], precio: Math.floor((precioBase - 50000) * m), asientosLibres: 20 }
+        ];
+    }
+
+    // ─────────────────────────────────────────
+    // RENDERIZA LAS TARJETAS DE VUELO
+    // ─────────────────────────────────────────
+    function mostrarVuelos(vuelos) {
+        const contenedor = document.getElementById('flightsContainer');
+        contenedor.innerHTML = vuelos.map(v => {
+            const totalPasajeros = v.precio * (datosBusqueda.pasajeros || 1);
+            return `
+            <div class="flight-card bg-white rounded-3xl shadow-lg p-6 cursor-pointer"
+                 onclick="seleccionarVuelo(${v.id})">
+                <div class="flex flex-col md:flex-row justify-between gap-4">
+                    <div>
+                        <p class="font-bold text-xl text-[#0F172A]">${v.flightNumber}</p>
+                        <p class="text-gray-600 text-lg">${v.origen} → ${v.destino}</p>
+                        <p class="text-sm text-gray-500 mt-1">${v.fecha} · ${v.salida} – ${v.llegada}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-bold text-[#f89f37]">$${v.precio.toLocaleString('es-CO')}</p>
+                        <p class="text-sm text-gray-500">por pasajero</p>
+                    </div>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-4 mt-4 text-sm text-gray-600">
+                    <div class="space-y-1">
+                        <p><strong>Clase:</strong> ${v.clase}</p>
+                        <p><strong>Duración:</strong> ${v.duracion}</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p><strong>Avión:</strong> ${v.avion}</p>
+                        <p><strong>Asientos libres:</strong> ${v.asientosLibres}</p>
+                    </div>
+                </div>
+                <div class="mt-4 border-t pt-3 flex justify-between items-center text-sm text-gray-500">
+                    <span>${datosBusqueda.pasajeros || 1} pasajero(s)</span>
+                    <span class="font-semibold text-[#0F172A]">Total: $${totalPasajeros.toLocaleString('es-CO')}</span>
+                </div>
+            </div>`;
+        }).join('');
+
+        // Guardamos la lista para poder recuperar el objeto por ID al hacer clic
+        window._vuelosGenerados = vuelos;
+    }
+
+    // ─────────────────────────────────────────
+    // EL USUARIO ELIGE UN VUELO
+    // ─────────────────────────────────────────
+    function seleccionarVuelo(idVuelo) {
+        // Busca el vuelo en la lista que generamos
+        vueloActual = window._vuelosGenerados.find(v => v.id === idVuelo);
+        localStorage.setItem('selectedFlight', JSON.stringify(vueloActual));
+
+        const total = vueloActual.precio * (datosBusqueda.pasajeros || 1);
+
+        // Rellena la sección de detalles del vuelo
+        document.getElementById('detailsInfo').innerHTML = `
+            <div class="space-y-4">
+                <div class="flex items-center gap-4">
+                    <i class="fa-solid fa-plane text-4xl text-[#0a68bd]"></i>
+                    <div>
+                        <p class="text-sm text-gray-500">Vuelo</p>
+                        <p class="text-2xl font-bold">${vueloActual.flightNumber}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <i class="fa-solid fa-map-marker-alt text-4xl text-[#0a68bd]"></i>
+                    <div>
+                        <p class="text-sm text-gray-500">Ruta</p>
+                        <p class="text-2xl font-bold">${vueloActual.origen} → ${vueloActual.destino}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <i class="fa-solid fa-clock text-4xl text-[#0a68bd]"></i>
+                    <div>
+                        <p class="text-sm text-gray-500">Horario</p>
+                        <p class="text-2xl font-bold">${vueloActual.salida} – ${vueloActual.llegada}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-blue-50 rounded-2xl p-6 flex flex-col justify-center">
+                <p class="text-sm text-gray-500 mb-1">Precio por pasajero</p>
+                <p class="text-3xl font-bold text-[#f89f37]">$${vueloActual.precio.toLocaleString('es-CO')}</p>
+                <p class="text-sm text-gray-600 mt-2">${datosBusqueda.pasajeros} pasajero(s)</p>
+                <p class="text-sm font-semibold text-[#0F172A] mt-1">Total: $${total.toLocaleString('es-CO')}</p>
+            </div>`;
+
+        mostrarSeccion('flight-details');
+    }
+
+    // ─────────────────────────────────────────
+    // INICIALIZAR EL MAPA DE ASIENTOS
+    // ─────────────────────────────────────────
+    function inicializarAsientos() {
+        const totalPasajeros = parseInt(datosBusqueda.pasajeros || 1);
+        document.getElementById('totalPassengers').textContent  = totalPasajeros;
+        document.getElementById('selectedSeatsGoal').textContent = totalPasajeros;
+
+        const filas   = ['A','B','C','D','E','F'];
+        // Asientos que simulamos como ya ocupados
+        const ocupados = ['C2','C5','C8','D12','D15'];
+        let html = '';
+
+        for (let fila = 1; fila <= 20; fila++) {
+            // Columnas izquierda (A, B, C)
+            for (let col = 0; col < 3; col++) {
+                const id = filas[col] + fila;
+                const ocupado = ocupados.includes(id);
+                html += `<button type="button" class="seat ${ocupado ? 'occupied' : 'available'}"
+                            data-seat="${id}" ${ocupado ? 'disabled' : `onclick="elegirAsiento(this)"`}>${id}</button>`;
+            }
+            // Número de fila en el centro
+            html += `<span class="row-number">${fila}</span>`;
+            // Columnas derecha (D, E, F)
+            for (let col = 3; col < 6; col++) {
+                const id = filas[col] + fila;
+                const ocupado = ocupados.includes(id);
+                html += `<button type="button" class="seat ${ocupado ? 'occupied' : 'available'}"
+                            data-seat="${id}" ${ocupado ? 'disabled' : `onclick="elegirAsiento(this)"`}>${id}</button>`;
             }
         }
 
-        // ===== ASIENTOS =====
-        function initSeats() {
-            const total = parseInt(searchData.passengers || 1);
-            document.getElementById('totalPassengers').textContent = total;
-            const goalEl = document.getElementById('selectedSeatsGoal');
-            if (goalEl) { goalEl.textContent = total; }
-            const seatsHTML = [];
-            const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
-            const occupied = [2, 5, 8, 12, 15];
+        document.getElementById('seatsGrid').innerHTML = html;
 
-            for(let i = 1; i <= 20; i++) {
-                // Columnas A, B, C (izquierda)
-                for(let j = 0; j < 3; j++) {
-                    const seatId = rows[j] + i;
-                    const isOccupied = occupied.includes(i) && j === 2;
-                    seatsHTML.push(`<button type="button" class="seat ${isOccupied ? 'occupied' : 'available'}" data-seat="${seatId}" onclick="selectSeat(this)">${seatId}</button>`);
-                }
-                // Número de fila (centro)
-                seatsHTML.push(`<span class="row-number">${i}</span>`);
-                // Columnas D, E, F (derecha)
-                for(let j = 3; j < rows.length; j++) {
-                    const seatId = rows[j] + i;
-                    const isOccupied = occupied.includes(i) && j === 2;
-                    seatsHTML.push(`<button type="button" class="seat ${isOccupied ? 'occupied' : 'available'}" data-seat="${seatId}" onclick="selectSeat(this)">${seatId}</button>`);
-                }
+        // Restaura selección previa si el usuario volvió atrás
+        asientosElegidos.forEach(id => {
+            const btn = document.querySelector(`#seatsGrid [data-seat="${id}"]`);
+            if (btn) btn.classList.replace('available', 'selected');
+        });
+        document.getElementById('selectedSeatsCount').textContent = asientosElegidos.length;
+    }
+
+    // ─────────────────────────────────────────
+    // CLICK EN UN ASIENTO
+    // ─────────────────────────────────────────
+    function elegirAsiento(btn) {
+        const total = parseInt(document.getElementById('totalPassengers').textContent);
+        const id    = btn.dataset.seat;
+
+        if (btn.classList.contains('selected')) {
+            // Deseleccionar
+            btn.classList.replace('selected', 'available');
+            asientosElegidos = asientosElegidos.filter(s => s !== id);
+        } else {
+            if (asientosElegidos.length >= total) {
+                alert(`Solo puedes elegir ${total} asiento(s) para este viaje.`);
+                return;
             }
-            document.getElementById('seatsGrid').innerHTML = seatsHTML.join('');
-            selectedSeats.forEach(seatId => {
-                const btn = document.querySelector(`#seatsGrid button[data-seat='${seatId}']`);
-                if (btn && !btn.classList.contains('occupied')) {
-                    btn.classList.add('selected');
-                }
+            btn.classList.replace('available', 'selected');
+            asientosElegidos.push(id);
+        }
+        document.getElementById('selectedSeatsCount').textContent = asientosElegidos.length;
+    }
+
+    // ─────────────────────────────────────────
+    // VALIDAR Y PASAR A DATOS DEL PASAJERO
+    // ─────────────────────────────────────────
+    function continuarAPasajero() {
+        const total = parseInt(document.getElementById('totalPassengers').textContent);
+        if (asientosElegidos.length !== total) {
+            alert(`Por favor selecciona exactamente ${total} asiento(s).`);
+            return;
+        }
+        localStorage.setItem('selectedSeats', JSON.stringify(asientosElegidos));
+        mostrarSeccion('passenger');
+    }
+
+    // ─────────────────────────────────────────
+    // GUARDAR DATOS DEL PASAJERO Y PASAR A PAGO
+    // ─────────────────────────────────────────
+    function guardarPasajero(e) {
+        e.preventDefault();
+        const pasajero = {
+            nombre:    document.getElementById('passengerName').value,
+            email:     document.getElementById('passengerEmail').value,
+            telefono:  document.getElementById('passengerPhone').value,
+            documento: document.getElementById('passengerDocument').value
+        };
+        localStorage.setItem('passengerData', JSON.stringify(pasajero));
+
+        // Llena el resumen lateral de la pantalla de pago
+        const total = vueloActual.precio * datosBusqueda.pasajeros;
+        document.getElementById('summaryFlight').textContent     = vueloActual.flightNumber;
+        document.getElementById('summaryRoute').textContent      = `${vueloActual.origen} → ${vueloActual.destino}`;
+        document.getElementById('summaryDate').textContent       = vueloActual.fecha || '-';
+        document.getElementById('summaryTime').textContent       = `${vueloActual.salida} – ${vueloActual.llegada}`;
+        document.getElementById('summaryPassengers').textContent = datosBusqueda.pasajeros;
+        document.getElementById('summarySeats').textContent      = asientosElegidos.join(', ');
+        document.getElementById('totalPrice').textContent        = total.toLocaleString('es-CO');
+
+        mostrarSeccion('payment');
+    }
+
+    // ─────────────────────────────────────────
+    // PROCESAR PAGO (validaciones básicas)
+    // ─────────────────────────────────────────
+    function procesarPago(e) {
+        e.preventDefault();
+
+        const numero  = document.getElementById('cardNumber').value.replace(/\s+/g,'');
+        const nombre  = document.getElementById('cardName').value.trim();
+        const expiry  = document.getElementById('cardExpiry').value.trim();
+        const cvv     = document.getElementById('cardCvv').value.trim();
+
+        // Validaciones simples de formato
+        if (!/^\d{16}$/.test(numero))                            { alert('El número de tarjeta debe tener 16 dígitos.'); return; }
+        if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]{4,}$/.test(nombre))     { alert('Ingresa el nombre completo del titular.'); return; }
+        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry))           { alert('La fecha debe tener formato MM/AA.'); return; }
+        if (!/^\d{3}$/.test(cvv))                                { alert('El CVV debe tener 3 dígitos.'); return; }
+
+        // Genera un código de reserva único
+        const codigo = 'JET' + Math.random().toString().slice(2, 8).toUpperCase();
+        const pasajero = JSON.parse(localStorage.getItem('passengerData') || '{}');
+        const total    = vueloActual.precio * datosBusqueda.pasajeros;
+
+        // Llena la pantalla de confirmación
+        document.getElementById('confirmationCode').textContent  = codigo;
+        document.getElementById('confirmEmail').textContent      = pasajero.email || '-';
+        document.getElementById('confFlightNumber').textContent  = vueloActual.flightNumber || '-';
+        document.getElementById('confRoute').textContent         = `${vueloActual.origen} → ${vueloActual.destino}`;
+        document.getElementById('confDate').textContent          = vueloActual.fecha || '-';
+        document.getElementById('confTime').textContent          = `${vueloActual.salida} – ${vueloActual.llegada}`;
+        document.getElementById('confSeats').textContent         = asientosElegidos.join(', ');
+        document.getElementById('confPassengerName').textContent = pasajero.nombre   || '-';
+        document.getElementById('confPassengerEmail').textContent= pasajero.email    || '-';
+        document.getElementById('confPassengerPhone').textContent= pasajero.telefono || '-';
+        document.getElementById('confTotalPaid').textContent     = `$${total.toLocaleString('es-CO')}`;
+
+        // Guarda la reserva en el dashboard
+        guardarReservaEnDashboard({
+            id:        vueloActual.flightNumber || codigo,
+            route:     `${vueloActual.origen} → ${vueloActual.destino}`,
+            date:      vueloActual.fecha || '',
+            time:      `${vueloActual.salida} – ${vueloActual.llegada}`,
+            seat:      asientosElegidos.join(', '),
+            status:    'Confirmado',
+            passengers: datosBusqueda.pasajeros || 1,
+            price:     `$${total.toLocaleString('es-CO')}`
+        });
+
+        mostrarSeccion('confirmation');
+    }
+
+    // ─────────────────────────────────────────
+    // GUARDAR RESERVA EN LOCALSTORAGE (para el dashboard)
+    // ─────────────────────────────────────────
+    function guardarReservaEnDashboard(reserva) {
+        try {
+            const guardadas = JSON.parse(localStorage.getItem('jetskyReservations') || '[]');
+            guardadas.unshift(reserva);
+            localStorage.setItem('jetskyReservations', JSON.stringify(guardadas));
+        } catch (err) {
+            console.warn('No se pudo guardar la reserva:', err);
+        }
+    }
+
+    // ─────────────────────────────────────────
+    // LEER LOS DATOS QUE ENVIÓ home.html
+    // (se ejecuta al cargar la página)
+    // ─────────────────────────────────────────
+    function cargarDesdePaginaPrincipal() {
+        const datosGuardados = JSON.parse(localStorage.getItem('homeSearchData') || 'null');
+        if (!datosGuardados) {
+            // Si no hay datos, volvemos a home
+            window.location.href = 'home.html';
+            return;
+        }
+
+        // Guardamos los datos globalmente
+        datosBusqueda = {
+            origen:    datosGuardados.origin      || '',
+            destino:   datosGuardados.destination || '',
+            fecha:     datosGuardados.date        || '',
+            pasajeros: datosGuardados.passengers  || 1,
+            clase:     datosGuardados.class       || 'economy'
+        };
+
+        // Muestra un resumen encima de los resultados
+        document.getElementById('searchSummary').textContent =
+            `${datosBusqueda.origen} → ${datosBusqueda.destino}  ·  ${datosBusqueda.fecha}  ·  ${datosBusqueda.pasajeros} pasajero(s)`;
+
+        // Genera y muestra los vuelos
+        const vuelos = generarVuelos(datosBusqueda.origen, datosBusqueda.destino, datosBusqueda.fecha, datosBusqueda.clase);
+        mostrarVuelos(vuelos);
+
+        // Limpia el localStorage para no reutilizar datos viejos
+        localStorage.removeItem('homeSearchData');
+        localStorage.removeItem('homeSelectedFlight');
+    }
+
+    // ─────────────────────────────────────────
+    // DROPDOWN DE ROLES
+    // ─────────────────────────────────────────
+    document.getElementById('profileToggle').addEventListener('click', () => {
+        const dd = document.getElementById('roleDropdown');
+        dd.classList.toggle('hidden');
+        document.getElementById('profileToggle').setAttribute('aria-expanded', String(!dd.classList.contains('hidden')));
+    });
+
+    document.querySelectorAll('.role-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const rol = btn.dataset.role;
+            document.getElementById('activeRoleLabel').textContent = nombresRol[rol] || rol;
+            document.querySelectorAll('.role-option').forEach(b => {
+                b.classList.remove('role-option-active');
+                b.querySelector('.role-badge')?.remove();
             });
-            document.getElementById('selectedSeatsCount').textContent = selectedSeats.length;
-        }
-
-        function selectSeat(btn) {
-            const total = parseInt(document.getElementById('totalPassengers').textContent);
-            if (btn.classList.contains('occupied')) return;
-
-            const seatId = btn.dataset.seat;
-            if (btn.classList.contains('selected')) {
-                btn.classList.remove('selected');
-                selectedSeats = selectedSeats.filter(s => s !== seatId);
-            } else {
-                if (selectedSeats.length >= total) {
-                    alert(`Solo puedes seleccionar ${total} asiento(s)`);
-                    return;
-                }
-                btn.classList.add('selected');
-                selectedSeats.push(seatId);
-            }
-
-            document.getElementById('selectedSeatsCount').textContent = selectedSeats.length;
-        }
-
-        function continueToPassenger() {
-            const total = parseInt(document.getElementById('totalPassengers').textContent);
-            if(selectedSeats.length !== total) {
-                alert('Selecciona todos los asientos');
-                return;
-            }
-            localStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
-            goToSection('passenger');
-        }
-
-        // ===== PASAJERO =====
-        function savePassenger(e) {
-            e.preventDefault();
-            const passenger = {
-                name: document.getElementById('passengerName').value,
-                email: document.getElementById('passengerEmail').value,
-                phone: document.getElementById('passengerPhone').value,
-                document: document.getElementById('passengerDocument').value
-            };
-            localStorage.setItem('passengerData', JSON.stringify(passenger));
-
-            const total = currentFlight.price * searchData.passengers;
-            document.getElementById('summaryFlight').textContent = currentFlight.flightNumber;
-            document.getElementById('summaryRoute').textContent = `${currentFlight.origin} → ${currentFlight.destination}`;
-            document.getElementById('summaryDate').textContent = currentFlight.date || '-';
-            document.getElementById('summaryTime').textContent = `${currentFlight.departureTime} - ${currentFlight.arrivalTime}`;
-            document.getElementById('summaryPassengers').textContent = searchData.passengers;
-            document.getElementById('summarySeats').textContent = selectedSeats.join(', ');
-            document.getElementById('totalPrice').textContent = total.toLocaleString('es-CO');
-            goToSection('payment');
-        }
-
-        // ===== PAGO =====
-        function processPayment(e) {
-            e.preventDefault();
-            const cardNumber = document.getElementById('cardNumber').value.replace(/\s+/g, '');
-            const cardName = document.getElementById('cardName').value.trim();
-            const cardExpiry = document.getElementById('cardExpiry').value.trim();
-            const cardCvv = document.getElementById('cardCvv').value.trim();
-
-            const validCard = /^\d{16}$/.test(cardNumber);
-            const validName = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]+$/.test(cardName) && cardName.length >= 4;
-            const validExpiry = /^(0[1-9]|1[0-2])\/(\d{2})$/.test(cardExpiry);
-            const validCvv = /^\d{3}$/.test(cardCvv);
-
-            if (!validCard || !validName || !validExpiry || !validCvv) {
-                alert('Por favor ingresa datos de pago válidos.');
-                return;
-            }
-
-            const confirmCode = 'JET' + Math.random().toString().slice(2, 8);
-            const passenger = JSON.parse(localStorage.getItem('passengerData') || '{}');
-
-            document.getElementById('confirmationCode').textContent = confirmCode;
-            document.getElementById('confirmEmail').textContent = passenger.email || '-';
-            document.getElementById('detailFlightNumber').textContent = currentFlight.flightNumber || '-';
-            document.getElementById('detailRoute').textContent = `${currentFlight.origin} → ${currentFlight.destination}` || '-';
-            document.getElementById('detailDate').textContent = currentFlight.date || '-';
-            document.getElementById('detailTime').textContent = `${currentFlight.departureTime} - ${currentFlight.arrivalTime}` || '-';
-            document.getElementById('detailSeats').textContent = selectedSeats.join(', ') || '-';
-            document.getElementById('detailPassengerName').textContent = passenger.name || '-';
-            document.getElementById('detailPassengerEmail').textContent = passenger.email || '-';
-            document.getElementById('detailPassengerPhone').textContent = passenger.phone || '-';
-            document.getElementById('detailTotalPaid').textContent = `$${(currentFlight.price * searchData.passengers).toLocaleString('es-CO')}`;
-
-            saveDashboardReservation({
-                id: currentFlight.flightNumber || confirmCode,
-                route: `${currentFlight.origin} → ${currentFlight.destination}`,
-                date: currentFlight.date || '',
-                time: `${currentFlight.departureTime} - ${currentFlight.arrivalTime}`,
-                seat: selectedSeats.join(', ') || '-',
-                status: 'Confirmado',
-                passengers: searchData.passengers || 1,
-                class: (searchData.class === 'economy' && 'Económica') || (searchData.class === 'premium' && 'Premium') || (searchData.class === 'business' && 'Business') || (searchData.class === 'first' && 'Primera Clase') || searchData.class,
-                airport: `${currentFlight.origin} - Aeropuerto`,
-                price: `$${(currentFlight.price * searchData.passengers).toLocaleString('es-CO')}`,
-                details: 'Reserva confirmada por JetSky. Disfruta tu viaje.'
-            });
-
-            goToSection('confirmation');
-        }
-
-        function saveDashboardReservation(reservation) {
-            try {
-                const key = 'jetskyReservations';
-                const stored = JSON.parse(localStorage.getItem(key) || 'null') || [];
-                stored.unshift(reservation);
-                localStorage.setItem(key, JSON.stringify(stored));
-            } catch (error) {
-                console.warn('No se pudo guardar la reserva en localStorage', error);
-            }
-        }
-
-        function startNewReservation() {
-            localStorage.removeItem('selectedFlight');
-            localStorage.removeItem('selectedSeats');
-            localStorage.removeItem('passengerData');
-            localStorage.removeItem('searchData');
-            localStorage.removeItem('homeSearchData');
-            localStorage.removeItem('homeSelectedFlight');
-            selectedSeats = [];
-            searchData = {};
-            currentFlight = {};
-            const searchForm = document.getElementById('searchForm');
-            if (searchForm) { searchForm.reset(); }
-            goToSection('home');
-        }
-
-        // ===== REGISTRO =====
-        function registerUser(e) {
-            e.preventDefault();
-            const pwd = document.getElementById('regPassword').value;
-            const pwdConfirm = document.getElementById('regPasswordConfirm').value;
-            if(pwd !== pwdConfirm || pwd.length < 8) {
-                alert('Las contraseñas no coinciden o son muy cortas');
-                return;
-            }
-
-            const profile = {
-                nombreCompleto: document.getElementById('regFirstName').value + ' ' + document.getElementById('regLastName').value,
-                email: document.getElementById('regEmail').value,
-                phone: document.getElementById('regPhone').value
-            };
-            localStorage.setItem('jetskyUserProfile', JSON.stringify(profile));
-            alert('¡Registro exitoso!');
-            goToSection('home');
-        }
-
-        // ===== ROLES Y PERFIL =====
-        document.getElementById('profileToggle').addEventListener('click', () => {
-            const isOpen = document.getElementById('roleDropdown').classList.contains('hidden');
-            document.getElementById('roleDropdown').classList.toggle('hidden', !isOpen);
+            btn.classList.add('role-option-active');
+            const badge = document.createElement('span');
+            badge.className = 'role-badge';
+            badge.textContent = 'Activo';
+            btn.appendChild(badge);
+            document.getElementById('roleDropdown').classList.add('hidden');
         });
+    });
 
-        document.querySelectorAll('.role-option').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const role = btn.dataset.role;
-                document.getElementById('activeRoleLabel').textContent = roleNames[role];
-                document.querySelectorAll('.role-option').forEach(b => b.classList.remove('role-option-active'));
-                document.querySelectorAll('.role-badge').forEach(b => b.remove());
-                btn.classList.add('role-option-active');
-                const badge = document.createElement('span');
-                badge.className = 'role-badge';
-                badge.textContent = 'Activo';
-                btn.appendChild(badge);
-                document.getElementById('roleDropdown').classList.add('hidden');
-            });
-        });
+    // ─────────────────────────────────────────
+    // MODAL DE CUENTA
+    // ─────────────────────────────────────────
+    document.getElementById('accountToggle').addEventListener('click', () => {
+        const perfil = JSON.parse(localStorage.getItem('jetskyUserProfile') || 'null');
+        if (!perfil) { window.location.href = 'register.html'; return; }
+        document.getElementById('accountName').textContent  = perfil.nombreCompleto || '-';
+        document.getElementById('accountEmail').textContent = perfil.email || '-';
+        document.getElementById('accountPhone').textContent = perfil.phone || '-';
+        document.getElementById('accountRole').textContent  = document.getElementById('activeRoleLabel').textContent;
+        document.getElementById('accountModalOverlay').classList.remove('hidden');
+    });
 
-        function loadAccountInfo() {
-            const profile = JSON.parse(localStorage.getItem('jetskyUserProfile') || 'null');
-            if(!profile) {
-                window.location.href = 'register.html';
-                return;
-            }
-            document.getElementById('accountName').textContent = profile.nombreCompleto || '-';
-            document.getElementById('accountEmail').textContent = profile.email || '-';
-            document.getElementById('accountPhone').textContent = profile.phone || '-';
-            document.getElementById('accountRole').textContent = document.getElementById('activeRoleLabel').textContent;
-            document.getElementById('accountModalOverlay').classList.remove('hidden');
-        }
+    function closeAccountModal() {
+        document.getElementById('accountModalOverlay').classList.add('hidden');
+    }
 
-        function closeAccountModal() { document.getElementById('accountModalOverlay').classList.add('hidden'); }
-        document.getElementById('accountToggle').addEventListener('click', loadAccountInfo);
+    // Cierra dropdown y modal al hacer clic fuera
+    document.addEventListener('click', e => {
+        if (!e.target.closest('#profileToggle') && !e.target.closest('#roleDropdown'))
+            document.getElementById('roleDropdown').classList.add('hidden');
+        if (!e.target.closest('#accountToggle') && !e.target.closest('#accountModalOverlay'))
+            document.getElementById('accountModalOverlay').classList.add('hidden');
+    });
 
-        // ===== UTILIDADES =====
-        function setTripType(type) {
-            tripType = type;
-            const ret = document.getElementById('returnContainer');
-            ret.style.display = type === 'oneway' ? 'none' : 'block';
-        }
+    // ─────────────────────────────────────────
+    // ARRANQUE — se ejecuta cuando la página carga
+    // ─────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', cargarDesdePaginaPrincipal);
+</script>
 
-        function filterCatalogSection(id) {
-            console.log('Catálogo:', id); // Placeholder para futuro
-        }
-
-        // ===== INICIALIZACIÓN =====
-        document.addEventListener('DOMContentLoaded', () => {
-            setTripType('roundtrip');
-            restoreHomeBooking();
-        });
-
-        // Cerrar selectors con clic fuera
-        document.addEventListener('click', (e) => {
-            if(!e.target.closest('#profileToggle') && !e.target.closest('#roleDropdown')) {
-                document.getElementById('roleDropdown').classList.add('hidden');
-            }
-            if(!e.target.closest('#accountToggle') && !e.target.closest('#accountModalOverlay')) {
-                document.getElementById('accountModalOverlay').classList.add('hidden');
-            }
-        });
-    </script>
 </body>
 </html>
