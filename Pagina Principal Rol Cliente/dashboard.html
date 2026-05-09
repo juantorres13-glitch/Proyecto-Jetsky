@@ -3,527 +3,701 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetSky - Sección de Usuario</title>
+    <title>JetSky - Mi Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --primary: #F7931E; }
-        .active {
-            color: #F7931E;
-            border-bottom: 2px solid #F7931E;
+        /* =============================================
+           COLORES PRINCIPALES JETSKY
+           Azul:   #0a68bd  (hover: #074e8f)
+           Naranja:#f97316  (hover: #ea580c)
+        ============================================= */
+
+        /* Tab activo: línea naranja abajo + texto naranja */
+        .tab-btn.active {
+            color: #f97316;
+            border-bottom: 2px solid #f97316;
         }
-        .search-card {
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid rgba(103, 232, 249, 0.45);
-            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+
+        /* Dropdown de roles (igual que las otras páginas) */
+        .role-dropdown {
+            position: absolute; right: 0; margin-top: .75rem;
+            width: 14rem; background: white;
+            border: 1px solid #e2e8f0; border-radius: 1rem;
+            box-shadow: 0 20px 50px rgba(15,23,42,.12); z-index: 50;
         }
-        .dashboard-input {
-            width: 100%;
-            height: 3rem;
-            padding: 0 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 1rem;
-            background: #ffffff;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        .role-option {
+            width: 100%; text-align: left; padding: .85rem 1rem;
+            font-size: .95rem; color: #0f172a; background: transparent;
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; gap: .5rem;
         }
-        .dashboard-input:focus {
-            outline: none;
-            border-color: #F7931E;
-            box-shadow: 0 0 0 3px rgba(247, 147, 30, 0.15);
+        .role-option:hover, .role-option-active { background: #eff6ff; }
+        .role-badge {
+            background: #dbeafe; color: #1d4ed8;
+            font-size: .75rem; font-weight: 700;
+            padding: .25rem .5rem; border-radius: 9999px;
+        }
+
+        /* Stat cards superiores */
+        .stat-card {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(10,104,189,.08);
+            border: 1px solid #e2e8f0;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(10,104,189,.14);
+        }
+
+        /* Contenedor de tabs */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Input del perfil */
+        .profile-input {
+            width: 100%; border: 1px solid #d1d5db;
+            border-radius: .75rem; padding: .6rem 1rem; font-size: .9rem;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .profile-input:focus {
+            outline: none; border-color: #0a68bd;
+            box-shadow: 0 0 0 3px rgba(10,104,189,.15);
+        }
+
+        /* Tarjetas de reserva */
+        .reservation-card {
+            border: 1px solid #e2e8f0; border-radius: 1.25rem;
+            padding: 1.5rem; background: white;
+            transition: box-shadow .2s;
+        }
+        .reservation-card:hover { box-shadow: 0 6px 24px rgba(10,104,189,.1); }
+
+        /* Barra de progreso de puntos */
+        .points-bar {
+            height: 10px; border-radius: 9999px;
+            background: #e0f2fe; overflow: hidden;
+        }
+        .points-fill {
+            height: 100%; border-radius: 9999px;
+            background: linear-gradient(90deg, #0a68bd, #38bdf8);
+            transition: width .6s ease;
         }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
 
-    <header class="bg-white shadow-sm">
-        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <i class="fas fa-plane text-[#0a68bd] text-2xl"></i>
-                <span class="text-2xl font-bold text-[#0a68bd]">JetSky</span>
-            </div>
-            <div class="hidden md:flex items-center gap-6">
-                <button onclick="window.location.href='home.html'" class="bg-gray-500 text-white px-6 py-3 rounded-xl">Inicio</button>
-                <button onclick="window.location.href='dashboard.html'" class="bg-[#f97316] text-white px-6 py-3 rounded-xl hover:bg-[#ea580c] transition">Mi Cuenta</button>
-                <button onclick="logout()" class="bg-red-500 text-white px-6 py-3 rounded-xl hover:bg-red-600 transition">Cerrar Sesión</button>
-            </div>
-        </nav>
-    </header>
+<!-- =============================================
+     HEADER — igual al resto del sitio
+============================================= -->
+<header class="bg-white shadow-sm sticky top-0 z-40">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
 
-    <div class="max-w-7xl mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8 text-[#0F172A]">Sección de Usuario</h1>
+        <!-- Logo → vuelve a home -->
+        <a href="home.html" class="flex items-center gap-2">
+            <i class="fas fa-plane text-[#0a68bd] text-2xl"></i>
+            <span class="text-2xl font-bold text-[#0a68bd]">JetSky</span>
+        </a>
 
-        <!-- Tabs -->
-        <div class="flex border-b mb-8">
-            <button onclick="switchTab(0)" class="tab-btn active px-8 py-4 font-medium">Buscar Vuelos</button>
-            <button onclick="switchTab(1)" class="tab-btn px-8 py-4 font-medium">Mis Reservas</button>
-            <button onclick="switchTab(2)" class="tab-btn px-8 py-4 font-medium">Historial</button>
-            <button onclick="switchTab(3)" class="tab-btn px-8 py-4 font-medium">Mi Perfil</button>
+        <!-- Links de navegación — mismos estilos que home.html -->
+        <div class="hidden md:flex items-center gap-10">
+            <a href="hoteles.html"  class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium transition-colors">
+                <i class="fas fa-hotel text-base"></i> Alojamiento
+            </a>
+            <a href="paquetes.html" class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium transition-colors">
+                <i class="fas fa-suitcase"></i> Paquetes
+            </a>
+            <a href="ofertas.html"  class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium transition-colors">
+                <i class="fas fa-fire"></i> Ofertas
+            </a>
         </div>
 
-        <!-- CONTENIDO TABS -->
+        <!-- Botones derecha — idénticos a home.html -->
+        <div class="flex items-center gap-4">
 
-        <!-- TAB 0: BUSCAR VUELOS -->
-        <div class="tab-content">
-        <div class="search-card max-w-5xl rounded-3xl p-8">
-            <h2 class="text-2xl font-bold text-[#0F172A]">Buscar Vuelos</h2>
-            <p class="text-gray-500 mb-6">Encuentra el vuelo perfecto para tu proximo viaje</p>
-
-            <div class="flex flex-wrap gap-4 mb-6">
-                <button type="button" onclick="setTripType('roundtrip')" id="btn-round" class="px-6 py-3 rounded-2xl font-semibold bg-[#69d7f7] text-white">Ida y vuelta</button>
-                <button type="button" onclick="setTripType('oneway')" id="btn-oneway" class="px-6 py-3 rounded-2xl font-semibold bg-gray-100 text-gray-600">Solo ida</button>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div>
-                    <label class="text-sm font-medium block mb-1">Origen</label>
-                    <input class="dashboard-input" placeholder="Ciudad de origen">
-                </div>
-                <div>
-                    <label class="text-sm font-medium block mb-1">Destino</label>
-                    <input class="dashboard-input" placeholder="Ciudad de destino">
-                </div>
-                <div>
-                    <label class="text-sm font-medium block mb-1">Ida</label>
-                    <input type="date" class="dashboard-input">
-                </div>
-                <div id="returnContainer">
-                    <label class="text-sm font-medium block mb-1">Vuelta</label>
-                    <input type="date" class="dashboard-input">
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-4 mt-6">
-                <div>
-                    <label class="text-sm font-medium block mb-1">Pasajeros</label>
-                    <select class="dashboard-input">
-                        <option>1 Pasajero</option>
-                        <option>2 Pasajeros</option>
-                        <option>3 Pasajeros</option>
-                        <option>4 Pasajeros</option>
-                        <option>5+ Pasajeros</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-sm font-medium block mb-1">Clase</label>
-                    <select class="dashboard-input">
-                        <option>Economica</option>
-                        <option>Premium</option>
-                        <option>Business</option>
-                        <option>Primera Clase</option>
-                    </select>
-                </div>
-                <div class="flex items-end">
-                    <button class="w-full h-12 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-2xl flex items-center justify-center gap-2 font-semibold transition-colors">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        Buscar
+            <!-- Selector de rol -->
+            <div class="relative">
+                <button id="profileToggle" type="button"
+                    class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium flex items-center gap-2 hover:border-[#0a68bd] focus:outline-none focus:ring-2 focus:ring-[#0a68bd]"
+                    aria-expanded="false" aria-haspopup="menu">
+                    <span id="activeRoleLabel" class="font-semibold">Cliente</span>
+                    <i class="fa-solid fa-chevron-down text-sm"></i>
+                </button>
+                <div id="roleDropdown" class="role-dropdown hidden">
+                    <button class="role-option role-option-active" data-role="Cliente">
+                        <span>Cliente</span><span class="role-badge">Activo</span>
                     </button>
+                    <button class="role-option" data-role="Asesor de aerolínea"><span>Asesor</span></button>
+                    <button class="role-option" data-role="Administrativo"><span>Admin</span></button>
                 </div>
             </div>
-        </div>
-        </div>
 
-        <!-- TAB 1: MIS RESERVAS -->
-        <div class="tab-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow">
-                <h2 class="text-xl font-bold">Mis Reservas</h2>
-                <p class="text-gray-500 mb-6">Gestiona tus reservas de vuelos activas.</p>
-                <div id="reservationList" class="space-y-4"></div>
-            </div>
-        </div>
-
-        <!-- TAB 2: HISTORIAL -->
-        <div class="tab-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow">
-                <h2 class="text-xl font-bold">Historial de Vuelos</h2>
-                <p class="text-gray-500 mb-6">Revisa todos tus vuelos anteriores.</p>
-                <div id="historyList" class="space-y-4"></div>
-            </div>
-        </div>
-
-        <!-- CANCELAR RESERVA MODAL -->
-        <div id="cancelModal" class="fixed inset-0 hidden items-center justify-center bg-slate-900/50 p-6 z-50">
-            <div class="max-w-xl w-full bg-white rounded-3xl p-8 shadow-2xl">
-                <h3 class="text-xl font-bold mb-3">¿Cancelar Reserva?</h3>
-                <p class="text-gray-600 mb-6">Esta acción no se puede deshacer. Tu reserva será cancelada y recibirás un reembolso según nuestras políticas.</p>
-                <div class="flex flex-col sm:flex-row gap-3 justify-end">
-                    <button type="button" onclick="closeCancelModal()" class="px-5 py-3 rounded-2xl border border-slate-300 text-slate-700">No, mantener reserva</button>
-                    <button type="button" id="confirmCancelBtn" onclick="confirmCancel()" class="px-5 py-3 rounded-2xl bg-[#f89f37] text-white hover:bg-[#e68817]">Sí, cancelar reserva</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 3: PERFIL -->
-        <div id="tab-perfil" class="tab-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-user text-3xl text-[#f97316]"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xs font-medium text-gray-700 mb-1">Mi Perfil</h2>
-                        <p class="text-sm text-gray-500">Actualiza tus datos personales</p>
-                    </div>
-                </div>
-
-           <form id="formPerfil" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-            <!-- Nombre -->
-            <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">
-                <i class="fas fa-user mr-1 text-[#f97316]"></i> Nombre completo
-                </label>
-                <input type="text" id="perfil-nombre" 
-                class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm
-                        focus:outline-none focus:ring-2 focus:ring-orange-500">
-            </div>
-
-            <!-- Correo -->
-            <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">
-                <i class="fas fa-envelope mr-1 text-[#f97316]"></i> Correo electrónico
-                </label>
-                <input type="email" id="perfil-correo" 
-                class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm
-                        focus:outline-none focus:ring-2 focus:ring-orange-500">
-            </div>
-
-            <!-- Teléfono -->
-            <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">
-                <i class="fas fa-phone mr-1 text-[#f97316]"></i> Teléfono
-                </label>
-                <input type="tel" id="perfil-tel" 
-                class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm
-                        focus:outline-none focus:ring-2 focus:ring-orange-500">
-            </div>
-
-            <!-- Fecha -->
-            <div>
-                <label class="block text-xs font-medium text-gray-700 mb-1">
-                <i class="fas fa-calendar-alt mr-1 text-[#f97316]"></i> Fecha de nacimiento
-                </label>
-                <input type="date" id="perfil-fecha"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm
-                                focus:outline-none focus:ring-2 focus:ring-orange-500">
-            </div>
-
-            <!-- Botón -->
-            <button type="button" onclick="guardarPerfil()"
-                class="md:col-span-2 w-full bg-orange-500 hover:bg-orange-600
-                    text-white font-medium py-2 rounded-lg transition
-                    flex items-center justify-center gap-2 mt-2">
-                <i class="fas fa-save"></i> Guardar Cambios
+            <!-- Botón Cuenta (igual que home) -->
+            <button onclick="window.location.href='home.html'"
+                class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#0a68bd] focus:outline-none focus:ring-2 focus:ring-[#0a68bd]">
+                Inicio
             </button>
 
-            </form>
-     </div>
+            <!-- Registrarse / Salir — mismo estilo naranja que home -->
+            <button onclick="logout()"
+                class="bg-[#f97316] hover:bg-[#ea580c] text-white px-6 py-3 rounded-xl font-medium">
+                Cerrar Sesión
+            </button>
+        </div>
+    </nav>
+</header>
 
-        <!-- Contenido de cada tab (se muestra/oculta con JS) -->
-        <!-- Tab 0: Buscar vuelos (igual que en home pero más compacto) -->
-        <!-- Tab 1: Mis Reservas (cards estáticas + botones) -->
-        <!-- Tab 2: Historial -->
-        <!-- Tab 3: Formulario perfil -->
 
-        <!-- Dialogs (modales) se implementan con divs + display none / flex -->
+<!-- =============================================
+     CONTENIDO PRINCIPAL DEL PANEL
+============================================= -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+    <!-- Título del panel -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-[#0F172A]">Mi Panel</h1>
+        <p class="text-gray-500 mt-1">Gestiona tus reservas y datos personales.</p>
     </div>
 
-  
-    <script>
-  const STORAGE_KEY = 'jetskyUserProfile';
-  const RESERVATIONS_KEY = 'jetskyReservations';
-  const HISTORY_KEY = 'jetskyHistory';
+    <!-- ── TARJETAS DE ESTADÍSTICAS ── -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
 
-  const defaultReservations = [
-    {
-      id: 'JS-1234',
-      route: 'Bogotá → París',
-      date: '2026-03-15',
-      time: '10:30',
-      seat: '12A',
-      status: 'Confirmado',
-      passengers: '1',
-      class: 'Economica',
-      airport: 'BOG - Aeropuerto El Dorado',
-      price: '$420.000 COP',
-      details: 'Tarifa flexible con cambios gratis dentro de la misma ruta.'
-    },
-    {
-      id: 'JS-5678',
-      route: 'Cali → Cartagena',
-      date: '2026-04-20',
-      time: '14:45',
-      seat: '8C',
-      status: 'Confirmado',
-      passengers: '2',
-      class: 'Premium',
-      airport: 'CTG - Aeropuerto Rafael Núñez',
-      price: '$860.000 COP',
-      details: 'Incluye equipaje de mano y selección de asiento anticipada.'
-    },
-    {
-      id: 'JS-9012',
-      route: 'Bogotá → Londres',
-      date: '2026-05-10',
-      time: '08:15',
-      seat: '15B',
-      status: 'Pendiente',
-      passengers: '1',
-      class: 'Económica',
-      airport: 'BOG - Aeropuerto El Dorado',
-      price: '$520.000 COP',
-      details: 'Esperando confirmación de tarifa especial para temporada alta.'
-    }
-  ];
-
-  const defaultHistory = [
-    { id: 'JS-3456', route: 'Bogotá → París', date: '2026-01-10', status: 'Completado' },
-    { id: 'JS-7890', route: 'Cartagena → Londres', date: '2026-02-05', status: 'Completado' },
-    { id: 'JS-2468', route: 'Bogotá → Roma', date: '2025-12-20', status: 'Cancelado' }
-  ];
-
-  let reservations = [];
-  let historyFlights = [];
-  let cancelTargetId = null;
-
-  function loadFromStorage(key, fallback) {
-    try {
-      const value = localStorage.getItem(key);
-      return value ? JSON.parse(value) : fallback;
-    } catch (error) {
-      return fallback;
-    }
-  }
-
-  function saveToStorage(key, data) {
-    try {
-      localStorage.setItem(key, JSON.stringify(data));
-    } catch (error) {
-      console.warn('No se pudo guardar en localStorage:', error);
-    }
-  }
-
-  function loadReservations() {
-    reservations = loadFromStorage(RESERVATIONS_KEY, defaultReservations.slice());
-    saveToStorage(RESERVATIONS_KEY, reservations);
-  }
-
-  function saveReservations() {
-    saveToStorage(RESERVATIONS_KEY, reservations);
-  }
-
-  function loadHistory() {
-    historyFlights = loadFromStorage(HISTORY_KEY, defaultHistory.slice());
-    saveToStorage(HISTORY_KEY, historyFlights);
-  }
-
-  function saveHistory() {
-    saveToStorage(HISTORY_KEY, historyFlights);
-  }
-
-  function switchTab(index) {
-    const tabs = document.querySelectorAll('.tab-content');
-    const buttons = document.querySelectorAll('.tab-btn');
-
-    tabs.forEach(tab => tab.classList.add('hidden'));
-    buttons.forEach(btn => btn.classList.remove('active'));
-
-    tabs[index].classList.remove('hidden');
-    if (buttons[index]) buttons[index].classList.add('active');
-  }
-
-  function obtenerPerfilGuardado() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    } catch (error) {
-      return {};
-    }
-  }
-
-  function setTripType(type) {
-    const returnContainer = document.getElementById('returnContainer');
-    const btnRound = document.getElementById('btn-round');
-    const btnOneway = document.getElementById('btn-oneway');
-
-    if (!returnContainer || !btnRound || !btnOneway) {
-      return;
-    }
-
-    if (type === 'oneway') {
-      returnContainer.style.display = 'none';
-      btnOneway.classList.add('bg-[#69d7f7]', 'text-white');
-      btnOneway.classList.remove('bg-gray-100', 'text-gray-600');
-      btnRound.classList.remove('bg-[#69d7f7]', 'text-white');
-      btnRound.classList.add('bg-gray-100', 'text-gray-600');
-    } else {
-      returnContainer.style.display = 'block';
-      btnRound.classList.add('bg-[#69d7f7]', 'text-white');
-      btnRound.classList.remove('bg-gray-100', 'text-gray-600');
-      btnOneway.classList.remove('bg-[#69d7f7]', 'text-white');
-      btnOneway.classList.add('bg-gray-100', 'text-gray-600');
-    }
-  }
-
-  function renderReservations() {
-    const container = document.getElementById('reservationList');
-    if (!container) return;
-    if (reservations.length === 0) {
-      container.innerHTML = '<div class="rounded-3xl border border-slate-200 p-8 text-center text-slate-600">No tienes reservas activas por el momento.</div>';
-      return;
-    }
-
-    container.innerHTML = reservations.map(reservation => {
-      const badgeClass = reservation.status === 'Confirmado'
-        ? 'bg-emerald-100 text-emerald-700'
-        : reservation.status === 'Pendiente'
-          ? 'bg-amber-100 text-amber-700'
-          : 'bg-slate-100 text-slate-700';
-
-      return `
-        <div class="rounded-3xl border border-slate-200 p-6">
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p class="text-sm uppercase tracking-[0.24em] text-slate-500 mb-2">Reserva</p>
-              <div class="flex flex-wrap items-center gap-3">
-                <span class="text-xl font-semibold">${reservation.id}</span>
-                <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ${badgeClass}">${reservation.status}</span>
-              </div>
-              <p class="text-slate-600 mt-3">${reservation.route}</p>
-              <div class="mt-3 grid gap-2 sm:grid-cols-2 text-sm text-slate-500">
-                <span><i class="fa-regular fa-calendar-days mr-2"></i>${reservation.date}</span>
-                <span><i class="fa-regular fa-clock mr-2"></i>${reservation.time}</span>
-                <span><i class="fa-solid fa-chair mr-2"></i>Asiento: ${reservation.seat}</span>
-                <span><i class="fa-solid fa-plane-departure mr-2"></i>${reservation.class}</span>
-              </div>
+        <!-- Reservas activas -->
+        <div class="stat-card">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                    <i class="fa-solid fa-ticket text-[#0a68bd]"></i>
+                </div>
+                <p class="text-sm text-gray-500">Reservas activas</p>
             </div>
-            <div class="flex flex-wrap gap-3 justify-start lg:justify-end">
-              <button type="button" onclick="toggleReservationDetails('${reservation.id}')" class="rounded-2xl border border-slate-300 px-5 py-3 text-slate-700 hover:bg-slate-50">Ver detalles</button>
-              <button type="button" onclick="openCancelModal('${reservation.id}')" class="rounded-2xl bg-red-600 px-5 py-3 text-white hover:bg-red-700">Cancelar</button>
-            </div>
-          </div>
-          <div id="details-${reservation.id}" class="mt-5 hidden rounded-2xl bg-slate-50 p-4 text-slate-700 text-sm">
-            <div class="grid gap-3 sm:grid-cols-2">
-              <div><strong>Pasajeros:</strong> ${reservation.passengers}</div>
-              <div><strong>Clase:</strong> ${reservation.class}</div>
-              <div><strong>Aeropuerto:</strong> ${reservation.airport}</div>
-              <div><strong>Precio:</strong> ${reservation.price}</div>
-            </div>
-            <p class="mt-3">${reservation.details}</p>
-          </div>
+            <p class="text-3xl font-bold text-[#0F172A]" id="statReservations">0</p>
         </div>
-      `;
-    }).join('');
-  }
 
-  function renderHistory() {
-    const container = document.getElementById('historyList');
-    if (!container) return;
-    if (historyFlights.length === 0) {
-      container.innerHTML = '<div class="rounded-3xl border border-slate-200 p-8 text-center text-slate-600">No tienes vuelos en el historial.</div>';
-      return;
-    }
-
-    container.innerHTML = historyFlights.map(item => {
-      const badgeClass = item.status === 'Completado'
-        ? 'bg-sky-100 text-sky-700'
-        : item.status === 'Cancelado'
-          ? 'bg-red-100 text-red-700'
-          : 'bg-slate-100 text-slate-700';
-
-      return `
-        <div class="rounded-3xl border border-slate-200 p-5">
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p class="text-sm uppercase tracking-[0.24em] text-slate-500 mb-2">Vuelo</p>
-              <div class="flex flex-wrap items-center gap-3">
-                <span class="text-lg font-semibold">${item.id}</span>
-                <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ${badgeClass}">${item.status}</span>
-              </div>
-              <p class="text-slate-600 mt-3">${item.route}</p>
+        <!-- Vuelos completados -->
+        <div class="stat-card">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                </div>
+                <p class="text-sm text-gray-500">Vuelos realizados</p>
             </div>
-            <div class="text-sm text-slate-500">
-              <p>${item.date}</p>
-            </div>
-          </div>
+            <p class="text-3xl font-bold text-[#0F172A]" id="statHistory">0</p>
         </div>
-      `;
-    }).join('');
-  }
 
-  function toggleReservationDetails(id) {
-    const details = document.getElementById(`details-${id}`);
-    if (details) {
-      details.classList.toggle('hidden');
+        <!-- Puntos acumulados -->
+        <div class="stat-card">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
+                    <i class="fa-solid fa-star text-[#f97316]"></i>
+                </div>
+                <p class="text-sm text-gray-500">Puntos JetSky</p>
+            </div>
+            <p class="text-3xl font-bold text-[#0F172A]">3.200</p>
+        </div>
+
+        <!-- Próximo vuelo -->
+        <div class="stat-card">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
+                    <i class="fa-solid fa-plane-departure text-purple-600"></i>
+                </div>
+                <p class="text-sm text-gray-500">Próximo vuelo</p>
+            </div>
+            <p class="text-base font-bold text-[#0F172A]" id="statNextFlight">—</p>
+        </div>
+    </div>
+
+
+
+    <!-- ── TABS DE NAVEGACIÓN ── -->
+    <div class="flex border-b border-gray-200 mb-8 overflow-x-auto">
+        <button onclick="cambiarTab(0)" class="tab-btn active whitespace-nowrap px-6 py-3 font-medium text-gray-600 hover:text-[#f97316] transition-colors">
+            <i class="fa-solid fa-calendar-check mr-2"></i>Mis Reservas
+        </button>
+        <button onclick="cambiarTab(1)" class="tab-btn whitespace-nowrap px-6 py-3 font-medium text-gray-600 hover:text-[#f97316] transition-colors">
+            <i class="fa-solid fa-clock-rotate-left mr-2"></i>Historial
+        </button>
+        <button onclick="cambiarTab(2)" class="tab-btn whitespace-nowrap px-6 py-3 font-medium text-gray-600 hover:text-[#f97316] transition-colors">
+            <i class="fa-solid fa-user mr-2"></i>Mi Perfil
+        </button>
+    </div>
+
+
+    <!-- ─────────────────────────────────────────
+         TAB 0 — MIS RESERVAS
+    ───────────────────────────────────────── -->
+    <div class="tab-content active" id="tab-reservas">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold text-[#0F172A]">Reservas activas</h2>
+            <!-- Botón para ir a buscar un nuevo vuelo -->
+            <a href="home.html"
+               class="flex items-center gap-2 bg-[#0a68bd] hover:bg-[#074e8f] text-white px-5 py-2.5 rounded-xl font-medium transition-colors text-sm">
+                <i class="fa-solid fa-plus"></i> Nueva reserva
+            </a>
+        </div>
+        <!-- Aquí se renderizan las tarjetas de reserva con JS -->
+        <div id="reservationList" class="space-y-4"></div>
+    </div>
+
+
+    <!-- ─────────────────────────────────────────
+         TAB 1 — HISTORIAL
+    ───────────────────────────────────────── -->
+    <div class="tab-content" id="tab-historial">
+        <h2 class="text-xl font-bold text-[#0F172A] mb-6">Historial de vuelos</h2>
+        <!-- Se rellena con JS -->
+        <div id="historyList" class="space-y-4"></div>
+    </div>
+
+
+    <!-- ─────────────────────────────────────────
+         TAB 2 — MI PERFIL
+    ───────────────────────────────────────── -->
+    <div class="tab-content" id="tab-perfil">
+        <div class="max-w-2xl bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+
+            <!-- Avatar + nombre -->
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-3xl text-[#0a68bd]"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-[#0F172A]" id="profileDisplayName">Mi Perfil</h2>
+                    <p class="text-sm text-gray-500">Actualiza tus datos personales</p>
+                </div>
+            </div>
+
+            <!-- Formulario de perfil -->
+            <form id="formPerfil" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+                        <i class="fas fa-user mr-1 text-[#f97316]"></i> Nombre completo
+                    </label>
+                    <input type="text" id="perfil-nombre" class="profile-input" placeholder="Tu nombre">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+                        <i class="fas fa-envelope mr-1 text-[#f97316]"></i> Correo
+                    </label>
+                    <input type="email" id="perfil-correo" class="profile-input" placeholder="correo@ejemplo.com">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+                        <i class="fas fa-phone mr-1 text-[#f97316]"></i> Teléfono
+                    </label>
+                    <input type="tel" id="perfil-tel" class="profile-input" placeholder="+57 300 000 0000">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+                        <i class="fas fa-calendar-alt mr-1 text-[#f97316]"></i> Fecha de nacimiento
+                    </label>
+                    <input type="date" id="perfil-fecha" class="profile-input">
+                </div>
+
+                <!-- Botón guardar — ocupa las 2 columnas -->
+                <button type="button" onclick="guardarPerfil()"
+                    class="md:col-span-2 w-full bg-[#0a68bd] hover:bg-[#074e8f] text-white font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 mt-2">
+                    <i class="fas fa-save"></i> Guardar cambios
+                </button>
+            </form>
+
+            <!-- Zona peligrosa: cerrar sesión -->
+            <div class="mt-8 pt-6 border-t border-gray-100">
+                <p class="text-xs text-gray-400 uppercase tracking-widest mb-3">Zona de sesión</p>
+                <button onclick="logout()"
+                    class="flex items-center gap-2 text-red-500 hover:text-red-700 font-medium text-sm transition-colors">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+
+<!-- =============================================
+     MODAL — CONFIRMAR CANCELACIÓN
+============================================= -->
+<div id="cancelModal" class="fixed inset-0 hidden items-center justify-center bg-slate-900/50 p-6 z-50">
+    <div class="max-w-lg w-full bg-white rounded-3xl p-8 shadow-2xl">
+        <div class="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+            <i class="fa-solid fa-triangle-exclamation text-2xl text-red-600"></i>
+        </div>
+        <h3 class="text-xl font-bold text-center mb-2">¿Cancelar esta reserva?</h3>
+        <p class="text-gray-500 text-center mb-6 text-sm">
+            Esta acción no se puede deshacer. Se aplicarán las políticas de reembolso vigentes.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <button onclick="closeCancelModal()"
+                class="flex-1 px-5 py-3 rounded-2xl border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium">
+                Mantener reserva
+            </button>
+            <button onclick="confirmCancel()"
+                class="flex-1 px-5 py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-semibold">
+                Sí, cancelar
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- =============================================
+     JAVASCRIPT — LÓGICA DEL DASHBOARD
+============================================= -->
+<script>
+    // ─────────────────────────────────────────
+    // CLAVES DE LOCALSTORAGE
+    // ─────────────────────────────────────────
+    const STORAGE_KEY      = 'jetskyUserProfile';
+    const RESERVATIONS_KEY = 'jetskyReservations';
+    const HISTORY_KEY      = 'jetskyHistory';
+
+    // ─────────────────────────────────────────
+    // RESERVAS DE EJEMPLO (se usan si no hay datos reales)
+    // ─────────────────────────────────────────
+    const reservasEjemplo = [
+        {
+            id: 'JS-1234', route: 'Bogotá → París',
+            date: '2026-03-15', time: '10:30', seat: '12A',
+            status: 'Confirmado', passengers: '1', class: 'Económica',
+            airport: 'BOG - Aeropuerto El Dorado',
+            price: '$420.000 COP',
+            details: 'Tarifa flexible con cambios gratis dentro de la misma ruta.'
+        },
+        {
+            id: 'JS-5678', route: 'Cali → Cartagena',
+            date: '2026-04-20', time: '14:45', seat: '8C',
+            status: 'Confirmado', passengers: '2', class: 'Premium',
+            airport: 'CTG - Aeropuerto Rafael Núñez',
+            price: '$860.000 COP',
+            details: 'Incluye equipaje de mano y selección de asiento anticipada.'
+        }
+    ];
+
+    // ─────────────────────────────────────────
+    // HISTORIAL DE EJEMPLO
+    // ─────────────────────────────────────────
+    const historialEjemplo = [
+        { id: 'JS-3456', route: 'Bogotá → París',      date: '2026-01-10', status: 'Completado' },
+        { id: 'JS-7890', route: 'Cartagena → Londres',  date: '2026-02-05', status: 'Completado' },
+        { id: 'JS-2468', route: 'Bogotá → Roma',        date: '2025-12-20', status: 'Cancelado'  }
+    ];
+
+    // ─────────────────────────────────────────
+    // ESTADO GLOBAL
+    // ─────────────────────────────────────────
+    let reservations  = [];
+    let historyFlights = [];
+    let cancelTargetId = null; // ID de la reserva que se quiere cancelar
+
+    // ─────────────────────────────────────────
+    // HELPERS DE LOCALSTORAGE
+    // ─────────────────────────────────────────
+    function leerStorage(key, fallback) {
+        try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+        catch { return fallback; }
     }
-  }
+    function escribirStorage(key, data) {
+        try { localStorage.setItem(key, JSON.stringify(data)); }
+        catch (e) { console.warn('localStorage error:', e); }
+    }
 
-  function openCancelModal(id) {
-    cancelTargetId = id;
-    const modal = document.getElementById('cancelModal');
-    if (modal) modal.classList.remove('hidden');
-  }
+    // ─────────────────────────────────────────
+    // CAMBIAR DE TAB
+    // ─────────────────────────────────────────
+    function cambiarTab(idx) {
+        // Oculta todos los contenidos y quita el estilo activo de los botones
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
 
-  function closeCancelModal() {
-    cancelTargetId = null;
-    const modal = document.getElementById('cancelModal');
-    if (modal) modal.classList.add('hidden');
-  }
+        // Activa el tab pedido
+        const tabs = [
+            document.getElementById('tab-reservas'),
+            document.getElementById('tab-historial'),
+            document.getElementById('tab-perfil')
+        ];
+        tabs[idx]?.classList.add('active');
+        document.querySelectorAll('.tab-btn')[idx]?.classList.add('active');
+    }
 
-  function confirmCancel() {
-    if (!cancelTargetId) return;
-    const index = reservations.findIndex(r => r.id === cancelTargetId);
-    if (index === -1) return;
+    // ─────────────────────────────────────────
+    // RENDERIZAR TARJETAS DE RESERVAS
+    // ─────────────────────────────────────────
+    function renderReservations() {
+        const container = document.getElementById('reservationList');
+        if (!container) return;
 
-    const removed = reservations.splice(index, 1)[0];
-    historyFlights.unshift({
-      id: removed.id,
-      route: removed.route,
-      date: removed.date,
-      status: 'Cancelado'
+        // Actualiza el contador de estadísticas
+        document.getElementById('statReservations').textContent = reservations.length;
+
+        // Detecta el próximo vuelo (el que tiene fecha más próxima)
+        const hoy = new Date();
+        const proximas = reservations
+            .filter(r => new Date(r.date) >= hoy)
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+        document.getElementById('statNextFlight').textContent =
+            proximas.length ? proximas[0].date : '—';
+
+        if (reservations.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-16 text-gray-400">
+                    <i class="fa-solid fa-ticket text-5xl mb-4 block"></i>
+                    <p class="text-lg font-medium mb-2">No tienes reservas activas</p>
+                    <a href="home.html" class="text-[#0a68bd] hover:underline text-sm font-medium">
+                        ¡Busca tu próximo vuelo!
+                    </a>
+                </div>`;
+            return;
+        }
+
+        container.innerHTML = reservations.map(r => {
+            // Color del badge según el estado de la reserva
+            const badgeColor = r.status === 'Confirmado'
+                ? 'bg-emerald-100 text-emerald-700'
+                : r.status === 'Pendiente'
+                    ? 'bg-amber-100 text-amber-700'
+                    : 'bg-slate-100 text-slate-600';
+
+            return `
+            <div class="reservation-card">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+                    <div class="flex-1">
+                        <!-- Número de reserva + estado -->
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <span class="text-lg font-bold text-[#0F172A]">${r.id}</span>
+                            <span class="text-xs font-semibold px-3 py-1 rounded-full ${badgeColor}">${r.status}</span>
+                        </div>
+
+                        <!-- Ruta -->
+                        <p class="text-xl font-semibold text-[#0a68bd] mb-3">${r.route}</p>
+
+                        <!-- Detalles en grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm text-gray-500">
+                            <span><i class="fa-regular fa-calendar mr-1 text-[#f97316]"></i>${r.date}</span>
+                            <span><i class="fa-regular fa-clock mr-1 text-[#f97316]"></i>${r.time}</span>
+                            <span><i class="fa-solid fa-chair mr-1 text-[#f97316]"></i>Asiento ${r.seat}</span>
+                            <span><i class="fa-solid fa-star mr-1 text-[#f97316]"></i>${r.class}</span>
+                        </div>
+                    </div>
+
+                    <!-- Precio + botones -->
+                    <div class="flex flex-col items-start lg:items-end gap-3">
+                        <p class="text-2xl font-bold text-[#f97316]">${r.price}</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <button onclick="toggleDetails('${r.id}')"
+                                class="px-4 py-2 rounded-xl border border-[#0a68bd] text-[#0a68bd] text-sm font-medium hover:bg-blue-50 transition-colors">
+                                Ver detalles
+                            </button>
+                            <button onclick="abrirModalCancelar('${r.id}')"
+                                class="px-4 py-2 rounded-xl bg-red-50 text-red-600 border border-red-200 text-sm font-medium hover:bg-red-100 transition-colors">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel de detalles expandible (oculto por defecto) -->
+                <div id="details-${r.id}" class="hidden mt-4 pt-4 border-t border-gray-100">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm text-gray-600 mb-3">
+                        <div><p class="text-xs text-gray-400 mb-1">Pasajeros</p><p class="font-semibold">${r.passengers}</p></div>
+                        <div><p class="text-xs text-gray-400 mb-1">Clase</p><p class="font-semibold">${r.class}</p></div>
+                        <div><p class="text-xs text-gray-400 mb-1">Aeropuerto</p><p class="font-semibold">${r.airport}</p></div>
+                        <div><p class="text-xs text-gray-400 mb-1">Precio total</p><p class="font-semibold text-[#f97316]">${r.price}</p></div>
+                    </div>
+                    <p class="text-sm text-gray-500 italic">${r.details}</p>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // ─────────────────────────────────────────
+    // RENDERIZAR HISTORIAL
+    // ─────────────────────────────────────────
+    function renderHistory() {
+        const container = document.getElementById('historyList');
+        if (!container) return;
+
+        // Actualiza el contador de vuelos realizados
+        const completados = historyFlights.filter(h => h.status === 'Completado').length;
+        document.getElementById('statHistory').textContent = completados;
+
+        if (historyFlights.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-16 text-gray-400">
+                    <i class="fa-solid fa-clock-rotate-left text-5xl mb-4 block"></i>
+                    <p class="text-lg font-medium">Tu historial de vuelos aparecerá aquí.</p>
+                </div>`;
+            return;
+        }
+
+        container.innerHTML = historyFlights.map(h => {
+            const badgeColor = h.status === 'Completado'
+                ? 'bg-sky-100 text-sky-700'
+                : 'bg-red-100 text-red-700';
+
+            return `
+            <div class="reservation-card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="font-bold text-[#0F172A]">${h.id}</span>
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full ${badgeColor}">${h.status}</span>
+                    </div>
+                    <p class="text-[#0a68bd] font-semibold">${h.route}</p>
+                </div>
+                <p class="text-sm text-gray-500">${h.date}</p>
+            </div>`;
+        }).join('');
+    }
+
+    // ─────────────────────────────────────────
+    // MOSTRAR / OCULTAR DETALLES DE UNA RESERVA
+    // ─────────────────────────────────────────
+    function toggleDetails(id) {
+        document.getElementById(`details-${id}`)?.classList.toggle('hidden');
+    }
+
+    // ─────────────────────────────────────────
+    // MODAL DE CANCELACIÓN
+    // ─────────────────────────────────────────
+    function abrirModalCancelar(id) {
+        cancelTargetId = id;
+        const modal = document.getElementById('cancelModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex'); // necesario para centrar con flexbox
+    }
+
+    function closeCancelModal() {
+        cancelTargetId = null;
+        const modal = document.getElementById('cancelModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // Confirma la cancelación: mueve la reserva al historial
+    function confirmCancel() {
+        if (!cancelTargetId) return;
+        const idx = reservations.findIndex(r => r.id === cancelTargetId);
+        if (idx === -1) return;
+
+        const eliminada = reservations.splice(idx, 1)[0];
+
+        // Agrega la reserva cancelada al historial
+        historyFlights.unshift({
+            id: eliminada.id, route: eliminada.route,
+            date: eliminada.date, status: 'Cancelado'
+        });
+
+        // Guarda en localStorage y vuelve a renderizar
+        escribirStorage(RESERVATIONS_KEY, reservations);
+        escribirStorage(HISTORY_KEY, historyFlights);
+        renderReservations();
+        renderHistory();
+        closeCancelModal();
+
+        // Mueve al usuario a la pestaña de historial para que vea el resultado
+        cambiarTab(1);
+    }
+
+    // ─────────────────────────────────────────
+    // PERFIL: cargar y guardar
+    // ─────────────────────────────────────────
+    function cargarPerfil() {
+        const p = leerStorage(STORAGE_KEY, {});
+        document.getElementById('perfil-nombre').value  = p.nombreCompleto || '';
+        document.getElementById('perfil-correo').value  = p.email          || '';
+        document.getElementById('perfil-tel').value     = p.phone          || '';
+        document.getElementById('perfil-fecha').value   = p.dateOfBirth    || '';
+
+        // Saludo con el primer nombre
+        const primerNombre = (p.nombreCompleto || '').split(' ')[0];
+        if (primerNombre) {
+            document.getElementById('greetingName').textContent = primerNombre;
+            document.getElementById('profileDisplayName').textContent = p.nombreCompleto;
+        }
+    }
+
+    function guardarPerfil() {
+        const actual = leerStorage(STORAGE_KEY, {});
+        const actualizado = {
+            ...actual,
+            nombreCompleto: document.getElementById('perfil-nombre').value.trim(),
+            email:          document.getElementById('perfil-correo').value.trim(),
+            phone:          document.getElementById('perfil-tel').value.trim(),
+            dateOfBirth:    document.getElementById('perfil-fecha').value
+        };
+        escribirStorage(STORAGE_KEY, actualizado);
+
+        // Actualiza el nombre en el perfil en tiempo real
+        document.getElementById('profileDisplayName').textContent = actualizado.nombreCompleto;
+
+        alert('✅ Tus cambios se guardaron correctamente.');
+    }
+
+    // ─────────────────────────────────────────
+    // CERRAR SESIÓN → vuelve a home.html
+    // ─────────────────────────────────────────
+    function logout() {
+        window.location.href = 'home.html';
+    }
+
+    // ─────────────────────────────────────────
+    // DROPDOWN DE ROLES (igual que las demás páginas)
+    // ─────────────────────────────────────────
+    const nombresRol = { 'Cliente':'Cliente', 'Asesor de aerolínea':'Asesor', 'Administrativo':'Admin' };
+
+    document.getElementById('profileToggle').addEventListener('click', () => {
+        const dd = document.getElementById('roleDropdown');
+        dd.classList.toggle('hidden');
     });
 
-    saveReservations();
-    saveHistory();
-    renderReservations();
-    renderHistory();
-    closeCancelModal();
-    switchTab(2);
-  }
+    document.querySelectorAll('.role-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const rol = btn.dataset.role;
+            document.getElementById('activeRoleLabel').textContent = nombresRol[rol] || rol;
+            document.querySelectorAll('.role-option').forEach(b => {
+                b.classList.remove('role-option-active');
+                b.querySelector('.role-badge')?.remove();
+            });
+            btn.classList.add('role-option-active');
+            const badge = document.createElement('span');
+            badge.className = 'role-badge';
+            badge.textContent = 'Activo';
+            btn.appendChild(badge);
+            document.getElementById('roleDropdown').classList.add('hidden');
+        });
+    });
 
-  function llenarPerfil(perfil) {
-    document.getElementById('perfil-nombre').value = perfil.nombreCompleto || '';
-    document.getElementById('perfil-correo').value = perfil.email || '';
-    document.getElementById('perfil-tel').value = perfil.phone || '';
-    document.getElementById('perfil-fecha').value = perfil.dateOfBirth || '';
-  }
+    // Cierra dropdown al hacer clic fuera
+    document.addEventListener('click', e => {
+        if (!e.target.closest('#profileToggle') && !e.target.closest('#roleDropdown'))
+            document.getElementById('roleDropdown').classList.add('hidden');
+    });
 
-  function guardarPerfil() {
-    const perfilActual = obtenerPerfilGuardado();
-    const perfilActualizado = {
-      ...perfilActual,
-      nombreCompleto: document.getElementById('perfil-nombre').value.trim(),
-      email: document.getElementById('perfil-correo').value.trim(),
-      phone: document.getElementById('perfil-tel').value.trim(),
-      dateOfBirth: document.getElementById('perfil-fecha').value
-    };
+    // ─────────────────────────────────────────
+    // INICIALIZACIÓN — se ejecuta al cargar la página
+    // ─────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+        // Carga reservas (reales o de ejemplo)
+        reservations   = leerStorage(RESERVATIONS_KEY, reservasEjemplo);
+        historyFlights = leerStorage(HISTORY_KEY,      historialEjemplo);
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(perfilActualizado));
-    alert('Tus cambios se guardaron correctamente.');
-  }
+        // Guarda los ejemplos si no había nada
+        escribirStorage(RESERVATIONS_KEY, reservations);
+        escribirStorage(HISTORY_KEY, historyFlights);
 
-  function logout() {
-    // Lógica para cerrar sesión, por ejemplo limpiar datos si es necesario
-    window.location.href = 'home.html';
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    llenarPerfil(obtenerPerfilGuardado());
-    setTripType('roundtrip');
-    loadReservations();
-    loadHistory();
-    renderReservations();
-    renderHistory();
-  });
+        // Renderiza todo
+        renderReservations();
+        renderHistory();
+        cargarPerfil();
+    });
 </script>
 
-        </body>
-    </html>
+</body>
+</html>
