@@ -3,11 +3,11 @@
   --sky-light: #A8D8EF;
   --sky-dark: #2E7FA8;
   --ink: #0F1923;
-  --ink-mid: #2C3E50;
-  --ink-soft: #5A6B7A;
+  --ink-mid: #27374A;
+  --ink-soft: #3F5363;
   --cloud: #F0F6FA;
   --white: #FFFFFF;
-  --border: #D6E8F3;
+  --border: #B7D4E4;
   --green: #22C55E;
   --orange: #F59E0B;
   --red: #EF4444;
@@ -292,7 +292,7 @@ h3 { font-size: 1rem; font-weight: 600; color: var(--ink); }
   outline: none;
 }
 
-.search-box input::placeholder { color: var(--ink-soft); }
+.search-box input::placeholder { color: var(--ink-mid); }
 
 /* ── FLIGHT CARDS ── */
 .flight-grid {
@@ -309,12 +309,19 @@ h3 { font-size: 1rem; font-weight: 600; color: var(--ink); }
   cursor: pointer;
   transition: all 0.18s ease;
   box-shadow: var(--shadow);
+  text-align: left;
+  border: 1.5px solid var(--border);
 }
 
-.flight-card:hover { 
-  border-color: var(--sky-light); 
-  box-shadow: var(--shadow-md); 
-  transform: translateY(-1px); 
+.flight-card:hover {
+  border-color: var(--sky-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.flight-card:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 3px;
 }
 
 .flight-card.selected { 
@@ -507,6 +514,17 @@ label {
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
+}
+
+.btn:focus-visible,
+.nav-btn:focus-visible,
+.flight-card:focus-visible,
+.seat:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 3px;
 }
 
 .btn-primary {
@@ -742,12 +760,20 @@ tbody tr:hover td { background: var(--cloud); }
 .seat {
   width: 36px; height: 36px;
   border-radius: 7px;
-  display: flex; align-items: center; justify-content: center;
+  display: inline-flex; align-items: center; justify-content: center;
   font-size: 0.58rem;
   font-family: var(--mono);
   font-weight: 600;
+  background: var(--cloud);
+  border: 1.5px solid var(--border);
   cursor: default;
   transition: all 0.12s;
+  padding: 0;
+}
+
+.seat:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 2px;
 }
 
 .seat.available {
@@ -952,6 +978,18 @@ tbody tr:hover td { background: var(--cloud); }
 }
 
 /* ── NOTIFICATION TOAST ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .toast-container { 
   position: fixed; 
   bottom: 1.5rem; 
