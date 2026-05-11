@@ -14,7 +14,7 @@
     <!-- HEADER -->
     <header>
         <div class="logo">
-            <i class="fas fa-plane"></i>
+            <i class="fas fa-plane" aria-hidden="true"></i>
             <div class="logo-text">JetSky</div>
         </div>
         <div class="header-divider"></div>
@@ -26,27 +26,27 @@
     <div class="body">
 
         <!-- SIDEBAR -->
-        <aside>
+        <aside role="navigation" aria-label="Menú principal">
             <div class="nav-group-label">Principal</div>
             <button class="nav-btn active" data-section="panel-asistente">
-                <span class="nav-icon"></span>
+                <span class="nav-icon" aria-hidden="true"></span>
                 <span>Panel</span>
             </button>
             <div class="nav-group-label">Gestión</div>
             <button class="nav-btn" data-section="gestionar-reservas">
-                <span class="nav-icon"></span>
+                <span class="nav-icon" aria-hidden="true"></span>
                 <span>Reservas</span>
             </button>
             <button class="nav-btn" data-section="gestionar-clientes">
-                <span class="nav-icon"></span>
+                <span class="nav-icon" aria-hidden="true"></span>
                 <span>Clientes</span>
             </button>
             <button class="nav-btn" data-section="confirmar-pagos">
-                <span class="nav-icon"></span>
+                <span class="nav-icon" aria-hidden="true"></span>
                 <span>Pagos</span>
             </button>
             <button class="nav-btn" data-section="asignar-asientos">
-                <span class="nav-icon"></span>
+                <span class="nav-icon" aria-hidden="true"></span>
                 <span>Asientos</span>
             </button>
         </aside>
@@ -86,10 +86,11 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="search-row" class="mb-5-inline">
+                        <div class="search-row mb-5-inline">
                             <div class="search-box">
-                                <span class="icon"></span>
-                                <input id="flight-search" type="text" placeholder="Buscar por código, ruta, estado...">
+                                <label for="flight-search" class="sr-only">Buscar vuelos</label>
+                                <span class="icon" aria-hidden="true"></span>
+                                <input id="flight-search" type="text" placeholder="Buscar por código, ruta, estado..." aria-label="Buscar vuelos">
                             </div>
                         </div>
                         <div class="flight-grid" id="flight-cards"></div>
@@ -107,28 +108,28 @@
                             <h4>Información</h4>
                             <div class="detail-row"><label>Número de vuelo</label><p id="flight-number" class="mono-lg-bold"></p></div>
                             <div class="detail-row"><label>Ruta</label><p><span id="flight-origin"></span> <span class="text-sky">→</span> <span id="flight-destination"></span></p></div>
-                            <div class="detail-row" class="mt-3-inline">
-                                <label>Cambiar estado</label>
-                                <select id="flight-status-select" title="Cambiar estado del vuelo">
+                                    <div class="detail-row mt-3-inline">
+                                <label for="flight-status-select">Cambiar estado</label>
+                                <select id="flight-status-select" title="Cambiar estado del vuelo" aria-label="Cambiar estado del vuelo">
                                     <option value="Programado">Programado</option>
                                     <option value="En vuelo">En vuelo</option>
                                     <option value="Retrasado">Retrasado</option>
                                     <option value="Cancelado">Cancelado</option>
                                 </select>
-                                <button id="update-flight-status-btn" class="btn btn-primary btn-sm" class="mt-2-inline">Actualizar</button>
+                                <button id="update-flight-status-btn" class="btn btn-primary btn-sm mt-2-inline" type="button">Actualizar</button>
                             </div>
                         </div>
                         <div class="detail-block">
                             <h4>Horarios</h4>
                             <div class="detail-row"><label>Estado actual</label><p id="flight-status"></p></div>
                             <div class="detail-row"><label>Fecha</label><p id="flight-date"></p></div>
-                            <div class="detail-row" class="mt-3-inline">
-                                <label>Hora de salida</label>
+                            <div class="detail-row mt-3-inline">
+                                <label for="flight-time-input">Hora de salida</label>
                                 <div class="flex-gap-row">
-                                    <input id="flight-time-input" type="time" title="Hora de salida" class="input-flex">
-                                    <button id="update-time-btn" class="btn btn-ghost btn-sm">Guardar</button>
+                                    <input id="flight-time-input" type="time" title="Hora de salida" class="input-flex" aria-label="Editar hora de salida">
+                                    <button id="update-time-btn" class="btn btn-ghost btn-sm" type="button">Guardar</button>
                                 </div>
-                                <p class="mt-1" class="text-xs-soft">Actual: <span id="flight-time"></span></p>
+                                <p class="mt-1 text-xs-soft">Actual: <span id="flight-time"></span></p>
                             </div>
                         </div>
                         <div class="detail-block">
@@ -152,10 +153,11 @@
                             <div class="page-subtitle">Historial y gestión de reservaciones</div>
                         </div>
                     </div>
-                    <div class="card-body" class="pb-0">
-                        <div class="search-box" class="search-filter-wrap">
-                            <span class="icon"></span>
-                            <input id="reservation-search" type="text" placeholder="Buscar por vuelo, pasajero o ID...">
+                    <div class="card-body pb-0">
+                        <div class="search-box search-filter-wrap">
+                            <label for="reservation-search" class="sr-only">Buscar reservas</label>
+                            <span class="icon" aria-hidden="true"></span>
+                            <input id="reservation-search" type="text" placeholder="Buscar por vuelo, pasajero o ID..." aria-label="Buscar reservas">
                         </div>
                     </div>
                     <div class="table-wrap">
@@ -178,11 +180,11 @@
             </div>
 
             <!-- Reservation Detail Modal -->
-            <div id="reservation-details" class="modal-overlay">
+            <div id="reservation-details" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="reservation-title">
                 <div class="modal-box">
                     <div class="modal-header">
                         <h3 id="reservation-title">Detalle de Reserva</h3>
-                        <button class="close-btn" onclick="document.getElementById('reservation-details').classList.remove('show')">✕</button>
+                        <button class="close-btn" type="button" aria-label="Cerrar detalle de reserva" onclick="document.getElementById('reservation-details').classList.remove('show')">✕</button>
                     </div>
                     <div class="modal-body">
                         <div class="info-grid">
@@ -206,15 +208,16 @@
                             <div class="page-title">Clientes</div>
                             <div class="page-subtitle">Base de datos de pasajeros</div>
                         </div>
-                        <button id="add-client-btn" class="btn btn-primary">+ Nuevo Cliente</button>
+                        <button id="add-client-btn" class="btn btn-primary" type="button">+ Nuevo Cliente</button>
                     </div>
                     <div class="card-body" class="pb-0">
                         <div class="search-row mb-5-inline">
                             <div class="search-box">
-                                <span class="icon"></span>
-                                <input id="client-search" type="text" placeholder="Buscar por nombre, email o documento...">
+                                <label for="client-search" class="sr-only">Buscar clientes</label>
+                                <span class="icon" aria-hidden="true"></span>
+                                <input id="client-search" type="text" placeholder="Buscar por nombre, email o documento..." aria-label="Buscar clientes">
                             </div>
-                            <label class="check-label">
+                            <label class="check-label" for="frequent-filter">
                                 <input type="checkbox" id="frequent-filter">
                                 <span>⭐ Solo frecuentes</span>
                             </label>
@@ -244,29 +247,29 @@
                             <h3 id="form-title">Nuevo Cliente</h3>
                             <div id="form-subtitle" class="form-subtitle-text"></div>
                         </div>
-                        <button id="close-form-btn" class="btn btn-ghost btn-icon">✕</button>
+                        <button id="close-form-btn" class="btn btn-ghost btn-icon" type="button" aria-label="Cerrar formulario de cliente">✕</button>
                     </div>
                     <div class="panel-body">
                         <div class="form-grid">
                             <div class="form-field">
-                                <label>Nombre Completo *</label>
-                                <input type="text" id="form-name" placeholder="Ej: Juan Carlos Rodríguez">
+                                <label for="form-name">Nombre Completo *</label>
+                                <input type="text" id="form-name" placeholder="Ej: Juan Carlos Rodríguez" aria-required="true">
                             </div>
                             <div class="form-field">
-                                <label>Teléfono *</label>
-                                <input type="tel" id="form-phone" placeholder="+57 300 1234567">
+                                <label for="form-phone">Teléfono *</label>
+                                <input type="tel" id="form-phone" placeholder="+57 300 1234567" aria-required="true">
                             </div>
                             <div class="form-field">
-                                <label>Correo Electrónico *</label>
-                                <input type="email" id="form-email" placeholder="correo@ejemplo.com">
+                                <label for="form-email">Correo Electrónico *</label>
+                                <input type="email" id="form-email" placeholder="correo@ejemplo.com" aria-required="true">
                             </div>
                             <div class="form-field">
-                                <label>Número de Documento *</label>
-                                <input type="text" id="form-doc-number" placeholder="Ej: 1234567890">
+                                <label for="form-doc-number">Número de Documento *</label>
+                                <input type="text" id="form-doc-number" placeholder="Ej: 1234567890" aria-required="true">
                             </div>
                             <div class="form-field">
-                                <label>Tipo de Documento *</label>
-                                <select id="form-doc-type" title="Tipo de documento">
+                                <label for="form-doc-type">Tipo de Documento *</label>
+                                <select id="form-doc-type" title="Tipo de documento" aria-required="true">
                                     <option value="">Seleccionar...</option>
                                     <option value="CC">Cédula de Ciudadanía</option>
                                     <option value="TI">Tarjeta de Identidad</option>
@@ -274,16 +277,16 @@
                                 </select>
                             </div>
                             <div class="form-field">
-                                <label>Número de Cuenta</label>
+                                <label for="form-account">Número de Cuenta</label>
                                 <input type="text" id="form-account" placeholder="Ej: 4532-1234-5678">
                             </div>
                             <div class="form-field">
-                                <label>Vuelos registrados</label>
-                                <input type="number" id="form-flights" min="0" value="0" title="Vuelos registrados" placeholder="0">
-                                <div class="hint-text">6 o más → cliente frecuente automático</div>
+                                <label for="form-flights">Vuelos registrados</label>
+                                <input type="number" id="form-flights" min="0" value="0" title="Vuelos registrados" placeholder="0" aria-describedby="flight-hint">
+                                <div id="flight-hint" class="hint-text">6 o más → cliente frecuente automático</div>
                             </div>
-                            <div class="form-field" class="form-field-end">
-                                <label class="check-label" class="check-bottom">
+                            <div class="form-field form-field-end">
+                                <label class="check-label check-bottom" for="form-frequent">
                                     <input type="checkbox" id="form-frequent">
                                     <span>Marcar como cliente frecuente</span>
                                 </label>
@@ -292,8 +295,8 @@
                         <input type="hidden" id="form-client-id">
                     </div>
                     <div class="panel-footer">
-                        <button id="cancel-client-btn" class="btn btn-ghost">Cancelar</button>
-                        <button id="save-client-btn" class="btn btn-primary">Guardar Cliente</button>
+                        <button id="cancel-client-btn" class="btn btn-ghost" type="button">Cancelar</button>
+                        <button id="save-client-btn" class="btn btn-primary" type="button">Guardar Cliente</button>
                     </div>
                 </div>
             </div>
@@ -339,11 +342,11 @@
             </div>
 
             <!-- Payment Confirm Modal -->
-            <div id="payment-details" class="modal-overlay">
+            <div id="payment-details" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="payment-title">
                 <div class="modal-box">
                     <div class="modal-header">
                         <h3 id="payment-title">Confirmar Pago</h3>
-                        <button class="close-btn" onclick="document.getElementById('payment-details').classList.remove('show')">✕</button>
+                        <button class="close-btn" type="button" aria-label="Cerrar confirmación de pago" onclick="document.getElementById('payment-details').classList.remove('show')">✕</button>
                     </div>
                     <div class="modal-body">
                         <div class="info-grid">
@@ -355,7 +358,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-ghost" onclick="document.getElementById('payment-details').classList.remove('show')">Cancelar</button>
-                        <button id="confirm-payment-btn" class="btn btn-success">✓ Confirmar Pago</button>
+                        <button id="confirm-payment-btn" class="btn btn-success" type="button">✓ Confirmar Pago</button>
                     </div>
                 </div>
             </div>
@@ -367,9 +370,9 @@
                         <div class="page-title">Mapa de Asientos</div>
                     </div>
                     <div class="card-body">
-                        <div class="form-field" class="selector-field">
-                            <label>Seleccionar Vuelo</label>
-                            <select id="flight-selector" title="Seleccionar vuelo"></select>
+                        <div class="form-field selector-field">
+                            <label for="flight-selector">Seleccionar Vuelo</label>
+                            <select id="flight-selector" title="Seleccionar vuelo" aria-label="Seleccionar vuelo"></select>
                         </div>
                         <div class="seat-layout">
                             <div id="seat-map" class="seat-map"></div>
@@ -421,7 +424,7 @@
 </div>
 
 <!-- Toast Container -->
-<div class="toast-container" id="toast-container"></div>
+<div class="toast-container" id="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>
     // ── TOAST NOTIFICATIONS ──
@@ -516,7 +519,7 @@
         }
 
         container.innerHTML = arr.map(f => `
-            <div class="flight-card" data-flight-id="${f.id}">
+            <button type="button" class="flight-card" data-flight-id="${f.id}" aria-label="Ver detalles del vuelo ${f.number} de ${f.origin} a ${f.destination}, estado ${f.status}">
                 <div class="flight-card-top">
                     <div>
                         <div class="flight-number">${f.number}</div>
@@ -531,7 +534,7 @@
                 </div>
                 <div class="flight-meta">${f.date} · ${f.time}</div>
                 <div class="flight-pax"> ${f.passengerCount} pasajeros</div>
-            </div>
+            </button>
         `).join('');
 
         container.querySelectorAll('.flight-card').forEach(card => {
@@ -962,20 +965,27 @@
                     availableCount++;
                 }
 
-                const el = document.createElement('div');
+                const el = document.createElement('button');
+                el.type = 'button';
                 el.className = `seat ${status}`;
                 el.textContent = seatId;
+                el.setAttribute('aria-label', `Asiento ${seatId} ${status}`);
+                el.setAttribute('aria-pressed', 'false');
 
                 if (status === 'available') {
                     el.addEventListener('click', () => {
                         selectedSeat = seatId;
                         document.querySelectorAll('.seat').forEach(s => s.classList.remove('selected'));
                         el.classList.add('selected');
+                        el.setAttribute('aria-pressed', 'true');
                         document.getElementById('selected-seat-id').textContent = seatId;
                         document.getElementById('selected-seat-status').textContent = 'Disponible';
                         document.getElementById('selected-seat-info').textContent = `Asiento ${seatId} seleccionado · Vuelo ${flightNumber}`;
                         document.getElementById('confirm-seat-btn').disabled = false;
                     });
+                } else {
+                    el.disabled = true;
+                    el.setAttribute('aria-disabled', 'true');
                 }
                 seatMap.appendChild(el);
             }
@@ -1013,7 +1023,18 @@
         document.getElementById('selected-seat-status').textContent = '—';
         document.getElementById('selected-seat-info').textContent = 'Selecciona un asiento disponible.';
         document.getElementById('confirm-seat-btn').disabled = true;
-        document.querySelectorAll('.seat').forEach(s => s.classList.remove('selected'));
+        document.querySelectorAll('.seat').forEach(s => {
+            s.classList.remove('selected');
+            s.setAttribute('aria-pressed', 'false');
+        });
+    });
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            document.getElementById('reservation-details')?.classList.remove('show');
+            document.getElementById('payment-details')?.classList.remove('show');
+            document.getElementById('add-client-form')?.classList.add('hidden');
+        }
     });
 
     // ── INIT ──
