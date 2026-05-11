@@ -276,8 +276,8 @@
 
                     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div>
-                            <label class="text-sm font-medium block mb-1">Origen</label>
-                            <select id="origin" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
+                            <label for="origin" class="text-sm font-medium block mb-1">Origen</label>
+                            <select id="origin" title="Origen del viaje" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
                                 <option value="">Ciudad de origen</option>
                                 <option value="Bogotá">Bogotá (BOG)</option>
                                 <option value="Cali">Cali (CLO)</option>
@@ -290,8 +290,8 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-sm font-medium block mb-1">Destino</label>
-                            <select id="destination" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">  
+                            <label for="destination" class="text-sm font-medium block mb-1">Destino</label>
+                            <select id="destination" title="Destino del viaje" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">  
                                 <option value="">Ciudad de destino</option>
                                 <option value="Cartagena">Cartagena (CTG)</option>
                                 <option value="París">París (CDG)</option>
@@ -304,19 +304,19 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-sm font-medium block mb-1">Ida</label>
-                            <input id="departureDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
+                            <label for="departureDate" class="text-sm font-medium block mb-1">Ida</label>
+                            <input id="departureDate" type="date" title="Fecha de ida" placeholder="Selecciona la fecha" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
                         </div>
                         <div id="returnContainer">
-                            <label class="text-sm font-medium block mb-1">Vuelta</label>
-                            <input id="returnDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
+                            <label for="returnDate" class="text-sm font-medium block mb-1">Vuelta</label>
+                            <input id="returnDate" type="date" title="Fecha de vuelta" placeholder="Selecciona la fecha" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
                         </div>
                     </div>
 
                     <div class="grid md:grid-cols-3 gap-4 mt-6">
                         <div>
-                            <label class="text-sm font-medium block mb-1">Pasajeros</label>
-                            <select id="passengers" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#0a68bd]">
+                            <label for="passengers" class="text-sm font-medium block mb-1">Pasajeros</label>
+                            <select id="passengers" title="Número de pasajeros" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#0a68bd]">
                                 <option value="1">1 Pasajero</option>
                                 <option value="2">2 Pasajeros</option>
                                 <option value="3">3 Pasajeros</option>
@@ -325,8 +325,8 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-sm font-medium block mb-1">Clase</label>
-                            <select id="flightClass" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#0a68bd]">
+                            <label for="flightClass" class="text-sm font-medium block mb-1">Clase</label>
+                            <select id="flightClass" title="Clase del vuelo" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#0a68bd]">
                                 <option value="economy">Económica</option>
                                 <option value="premium">Premium</option>
                                 <option value="business">Business</option>
@@ -595,8 +595,8 @@
         <h3 class="text-xl font-bold mb-2">Cartagena All Inclusive</h3>
         <p class="text-gray-600 mb-4">7 dias / 6 noches. Incluye vuelo, hotel 4 estrellas, city tour y dia de playa.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 7 dias</span>
-          <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Cartagena</span>
+          <span><i class="fa-regular fa-clock text-[#f97316]"></i> 7 dias</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]"></i> Cartagena</span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-2xl font-bold text-[#f97316]">$4.000.000</span>
@@ -615,8 +615,8 @@
         <h3 class="text-xl font-bold mb-2">Paquete Dubai </h3>
         <p class="text-gray-600 mb-4">9 dias / 8 noches. Incluye vuelo, Playa Privada, Spa diario y cena bajo las estrellas.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 9 dias</span>
-          <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Dubai</span>
+          <span><i class="fa-regular fa-clock text-[#f97316]"></i> 9 dias</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]"></i> Dubai</span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-2xl font-bold text-[#f97316]">$15.000.000</span>
@@ -635,8 +635,8 @@
         <h3 class="text-xl font-bold mb-2">Tour Tokio</h3>
         <p class="text-gray-600 mb-4"> 11 dias / 10 noches. Incluye vuelo, Onsen privado, ceremonia del té, y el Monte Fuji.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 11 dias</span>
-          <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Tokio</span>
+          <span><i class="fa-regular fa-clock text-[#f97316]"></i> 11 dias</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]"></i> Tokio</span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-2xl font-bold text-[#f97316]">$12.500.000</span>
@@ -1079,7 +1079,5 @@
         window.location.href = 'paquetes.html';
     }
 </script>
-        
-    </script>
 </body>
 </html>
