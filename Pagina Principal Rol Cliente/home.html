@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -7,10 +7,34 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
 
     <style>
         :root { --primary: #F7931E; }
+
+        /* Accesibilidad: skip link y clases utiles */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .sr-only:focus {
+            position: static;
+            width: auto;
+            height: auto;
+            margin: 0;
+            overflow: visible;
+            clip: auto;
+            white-space: normal;
+        }
+
+        /* Foco visible para navegación por teclado */
+        :focus-visible { outline: 3px solid #ffbf6b; outline-offset: 2px; }
 
         /* Estado visual del filtro de catálogo del menú superior */
         .catalog-filter-active {
@@ -101,66 +125,73 @@
 
     <!-- Header -->
     <header class="bg-white shadow-sm">
-
-        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between" role="navigation" aria-label="Navegación principal">
             <div class="flex items-center gap-2">
-                <i class="fas fa-plane text-[#0a68bd] text-2xl"></i>
+                <i class="fas fa-plane text-[#0a68bd] text-2xl" aria-hidden="true"></i>
                 <span class="text-2xl font-bold text-[#0a68bd]">JetSky</span>
             </div>
-           
+
             <div class="hidden md:flex items-center gap-10">
               <a href="hoteles.html" class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium transition-colors">
-                <i class="fas fa-hotel text-base"></i>
-             <span>Alojamiento</span>
+                <i class="fas fa-hotel text-base" aria-hidden="true"></i>
+                <span>Alojamiento</span>
               </a>
               <a href="paquetes.html" class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium transition-colors">
-                  <i class="fas fa-suitcase"></i>
-                  Paquetes
+                  <i class="fas fa-suitcase" aria-hidden="true"></i>
+                  <span>Paquetes</span>
               </a>
                 <a href="ofertas.html" class="flex items-center gap-2 text-gray-700 hover:text-[#0a68bd] font-medium">
-                    <i class="fas fa-fire"></i>
-                    Ofertas
+                    <i class="fas fa-fire" aria-hidden="true"></i>
+                    <span>Ofertas</span>
                 </a>
             </div>
+
             <div class="flex items-center gap-4">
+                <a href="#main" class="sr-only">Saltar al contenido</a>
+
                 <div class="relative">
-                    <button id="profileToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium flex items-center gap-2 hover:border-[#0a68bd] focus:outline-none focus:ring-2 focus:ring-[#0a68bd]" aria-expanded="false" aria-haspopup="menu">
+                    <button id="profileToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium flex items-center gap-2 hover:border-[#0a68bd] focus:outline-none focus:ring-2 focus:ring-[#0a68bd]" aria-expanded="false" aria-haspopup="menu" aria-controls="roleDropdown">
                         <span id="activeRoleLabel" class="font-semibold">Cliente</span>
-                        <i class="fa-solid fa-chevron-down text-sm"></i>
+                        <i class="fa-solid fa-chevron-down text-sm" aria-hidden="true"></i>
                     </button>
-                    <div id="roleDropdown" class="role-dropdown hidden">
-                        <button type="button" class="role-option role-option-active" data-role="Cliente">
+                    <div id="roleDropdown" class="role-dropdown hidden" role="menu" aria-label="Seleccionar rol">
+                        <button type="button" class="role-option role-option-active" data-role="Cliente" role="menuitem" tabindex="-1">
                             <span>Cliente</span>
                             <span class="role-badge">Activo</span>
                         </button>
-                        <button type="button" class="role-option" data-role="Asesor de aerolínea">
+                        <button type="button" class="role-option" data-role="Asesor de aerolínea" role="menuitem" tabindex="-1">
                             <span>Asesor</span>
                         </button>
-                        <button type="button" class="role-option" data-role="Administrativo">
+                        <button type="button" class="role-option" data-role="Administrativo" role="menuitem" tabindex="-1">
                             <span>Admin</span>
                         </button>
                     </div>
                 </div>
-                <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#0a68bd] focus:outline-none focus:ring-2 focus:ring-[#0a68bd]">
+
+                <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#0a68bd] focus:outline-none focus:ring-2 focus:ring-[#0a68bd]" aria-haspopup="dialog" aria-controls="accountModal" aria-expanded="false">
                     Cuenta
                 </button>
-                <a id="registerLink" href="register.html"><button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-6 py-3 rounded-xl font-medium">Registrarse</button></a>
+
+                <a id="registerLink" href="register.html" class="bg-[#f97316] hover:bg-[#ea580c] text-white px-6 py-3 rounded-xl font-medium inline-block text-center" role="button" aria-label="Registrarse">
+                    Registrarse
+                </a>
             </div>
         </nav>
     </header>
 
-    <div id="accountModal" class="account-modal hidden">
-    <div class="account-modal-panel">
+    <!-- Modal Cuenta -->
+    <div id="accountModal" class="account-modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="accountModalTitle">
+    <div class="account-modal-panel" tabindex="-1">
 
         <!-- Encabezado: título + botón cerrar -->
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h2 class="text-2xl font-bold text-[#0F172A]">Mi cuenta</h2>
+                <h2 id="accountModalTitle" class="text-2xl font-bold text-[#0F172A]">Mi cuenta</h2>
                 <p class="text-sm text-gray-500">Tus datos guardados en JetSky.</p>
             </div>
             <button id="closeAccountModal" type="button"
-                class="text-gray-500 hover:text-[#0a68bd] text-xl">
-                <i class="fa-solid fa-xmark"></i>
+                class="text-gray-500 hover:text-[#0a68bd] text-xl" aria-label="Cerrar diálogo de cuenta">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
             </button>
         </div>
 
@@ -183,7 +214,7 @@
                     <p class="text-xs uppercase tracking-widest text-gray-400">Rol actual</p>
                     <p id="accountRole" class="font-semibold">Cliente</p>
                 </div>
-                <span class="px-3 py-1 rounded-full bg-[#dbeafe] text-[#1d4ed8] text-sm font-semibold">
+                <span class="px-3 py-1 rounded-full bg-[#dbeafe] text-[#1d4ed8] text-sm font-semibold" aria-hidden="true">
                     Activo
                 </span>
             </div>
@@ -192,7 +223,7 @@
         <!-- Botón "Ir a Mi Panel" — aparece en la parte inferior -->
         <div class="mt-6 pt-4 border-t border-gray-100 flex justify-end">
             <a href="dashboard.html"
-               class="flex items-center gap-2 bg-[#0a68bd] hover:bg-[#074e8f] text-white px-5 py-2.5 rounded-xl font-medium text-sm transition-colors">
+               class="flex items-center gap-2 bg-[#0a68bd] hover:bg-[#074e8f] text-white px-5 py-2.5 rounded-xl font-medium text-sm transition-colors" role="button" aria-label="Ir a mi panel">
                  Mi Panel
             </a>
         </div>
@@ -200,15 +231,16 @@
     </div>
     </div>
 
-    <div id="flightDetailsModal" class="account-modal hidden">
-      <div class="account-modal-panel">
+    <!-- Modal Detalles de vuelo -->
+    <div id="flightDetailsModal" class="account-modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="flightDetailsTitle">
+      <div class="account-modal-panel" tabindex="-1">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h2 class="text-2xl font-bold text-[#0F172A]">Detalles del vuelo</h2>
+            <h2 id="flightDetailsTitle" class="text-2xl font-bold text-[#0F172A]">Detalles del vuelo</h2>
             <p class="text-sm text-gray-500">Revisa la información antes de reservar.</p>
           </div>
-          <button id="closeFlightDetailsModal" type="button" class="text-gray-500 hover:text-[#69d7f7] text-xl">
-            <i class="fa-solid fa-xmark"></i>
+          <button id="closeFlightDetailsModal" type="button" class="text-gray-500 hover:text-[#69d7f7] text-xl" aria-label="Cerrar detalles del vuelo">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
           </button>
         </div>
         <div class="space-y-4 text-gray-700">
@@ -263,12 +295,13 @@
     </div>
 
     <!-- Hero + Search -->
-    <section class="relative py-12">
+    <main id="main" role="main" tabindex="-1" class="relative py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Formulario de búsqueda -->
-             
             <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl p-8">
                 <form id="searchForm">
+                    <h1 class="sr-only">Buscar vuelos en JetSky</h1>
+
                     <div class="flex gap-4 mb-6">
                         <button type="button" onclick="setTripType('roundtrip')" id="btn-round" class="px-6 py-3 rounded-2xl font-semibold bg-[#0a68bd] text-white">Ida y vuelta</button>
                         <button type="button" onclick="setTripType('oneway')" id="btn-oneway" class="px-6 py-3 rounded-2xl font-semibold bg-gray-100 text-gray-600">Solo ida</button>
@@ -276,8 +309,8 @@
 
                     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div>
-                            <label class="text-sm font-medium block mb-1">Origen</label>
-                            <select id="origin" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
+                            <label for="origin" class="text-sm font-medium block mb-1">Origen</label>
+                            <select id="origin" title="Origen del viaje" aria-label="Origen del viaje" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
                                 <option value="">Ciudad de origen</option>
                                 <option value="Bogotá">Bogotá (BOG)</option>
                                 <option value="Cali">Cali (CLO)</option>
@@ -286,12 +319,11 @@
                                 <option value="Barcelona">Barcelona (BCN)</option>
                                 <option value="Nueva York">Nueva York (JFK)</option>
                                 <option value="Río de Janeiro">Río de Janeiro (GIG)</option>
-                                <!-- más opciones según original -->
                             </select>
                         </div>
                         <div>
-                            <label class="text-sm font-medium block mb-1">Destino</label>
-                            <select id="destination" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">  
+                            <label for="destination" class="text-sm font-medium block mb-1">Destino</label>
+                            <select id="destination" title="Destino del viaje" aria-label="Destino del viaje" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">  
                                 <option value="">Ciudad de destino</option>
                                 <option value="Cartagena">Cartagena (CTG)</option>
                                 <option value="París">París (CDG)</option>
@@ -300,23 +332,22 @@
                                 <option value="Dubái">Dubái (DXB)</option>
                                 <option value="Madrid">Madrid (MAD)</option>
                                 <option value="Roma">Roma (FCO)</option>
-                                <!-- más opciones -->
                             </select>
                         </div>
                         <div>
-                            <label class="text-sm font-medium block mb-1">Ida</label>
-                            <input id="departureDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
+                            <label for="departureDate" class="text-sm font-medium block mb-1">Ida</label>
+                            <input id="departureDate" type="date" title="Fecha de ida" aria-label="Fecha de ida" placeholder="Selecciona la fecha" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
                         </div>
                         <div id="returnContainer">
-                            <label class="text-sm font-medium block mb-1">Vuelta</label>
-                            <input id="returnDate" type="date" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
+                            <label for="returnDate" class="text-sm font-medium block mb-1">Vuelta</label>
+                            <input id="returnDate" type="date" title="Fecha de vuelta" aria-label="Fecha de vuelta" placeholder="Selecciona la fecha" class="w-full h-12 px-4 border rounded-2xl focus:outline-none focus:border-[#0a68bd]">
                         </div>
                     </div>
 
                     <div class="grid md:grid-cols-3 gap-4 mt-6">
                         <div>
-                            <label class="text-sm font-medium block mb-1">Pasajeros</label>
-                            <select id="passengers" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#0a68bd]">
+                            <label for="passengers" class="text-sm font-medium block mb-1">Pasajeros</label>
+                            <select id="passengers" title="Número de pasajeros" aria-label="Número de pasajeros" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#0a68bd]">
                                 <option value="1">1 Pasajero</option>
                                 <option value="2">2 Pasajeros</option>
                                 <option value="3">3 Pasajeros</option>
@@ -325,8 +356,8 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-sm font-medium block mb-1">Clase</label>
-                            <select id="flightClass" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#0a68bd]">
+                            <label for="flightClass" class="text-sm font-medium block mb-1">Clase</label>
+                            <select id="flightClass" title="Clase del vuelo" aria-label="Clase del vuelo" class="w-full h-12 px-4 border rounded-2xl bg-white outline-none focus:border-[#0a68bd]">
                                 <option value="economy">Económica</option>
                                 <option value="premium">Premium</option>
                                 <option value="business">Business</option>
@@ -334,9 +365,9 @@
                             </select>
                         </div>
                         <div class="flex items-end">
-                            <button type="submit" class="w-full h-12 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-2xl flex items-center justify-center gap-2 font-semibold">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                Buscar
+                            <button type="submit" aria-label="Buscar vuelos" class="w-full h-12 bg-[#f97316] hover:bg-[#ea580c] text-white rounded-2xl flex items-center justify-center gap-2 font-semibold">
+                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                <span>Buscar</span>
                             </button>
                         </div>
                     </div>
@@ -349,7 +380,7 @@
                 <div id="flightsContainer" class="space-y-6"></div>
             </div>
         </div>
-    </section>
+    </main>
 
   <!--OFERTAS - PLANES -->
  <div class="max-w-5xl mx-auto mt-1 mb-12 px-4">
@@ -366,7 +397,7 @@
                     <p class="uppercase tracking-widest text-[10px] font-medium mb-1">¡Oferta especial!</p>
                     <h2 class="text-2xl font-bold leading-tight mb-2">Vuela a tu<br>destino favorito</h2>
                     <p class="text-base font-light mb-4">Desde <span class="font-semibold">COP 60.900</span></p>
-                    <a href="#" class="inline-block bg-[#f97316] hover:bg-[#ea580c] text-white px-5 py-2 rounded-xl font-semibold text-sm transition-colors">
+                    <a href="#" class="inline-block bg-[#f97316] hover:bg-[#ea580c] text-white px-5 py-2 rounded-xl font-semibold text-sm transition-colors" role="button" aria-label="Reservar ahora">
                         Reservar ahora
                     </a>
                 </div>
@@ -384,7 +415,7 @@
                     <p class="uppercase tracking-widest text-[10px] font-medium mb-1">Escápate hoy</p>
                     <h2 class="text-2xl font-bold leading-tight mb-2">Planes Todo<br>Incluido</h2>
                     <p class="text-base font-light mb-4">Desde <span class="font-semibold">COP 150.000</span></p>
-                    <a href="#" class="inline-block bg-white text-blue-900 hover:bg-gray-100 px-5 py-2 rounded-xl font-semibold text-sm transition-colors">
+                    <a href="#" class="inline-block bg-white text-blue-900 hover:bg-gray-100 px-5 py-2 rounded-xl font-semibold text-sm transition-colors" role="button" aria-label="Ver planes">
                         Ver planes
                     </a>
                 </div>
@@ -394,27 +425,25 @@
     </div>
 </div>
 
-
          <!-- Iconos -->
-
-            <section class="bg-[#0a68bd] text-white py-3">
+<section class="bg-[#0a68bd] text-white py-3" aria-hidden="false">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid md:grid-cols-3 gap-8 text-center">
 
             <div>
-                <i class="fa-solid fa-users text-5xl mb-4"></i>
+                <i class="fa-solid fa-users text-5xl mb-4" aria-hidden="true"></i>
                 <p class="text-4xl font-bold mb-2">5M+</p>
                 <p class="text-xl">Pasajeros Felices</p>
             </div>
 
             <div>
-                <i class="fa-solid fa-location-dot text-5xl mb-4"></i>
+                <i class="fa-solid fa-location-dot text-5xl mb-4" aria-hidden="true"></i>
                 <p class="text-4xl font-bold mb-2">200+</p>
                 <p class="text-xl">Destinos</p>
             </div>
 
             <div>
-                <i class="fa-solid fa-star text-5xl mb-4"></i>
+                <i class="fa-solid fa-star text-5xl mb-4" aria-hidden="true"></i>
                 <p class="text-4xl font-bold mb-2">4.8 / 5</p>
                 <p class="text-xl">Calificación</p>
             </div>
@@ -422,8 +451,6 @@
         </div>
     </div>
 </section>
-
-    <!-- Font Awesome -->
 
     <section class="max-w-7xl mx-auto px-6 py-20">
     <div class="grid lg:grid-cols-2 gap-12 items-center">
@@ -436,9 +463,9 @@
 
       <!-- Item -->
       <div class="flex gap-4 mb-6">
-        <i class="fa-regular fa-star text-[#0a68bd] text-xl mt-1"></i>
+        <i class="fa-regular fa-star text-[#0a68bd] text-xl mt-1" aria-hidden="true"></i>
         <div>
-          <h4 class="font-semibold">Acumula Puntos</h4>
+          <h3 class="font-semibold">Acumula Puntos</h3>
           <p class="text-gray-600">
             Gana puntos en cada vuelo y canjéalos por recompensas.
           </p>
@@ -447,9 +474,9 @@
 
       <!-- Item -->
       <div class="flex gap-4 mb-6">
-        <i class="fa-solid fa-tags text-[#0a68bd] text-xl mt-1"></i>
+        <i class="fa-solid fa-tags text-[#0a68bd] text-xl mt-1" aria-hidden="true"></i>
         <div>
-          <h4 class="font-semibold">Descuentos Exclusivos</h4>
+          <h3 class="font-semibold">Descuentos Exclusivos</h3>
           <p class="text-gray-600">
             Accede a ofertas especiales solo para miembros.
           </p>
@@ -458,19 +485,17 @@
 
       <!-- Item -->
       <div class="flex gap-4 mb-8">
-        <i class="fa-solid fa-check-double text-[#0a68bd]  text-xl mt-1"></i>
+        <i class="fa-solid fa-check-double text-[#0a68bd]  text-xl mt-1" aria-hidden="true"></i>
         <div>
-          <h4 class="font-semibold">Check-in Prioritario</h4>
+          <h3 class="font-semibold">Check-in Prioritario</h3>
           <p class="text-gray-600">
             Ahorra tiempo con nuestro servicio prioritario.
           </p>
         </div>
 
         </div>
-        <a class="registerAction" href="register.html">
-        <button class="bg-[#0a68bd] [#0a68bd] hover:bg-[#074e8f] text-white px-8 py-3 rounded-lg font-semibold">
-        Crear Mi Cuenta
-        </button>
+        <a class="registerAction inline-block bg-[#0a68bd] hover:bg-[#074e8f] text-white px-8 py-3 rounded-lg font-semibold" href="register.html" role="button" aria-label="Crear mi cuenta">
+            Crear Mi Cuenta
         </a>
     </div>
 
@@ -483,12 +508,11 @@
      </div>
     </section>
 
-
     <!-- Sección: Alojamientos -->
     <section id="alojamiento" data-catalog-section="alojamiento" class="max-w-7xl mx-auto px-6 py-20 scroll-mt-24">
   <div class="text-center mb-14">
     <span class="inline-flex items-center gap-2 bg-cyan-100 text-cyan-600 px-4 py-2 rounded-full font-semibold mb-4">
-      <i class="fa-solid fa-hotel"></i>
+      <i class="fa-solid fa-hotel" aria-hidden="true"></i>
       Alojamientos
     </span>
     <h2 class="text-4xl font-bold mb-4">Hoteles Para Cada Tipo de Viaje</h2>
@@ -509,8 +533,8 @@
         </div>
         <p class="text-gray-600 mb-4">A pasos de la playa, con desayuno incluido, piscina panoramica y traslado al aeropuerto.</p>
         <div class="flex gap-4 text-sm text-gray-500 mb-4">
-          <span><i class="fa-solid fa-location-dot text-[#f97316]"></i> Cartagena</span>  
-          <span><i class="fa-solid fa-wifi text-[#f97316]"></i> Wifi</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]" aria-hidden="true"></i> Cartagena</span>  
+          <span><i class="fa-solid fa-wifi text-[#f97316]" aria-hidden="true"></i> Wifi</span>
         </div>
         <div class="flex items-center justify-between">
           <div>
@@ -532,8 +556,8 @@
         </div>
         <p class="text-gray-600 mb-4">A pasos de la Torre Eiffel, con desayuno buffet y tour guiado por el Louvre incluido.</p>
         <div class="flex gap-4 text-sm text-gray-500 mb-4">
-          <span><i class="fa-solid fa-location-dot text-[#f97316]"></i> París</span>
-          <span><i class="fa-solid fa-mug-hot text-[#f97316]"></i> Desayuno</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]" aria-hidden="true"></i> París</span>
+          <span><i class="fa-solid fa-mug-hot text-[#f97316]" aria-hidden="true"></i> Desayuno</span>
         </div>
         <div class="flex items-center justify-between">
           <div>
@@ -555,8 +579,8 @@
         </div>
         <p class="text-gray-600 mb-4">frente al Tate Modern y vistas al Támesis,el mejor brunch de Southwark.</p>
         <div class="flex gap-4 text-sm text-gray-500 mb-4">
-          <span><i class="fa-solid fa-location-dot text-[#f97316]"></i> Londres</span>
-          <span><i class="fa-solid fa-dumbbell text-[#f97316]"></i> Gym</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]" aria-hidden="true"></i> Londres</span>
+          <span><i class="fa-solid fa-dumbbell text-[#f97316]" aria-hidden="true"></i> Gym</span>
         </div>
         <div class="flex items-center justify-between">
           <div>
@@ -574,7 +598,7 @@
     <section id="paquetes" data-catalog-section="paquetes" class="max-w-7xl mx-auto px-6 py-20 scroll-mt-24">
   <div class="text-center mb-14">
     <span class="inline-flex items-center gap-2 bg-orange-100 text-orange-500 px-4 py-2 rounded-full font-semibold mb-4">
-      <i class="fa-solid fa-suitcase-rolling"></i>
+      <i class="fa-solid fa-suitcase-rolling" aria-hidden="true"></i>
       Paquetes
     </span>
     <h2 class="text-4xl font-bold mb-4">Tours y Experiencias Completas</h2>
@@ -595,8 +619,8 @@
         <h3 class="text-xl font-bold mb-2">Cartagena All Inclusive</h3>
         <p class="text-gray-600 mb-4">7 dias / 6 noches. Incluye vuelo, hotel 4 estrellas, city tour y dia de playa.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 7 dias</span>
-          <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Cartagena</span>
+          <span><i class="fa-regular fa-clock text-[#f97316]" aria-hidden="true"></i> 7 dias</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]" aria-hidden="true"></i> Cartagena</span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-2xl font-bold text-[#f97316]">$4.000.000</span>
@@ -615,8 +639,8 @@
         <h3 class="text-xl font-bold mb-2">Paquete Dubai </h3>
         <p class="text-gray-600 mb-4">9 dias / 8 noches. Incluye vuelo, Playa Privada, Spa diario y cena bajo las estrellas.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 9 dias</span>
-          <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Dubai</span>
+          <span><i class="fa-regular fa-clock text-[#f97316]" aria-hidden="true"></i> 9 dias</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]" aria-hidden="true"></i> Dubai</span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-2xl font-bold text-[#f97316]">$15.000.000</span>
@@ -635,8 +659,8 @@
         <h3 class="text-xl font-bold mb-2">Tour Tokio</h3>
         <p class="text-gray-600 mb-4"> 11 dias / 10 noches. Incluye vuelo, Onsen privado, ceremonia del té, y el Monte Fuji.</p>
         <div class="flex gap-6 text-sm text-gray-500 mb-4">
-          <span><i class="fa-regular fa-clock" style="color: #f97316;"></i> 11 dias</span>
-          <span><i class="fa-solid fa-location-dot" style="color: #f97316;"></i> Tokio</span>
+          <span><i class="fa-regular fa-clock text-[#f97316]" aria-hidden="true"></i> 11 dias</span>
+          <span><i class="fa-solid fa-location-dot text-[#f97316]" aria-hidden="true"></i> Tokio</span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-2xl font-bold text-[#f97316]">$12.500.000</span>
@@ -651,7 +675,7 @@
     <section id="ofertas" data-catalog-section="ofertas" class="max-w-7xl mx-auto px-6 py-20 scroll-mt-24">
   <div class="text-center mb-14">
     <span class="inline-flex items-center gap-2 bg-red-100 text-red-500 px-4 py-2 rounded-full font-semibold mb-4">
-      <i class="fa-solid fa-fire"></i>
+      <i class="fa-solid fa-fire" aria-hidden="true"></i>
       Ofertas
     </span>
     <h2 class="text-4xl font-bold mb-4">Promociones Que Vale la Pena Aprovechar</h2>
@@ -673,13 +697,11 @@
           <p class="text-gray-600 text-sm mb-3">Descubre el paraíso del mar de los siete colores con un descuento exclusivo antes de que se agoten los cupos.</p>
           <p class="text-gray-500 text-xs italic">Una experiencia diseñada para relajarse sin preocupaciones. El destino te espera.</p>
         </div>
-        <button class="w-full bg-[#0a68bd] text-white py-3 rounded-2xl font-bold text-base hover:bg-[#074e8f] transition-colors shadow-sm mt-6">
+        <button class="w-full bg-[#0a68bd] text-white py-3 rounded-2xl font-bold text-base hover:bg-[#074e8f] transition-colors shadow-sm mt-6" aria-label="Ver detalles San Andrés">
           VER DETALLES
         </button>
       </div>
     </div>
-
-        <!-- AMIGOS -->
 
     <div class="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100 flex flex-col transition-transform hover:scale-[1.02] duration-300">
       <div class="relative">
@@ -692,7 +714,7 @@
           <p class="text-gray-600 text-sm mb-3">Invita a tus amigos a registrarse y recibirán un bono de $200.000 para su próximo viaje juntos.</p>
           <p class="text-gray-500 text-xs italic">Porque las mejores historias se cuentan viajando en grupo. ¡No te quedes fuera!</p>
         </div>
-        <button class="w-full bg-[#0a68bd] text-white py-3 rounded-2xl font-bold text-base hover:bg-[#074e8f] transition-colors shadow-sm mt-6">
+        <button class="w-full bg-[#0a68bd] text-white py-3 rounded-2xl font-bold text-base hover:bg-[#074e8f] transition-colors shadow-sm mt-6" aria-label="Invitar amigos">
           INVITAR AMIGOS
         </button>
       </div>
@@ -711,7 +733,7 @@
           <p class="text-gray-600 text-sm mb-3">Promoción para viajes cortos con salida inmediata, perfecta para mover reservas rápidas este fin de semana.</p>
           <p class="text-gray-500 text-xs italic">Toma un respiro de la rutina y vuela hoy mismo. La aventura está a un clic.</p>
         </div>
-        <button class="w-full bg-[#0a68bd] text-white py-3 rounded-2xl font-bold text-base hover:bg-[#074e8f] transition-colors shadow-sm mt-6">
+        <button class="w-full bg-[#0a68bd] text-white py-3 rounded-2xl font-bold text-base hover:bg-[#074e8f] transition-colors shadow-sm mt-6" aria-label="Ver detalles escapada">
           VER DETALLES
         </button>
       </div>
@@ -719,7 +741,6 @@
 
   </div>
 </section>
-
 
     <!-- CTA -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
@@ -729,67 +750,65 @@
       <p class="text-lg mb-6 text-gray-600">
         Regístrate y recibe 10% de descuento adicional en tu primer paquete turístico
       </p>
-      <a class="registerAction" href="register.html">
-        <button class="bg-[#f97316] hover:bg-[#ea580c] text-white px-8 py-3 rounded-lg font-semibold">
-        Registrarme Ahora
-        </button>
-    </a>
+      <a class="registerAction inline-block" href="register.html" role="button" aria-label="Registrarme ahora">
+        <span class="bg-[#f97316] hover:bg-[#ea580c] text-white px-8 py-3 rounded-lg font-semibold inline-block">Registrarme Ahora</span>
+      </a>
     </section>
 
     <!-- Pie de Pagina -->
-     
- <footer class="absolute left-0 w-full bg-[#0f172a] text-white py-12">
+ <footer class="absolute left-0 w-full bg-[#0f172a] text-white py-12" role="contentinfo">
   
   <div class="max-w-5xl mx-auto px-6">
     
     <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
       
       <div>
-        <h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Compra</h6>
-        <div class="text-sm text-gray-400 space-y-2">
-          <p class="hover:text-white cursor-pointer">Vuelos baratos</p>
-          <p class="hover:text-white cursor-pointer">Hoteles</p>
-          <p class="hover:text-white cursor-pointer">Acumula Puntos</p>
+        <h3 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Compra</h3>
+        <div class="text-sm text-gray-200 space-y-2">
+          <a href="#" class="hover:text-white block">Vuelos baratos</a>
+          <a href="#" class="hover:text-white block">Hoteles</a>
+          <a href="#" class="hover:text-white block">Acumula puntos</a>
         </div>
       </div>
 
       <div>
-        <h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">JetSky</h6>
-        <div class="text-sm text-gray-400 space-y-2">
-          <p class="hover:text-white cursor-pointer">Sobre nosotros</p>
-          <p class="hover:text-white cursor-pointer">Sostenibilidad</p>
-          <p class="hover:text-white cursor-pointer">Empleo</p>
+        <h3 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">JetSky</h3>
+        <div class="text-sm text-gray-200 space-y-2">
+          <a href="#" class="hover:text-white block">Sobre nosotros</a>
+          <a href="#" class="hover:text-white block">Sostenibilidad</a>
+          <a href="#" class="hover:text-white block">Empleo</a>
         </div>
       </div>
 
       <div>
-        <h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Ayuda</h6>
-        <div class="text-sm text-gray-400 space-y-2">
-          <p class="hover:text-white cursor-pointer">Soporte</p>
-          <p class="hover:text-white cursor-pointer">PQRS</p>
-          <p class="hover:text-white cursor-pointer">Check-in</p>
+        <h3 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Ayuda</h3>
+        <div class="text-sm text-gray-200 space-y-2">
+          <a href="#" class="hover:text-white block">Soporte</a>
+          <a href="#" class="hover:text-white block">PQRS</a>
+          <a href="#" class="hover:text-white block">Check-in</a>
         </div>
       </div>
 
       <div>
-        <h6 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Legal</h6>
-        <div class="text-sm text-gray-400 space-y-2">
-          <p class="hover:text-white cursor-pointer">Privacidad</p>
-          <p class="hover:text-white cursor-pointer">Condiciones</p>
-          <p class="hover:text-white cursor-pointer">Cookies</p>
+        <h3 class="font-bold text-white mb-4 uppercase text-xs tracking-widest">Legal</h3>
+        <div class="text-sm text-gray-200 space-y-2">
+          <a href="#" class="hover:text-white block">Privacidad</a>
+          <a href="#" class="hover:text-white block">Condiciones</a>
+          <a href="#" class="hover:text-white block">Cookies</a>
         </div>
       </div>
 
     </div>
 
     <div class="mt-12 pt-8 border-t border-gray-800 text-center">
-      <p class="text-gray-500 text-[10px] tracking-[0.3em]">
+      <p class="text-gray-400 text-[10px] tracking-[0.3em]">
         © 2026 JETSKY · TODOS LOS DERECHOS RESERVADOS
       </p>
     </div>
 
   </div>
 </footer>
+
     <script>
         // Configuración Tailwind 
         tailwind.config = { theme: { extend: { colors: { primary: '#F7931E' } } } };
@@ -881,6 +900,20 @@
             }
 
             modal.classList.remove('hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            const panel = modal.querySelector('.account-modal-panel');
+            if (panel) panel.focus();
+            trapFocusInModal(modal);
+        }
+
+        function closeFlightDetails() {
+            const modal = document.getElementById('flightDetailsModal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.setAttribute('aria-hidden', 'true');
+            const accountToggleEl = document.getElementById('accountToggle');
+            if (accountToggleEl) accountToggleEl.focus();
+            removeTrapFocus();
         }
 
         function reserveFlight(flightId) {
@@ -976,8 +1009,9 @@
     // ==================== ROLES Y CUENTA ====================
     const profileToggle = document.getElementById('profileToggle');
     const roleDropdown = document.getElementById('roleDropdown');
+    let roleButtons = Array.from(document.querySelectorAll('.role-option'));
+
     const activeRoleLabel = document.getElementById('activeRoleLabel');
-    const roleButtons = document.querySelectorAll('.role-option');
 
     const roleNames = {
         'Cliente': 'Cliente',
@@ -985,13 +1019,53 @@
         'Administrativo': 'Admin'
     };
 
+    // Abrir/cerrar menú roles y accesibilidad por teclado
     profileToggle.addEventListener('click', () => {
         const isOpen = !roleDropdown.classList.contains('hidden');
         roleDropdown.classList.toggle('hidden', isOpen);
         profileToggle.setAttribute('aria-expanded', String(!isOpen));
+        if (!isOpen) {
+            const first = roleDropdown.querySelector('[role="menuitem"]');
+            if (first) first.focus();
+        }
     });
 
-    roleButtons.forEach(button => {
+    profileToggle.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (roleDropdown.classList.contains('hidden')) {
+                roleDropdown.classList.remove('hidden');
+                profileToggle.setAttribute('aria-expanded', 'true');
+            }
+            const first = roleDropdown.querySelector('[role="menuitem"]');
+            if (first) first.focus();
+        } else if (e.key === 'Escape') {
+            roleDropdown.classList.add('hidden');
+            profileToggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Soporte de teclado en menú roles (ArrowUp/Down, Enter, Esc)
+    roleButtons.forEach((button, idx) => {
+        button.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const next = roleButtons[(idx + 1) % roleButtons.length];
+                next.focus();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                const prev = roleButtons[(idx - 1 + roleButtons.length) % roleButtons.length];
+                prev.focus();
+            } else if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                button.click();
+            } else if (e.key === 'Escape') {
+                roleDropdown.classList.add('hidden');
+                profileToggle.focus();
+                profileToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
         button.addEventListener('click', () => {
             const role = button.getAttribute('data-role');
             activeRoleLabel.textContent = roleNames[role] || role;
@@ -1009,6 +1083,7 @@
             button.appendChild(badge);
             roleDropdown.classList.add('hidden');
             profileToggle.setAttribute('aria-expanded', 'false');
+            profileToggle.focus();
         });
     });
 
@@ -1019,6 +1094,58 @@
             return JSON.parse(savedProfile);
         } catch (error) {
             return null;
+        }
+    }
+
+    // Accessibility: focus trap helpers
+    let lastFocusedElementBeforeModal = null;
+    let trapHandler = null;
+
+    function trapFocusInModal(modal) {
+        removeTrapFocus();
+        lastFocusedElementBeforeModal = document.activeElement;
+        const focusable = modal.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])');
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        trapHandler = function(e) {
+            if (e.key === 'Tab') {
+                if (focusable.length === 0) {
+                    e.preventDefault();
+                    return;
+                }
+                if (e.shiftKey) {
+                    if (document.activeElement === first) {
+                        e.preventDefault();
+                        last.focus();
+                    }
+                } else {
+                    if (document.activeElement === last) {
+                        e.preventDefault();
+                        first.focus();
+                    }
+                }
+            } else if (e.key === 'Escape') {
+                // cerrar cualquier modal visible
+                if (!document.getElementById('accountModal').classList.contains('hidden')) {
+                    closeAccountModalFunc();
+                }
+                if (!document.getElementById('flightDetailsModal').classList.contains('hidden')) {
+                    closeFlightDetails();
+                }
+            }
+        };
+        document.addEventListener('keydown', trapHandler);
+    }
+
+    function removeTrapFocus() {
+        if (trapHandler) {
+            document.removeEventListener('keydown', trapHandler);
+            trapHandler = null;
+        }
+        if (lastFocusedElementBeforeModal) {
+            try { lastFocusedElementBeforeModal.focus(); } catch (e) {}
+            lastFocusedElementBeforeModal = null;
         }
     }
 
@@ -1033,7 +1160,22 @@
         document.getElementById('accountEmail').textContent = profile.email || 'No disponible';
         document.getElementById('accountPhone').textContent = profile.phone || 'No disponible';
         document.getElementById('accountRole').textContent = activeRoleLabel.textContent || 'Cliente';
-        document.getElementById('accountModal').classList.remove('hidden');
+        const modal = document.getElementById('accountModal');
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        const panel = modal.querySelector('.account-modal-panel');
+        if (panel) panel.focus();
+        trapFocusInModal(modal);
+    }
+
+    function closeAccountModalFunc() {
+        const modal = document.getElementById('accountModal');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+        const profileToggleEl = document.getElementById('profileToggle');
+        if (profileToggleEl) profileToggleEl.focus();
+        removeTrapFocus();
     }
 
     // ==================== INICIALIZACIÓN ====================
@@ -1045,26 +1187,59 @@
     const accountToggle = document.getElementById('accountToggle');
     const accountModal = document.getElementById('accountModal');
     const closeAccountModal = document.getElementById('closeAccountModal');
+    const closeFlightDetailsModal = document.getElementById('closeFlightDetailsModal');
 
-    if (accountToggle) accountToggle.addEventListener('click', openAccountModal);
+    if (accountToggle) accountToggle.addEventListener('click', () => {
+        openAccountModal();
+        accountToggle.setAttribute('aria-expanded', 'true');
+    });
+
     if (closeAccountModal) {
-        closeAccountModal.addEventListener('click', () => {
-            accountModal.classList.add('hidden');
-        });
+        closeAccountModal.addEventListener('click', closeAccountModalFunc);
+    }
+    if (closeFlightDetailsModal) {
+        closeFlightDetailsModal.addEventListener('click', closeFlightDetails);
     }
 
-    // Cerrar modales al hacer clic fuera
+    // Cerrar modales/menus al hacer clic fuera
     document.addEventListener('click', (event) => {
-        if (profileToggle && roleDropdown && 
-            !profileToggle.contains(event.target) && 
+        if (profileToggle && roleDropdown &&
+            !profileToggle.contains(event.target) &&
             !roleDropdown.contains(event.target)) {
             roleDropdown.classList.add('hidden');
+            profileToggle.setAttribute('aria-expanded', 'false');
         }
 
-        if (accountModal && accountToggle && 
-            !accountModal.contains(event.target) && 
+        const accountModalEl = document.getElementById('accountModal');
+        if (accountModalEl && accountToggle &&
+            !accountModalEl.contains(event.target) &&
             !accountToggle.contains(event.target)) {
-            accountModal.classList.add('hidden');
+            closeAccountModalFunc();
+        }
+
+        const flightModalEl = document.getElementById('flightDetailsModal');
+        const accountToggleEl = document.getElementById('accountToggle');
+        if (flightModalEl && accountToggleEl &&
+            !flightModalEl.contains(event.target) &&
+            !accountToggleEl.contains(event.target)) {
+            // no-op (cerrado por close button / lógica interna)
+        }
+    });
+
+    // Cerrar con Escape global si no está en trapFocus
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (!document.getElementById('accountModal').classList.contains('hidden')) {
+                closeAccountModalFunc();
+            }
+            if (!document.getElementById('flightDetailsModal').classList.contains('hidden')) {
+                closeFlightDetails();
+            }
+            if (!roleDropdown.classList.contains('hidden')) {
+                roleDropdown.classList.add('hidden');
+                profileToggle.setAttribute('aria-expanded', 'false');
+                profileToggle.focus();
+            }
         }
     });
 
@@ -1079,7 +1254,5 @@
         window.location.href = 'paquetes.html';
     }
 </script>
-        
-    </script>
 </body>
 </html>
