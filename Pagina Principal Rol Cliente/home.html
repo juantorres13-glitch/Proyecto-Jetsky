@@ -147,35 +147,34 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <a href="#main" class="sr-only">Saltar al contenido</a>
+    <!-- Botón principal de login / rol -->
+    <button
+        id="loginButton"
+        type="button"
+        class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#69d7f7] focus:outline-none focus:ring-2 focus:ring-[#69d7f7]">
+        Iniciar sesión
+    </button>
 
-                <div class="relative">
-                    <button id="profileToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium flex items-center gap-2 hover:border-[#0a68bd] focus:outline-none focus:ring-2 focus:ring-[#0a68bd]" aria-expanded="false" aria-haspopup="menu" aria-controls="roleDropdown">
-                        <span id="activeRoleLabel" class="font-semibold">Cliente</span>
-                        <i class="fa-solid fa-chevron-down text-sm" aria-hidden="true"></i>
-                    </button>
-                    <div id="roleDropdown" class="role-dropdown hidden" role="menu" aria-label="Seleccionar rol">
-                        <button type="button" class="role-option role-option-active" data-role="Cliente" role="menuitem" tabindex="-1">
-                            <span>Cliente</span>
-                            <span class="role-badge">Activo</span>
-                        </button>
-                        <button type="button" class="role-option" data-role="Asesor de aerolínea" role="menuitem" tabindex="-1">
-                            <span>Asesor</span>
-                        </button>
-                        <button type="button" class="role-option" data-role="Administrativo" role="menuitem" tabindex="-1">
-                            <span>Admin</span>
-                        </button>
-                    </div>
-                </div>
+    <!-- Botón de cerrar sesión (se oculta hasta que haya login) -->
+    <button
+        id="logoutButton"
+        type="button"
+        class="hidden border border-red-500 text-red-600 px-4 py-2 rounded-xl text-sm font-medium hover:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">
+        Cerrar sesión
+    </button>
 
-                <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#0a68bd] focus:outline-none focus:ring-2 focus:ring-[#0a68bd]" aria-haspopup="dialog" aria-controls="accountModal" aria-expanded="false">
-                    Cuenta
-                </button>
+    <!-- Botón Cuenta (igual que antes) -->
+    <button id="accountToggle" type="button" class="border border-[#0F172A] text-[#0F172A] px-6 py-3 rounded-xl font-medium hover:border-[#69d7f7] focus:outline-none focus:ring-2 focus:ring-[#69d7f7]">
+        Cuenta
+    </button>
 
-                <a id="registerLink" href="register.html" class="bg-[#f97316] hover:bg-[#ea580c] text-white px-6 py-3 rounded-xl font-medium inline-block text-center" role="button" aria-label="Registrarse">
-                    Registrarse
-                </a>
-            </div>
+    <!-- Registrarse (igual que antes) -->
+    <a href="register.html">
+        <button class="bg-[#f89f37] hover:bg-[#e68817] text-white px-6 py-3 rounded-xl font-medium">
+            Registrarse
+        </button>
+    </a>
+</div>
         </nav>
     </header>
 
@@ -293,6 +292,59 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal de inicio de sesión -->
+<div id="loginModal" class="account-modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="loginModalTitle">
+    <div class="account-modal-panel">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 id="loginModalTitle" class="text-2xl font-bold text-[#0F172A]">Iniciar sesión</h2>
+                <p class="text-sm text-gray-500">
+                    Usa las credenciales de prueba para entrar como Cliente, Asesor o Admin.
+                </p>
+            </div>
+            <button id="closeLoginModal" type="button" class="text-gray-500 hover:text-[#69d7f7] text-xl" aria-label="Cerrar inicio de sesión">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="loginForm" class="space-y-4 text-gray-700">
+            <div class="account-field">
+                <p class="text-xs uppercase tracking-widest text-gray-400">Correo electrónico</p>
+                <input
+                    id="loginEmail"
+                    type="email"
+                    class="w-full mt-1 bg-transparent outline-none text-sm"
+                    placeholder="correo@ejemplo.com"
+                    required>
+            </div>
+
+            <div class="account-field">
+                <p class="text-xs uppercase tracking-widest text-gray-400">Contraseña</p>
+                <input
+                    id="loginPassword"
+                    type="password"
+                    class="w-full mt-1 bg-transparent outline-none text-sm"
+                    placeholder="********"
+                    required>
+            </div>
+
+            <div class="text-xs text-gray-500 space-y-1">
+                <p>Datos de prueba:</p>
+                <p>Cliente: <code>cliente.cliente00@gmail.com</code></p>
+                <p>Asesor: <code>asesor.asesor00@gmail.com</code></p>
+                <p>Admin: <code>admin.admin00@gmail.com</code></p>
+                <p>Contraseña para todos: <code>12345678</code></p>
+            </div>
+
+            <button
+                type="submit"
+                class="w-full mt-4 bg-[#f89f37] hover:bg-[#e68817] text-white px-6 py-3 rounded-xl font-semibold">
+                Entrar
+            </button>
+        </form>
+    </div>
+</div>
 
     <!-- Hero + Search -->
     <main id="main" role="main" tabindex="-1" class="relative py-12">
@@ -1005,6 +1057,107 @@
             targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
+
+   // ---- LOGIN POR ROLES ----
+const loginButton = document.getElementById('loginButton');
+const logoutButton = document.getElementById('logoutButton');
+const loginModal = document.getElementById('loginModal');
+const closeLoginModal = document.getElementById('closeLoginModal');
+const loginForm = document.getElementById('loginForm');
+const loginEmailInput = document.getElementById('loginEmail');
+const loginPasswordInput = document.getElementById('loginPassword');
+
+// Usuarios de prueba
+const TEST_USERS = {
+    'cliente.cliente00@gmail.com': { role: 'cliente', password: '12345678' },
+    'asesor.asesor00@gmail.com':  { role: 'asesor',  password: '12345678' },
+    'admin.admin00@gmail.com':    { role: 'admin',   password: '12345678' }
+};
+
+function roleLabel(role) {
+    if (!role) return 'Iniciar sesión';
+    if (role === 'cliente') return 'Cliente';
+    if (role === 'asesor')  return 'Asesor';
+    if (role === 'admin')   return 'Admin';
+    return role;
+}
+
+function updateAuthUI() {
+    const role = localStorage.getItem('jetskyAuthRole');
+    if (role) {
+        loginButton.textContent = roleLabel(role);
+        logoutButton.classList.remove('hidden');
+    } else {
+        loginButton.textContent = 'Iniciar sesión';
+        logoutButton.classList.add('hidden');
+    }
+}
+
+// Click en botón de login
+loginButton.addEventListener('click', () => {
+    const role = localStorage.getItem('jetskyAuthRole');
+
+    if (role === 'asesor') {
+        window.location.href = '../Asesor de Aerolineas/Asesor Aerolinea Prototipo.html';
+        return;
+    }
+    if (role === 'admin') {
+        window.location.href = '../Administrador/admin.html';
+        return;
+    }
+
+    // Cliente o sin sesión: abrir modal de login
+    loginModal.classList.remove('hidden');
+    loginEmailInput.focus();
+});
+
+// Cerrar modal login
+closeLoginModal.addEventListener('click', () => {
+    loginModal.classList.add('hidden');
+});
+
+// Cerrar modal haciendo click fuera
+loginModal.addEventListener('click', (event) => {
+    if (event.target === loginModal) {
+        loginModal.classList.add('hidden');
+    }
+});
+
+// Envío del formulario de login
+loginForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const email = loginEmailInput.value.trim().toLowerCase();
+    const password = loginPasswordInput.value.trim();
+
+    const user = TEST_USERS[email];
+    if (!user || user.password !== password) {
+        alert('Correo o contraseña incorrectos. Usa los datos de prueba indicados.');
+        return;
+    }
+
+    localStorage.setItem('jetskyAuthRole', user.role);
+    localStorage.setItem('jetskyAuthEmail', email);
+
+    updateAuthUI();
+    loginModal.classList.add('hidden');
+
+    if (user.role === 'cliente') {
+        // Cliente se queda en home
+        return;
+    } else if (user.role === 'asesor') {
+        window.location.href = '../Asesor de Aerolineas/Asesor Aerolinea Prototipo.html';
+    } else if (user.role === 'admin') {
+        window.location.href = '../Administrador/admin.html';
+    }
+});
+
+// Cerrar sesión
+logoutButton.addEventListener('click', () => {
+    localStorage.removeItem('jetskyAuthRole');
+    localStorage.removeItem('jetskyAuthEmail');
+    updateAuthUI();
+});
 
     // ==================== ROLES Y CUENTA ====================
     const profileToggle = document.getElementById('profileToggle');

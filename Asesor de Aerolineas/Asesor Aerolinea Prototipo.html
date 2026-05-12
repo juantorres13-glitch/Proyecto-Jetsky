@@ -1,27 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetSky · Sistema de Gestión</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="Css/Decoracion.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JetSky · Sistema de Gestión · Asesor Aerolínea</title>
+
+  <!-- Fuentes y iconos (como tenías) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- ESTO ES LO IMPORTANTE: tu CSS del diseño -->
+  <link rel="stylesheet" href="Css/Decoracion.css" />
 </head>
 <body>
 <div class="app">
 
     <!-- HEADER -->
-    <header>
-        <div class="logo">
-            <i class="fas fa-plane" aria-hidden="true"></i>
-            <div class="logo-text">JetSky</div>
-        </div>
-        <div class="header-divider"></div>
-        <div class="header-subtitle">Sistema de Gestión · Asesor Aerolínea</div>
-        <div class="header-spacer"></div>
-        <div class="header-badge"> 🟢 En línea</div>
-    </header>
+    <header class="app-header">
+  <div class="logo">
+    <i class="fas fa-plane" aria-hidden="true"></i>
+    <span class="logo-text">JetSky</span>
+  </div>
+
+  <div class="header-divider"></div>
+  <div class="header-subtitle">Sistema de Gestión · Asesor Aerolínea</div>
+
+  <div class="header-spacer"></div>
+
+  <!-- Estado en línea (igual que antes) -->
+  <div class="header-badge">🟢 En línea</div>
+
+  <!-- NUEVO: rol + botón cerrar sesión -->
+  <div class="header-spacer"></div>
+  <div class="header-user" style="display:flex; align-items:center; gap:0.5rem;">
+    <span
+      id="asesorRoleLabel"
+      style="
+        font-size:0.8rem;
+        font-weight:600;
+        color:#1e3a8a;
+        background:#e0ecff;
+        padding:0.25rem 0.75rem;
+        border-radius:9999px;">
+      Asesor
+    </span>
+    <button
+      id="asesorLogoutBtn"
+      type="button"
+      class="btn btn-ghost btn-sm">
+      Cerrar sesión
+    </button>
+  </div>
+</header>
 
     <div class="body">
 
@@ -1045,6 +1079,35 @@
     renderClients();
     renderPayments();
     renderSeatMap();
+
+    // --- SESIÓN / LOGOUT ASESOR (unificación con home) ---
+(function () {
+  const label = document.getElementById('asesorRoleLabel');
+  const logoutBtn = document.getElementById('asesorLogoutBtn');
+
+  // Leer el rol actual guardado por home.html
+  const role = (localStorage.getItem('jetskyAuthRole') || 'asesor').toLowerCase();
+
+  if (label) {
+    let texto = 'Asesor';
+    if (role === 'cliente') texto = 'Cliente';
+    if (role === 'admin')   texto = 'Admin';
+    label.textContent = texto;
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function () {
+      // Borrar la sesión falsa
+      localStorage.removeItem('jetskyAuthRole');
+      localStorage.removeItem('jetskyAuthEmail');
+      // Volver a la home del cliente
+      window.location.href = '../Pagina Principal Rol Cliente/home.html';
+    });
+  }
+})();
+
+
+
 </script>
 </body>
 </html>
