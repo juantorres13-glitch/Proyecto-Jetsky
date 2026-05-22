@@ -83,6 +83,12 @@
                 <span class="nav-icon" aria-hidden="true"></span>
                 <span>Asientos</span>
             </button>
+            <div class="nav-group-label">Soporte</div>
+            <button class="nav-btn" data-section="soporte-chat" id="nav-chat-btn">
+                <span class="nav-icon" aria-hidden="true">💬</span>
+                <span>Mensajes</span>
+                <span id="chat-badge" style="display:none;background:#ef4444;color:#fff;font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:9999px;margin-left:auto;">0</span>
+            </button>
         </aside>
 
         <!-- MAIN -->
@@ -453,6 +459,73 @@
                 </div>
             </div>
 
+
+            <!-- ── SOPORTE CHAT ── -->
+            <div id="soporte-chat" class="content-section">
+                <div style="display:grid;grid-template-columns:290px 1fr;gap:1rem;height:calc(100vh - 130px);min-height:500px;">
+
+                    <!-- Lista de conversaciones -->
+                    <div class="card" style="display:flex;flex-direction:column;overflow:hidden;padding:0;">
+                        <div class="card-header" style="flex-shrink:0;padding:1rem 1.25rem 0.75rem;">
+                            <div>
+                                <div class="page-title" style="font-size:1rem;">Conversaciones</div>
+                                <div class="page-subtitle" id="chat-active-count">Cargando...</div>
+                            </div>
+                        </div>
+                        <div style="padding:0 0.75rem 0.5rem;flex-shrink:0;">
+                            <div class="search-box">
+                                <span class="icon" aria-hidden="true">🔍</span>
+                                <input id="chat-search" type="text" placeholder="Buscar cliente..." aria-label="Buscar conversación" style="width:100%;">
+                            </div>
+                        </div>
+                        <div style="padding:0 0.5rem 0.25rem;flex-shrink:0;display:flex;gap:0.4rem;">
+                            <button class="chat-filter-btn active" data-filter="all" style="flex:1;padding:0.3rem 0;border:1px solid var(--border);border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer;background:var(--sky);color:#fff;">Todos</button>
+                            <button class="chat-filter-btn" data-filter="pending" style="flex:1;padding:0.3rem 0;border:1px solid var(--border);border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer;background:transparent;color:var(--ink-soft);">Pendientes</button>
+                            <button class="chat-filter-btn" data-filter="resolved" style="flex:1;padding:0.3rem 0;border:1px solid var(--border);border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer;background:transparent;color:var(--ink-soft);">Resueltos</button>
+                        </div>
+                        <div id="chat-list" style="flex:1;overflow-y:auto;padding:0.25rem 0.5rem;"></div>
+                    </div>
+
+                    <!-- Panel de mensajes -->
+                    <div class="card" style="display:flex;flex-direction:column;overflow:hidden;padding:0;">
+
+                        <!-- Estado vacío -->
+                        <div id="chat-empty-state" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink-soft);gap:0.75rem;">
+                            <div style="font-size:2.5rem;">💬</div>
+                            <div style="font-weight:600;font-size:0.95rem;">Selecciona una conversación</div>
+                            <div style="font-size:0.8rem;">Los mensajes de clientes aparecen aquí</div>
+                        </div>
+
+                        <!-- Chat activo -->
+                        <div id="chat-active" style="display:none;flex-direction:column;height:100%;">
+
+                            <!-- Header del chat -->
+                            <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.75rem;flex-shrink:0;">
+                                <div id="chat-header-avatar" style="width:38px;height:38px;border-radius:50%;background:var(--sky);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:0.9rem;flex-shrink:0;"></div>
+                                <div style="flex:1;min-width:0;">
+                                    <div id="chat-header-name" style="font-weight:700;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+                                    <div id="chat-header-info" style="font-size:0.75rem;color:var(--ink-soft);"></div>
+                                </div>
+                                <div style="display:flex;gap:0.5rem;align-items:center;">
+                                    <span id="chat-header-status" style="font-size:0.72rem;font-weight:600;padding:0.2rem 0.6rem;border-radius:9999px;"></span>
+                                    <button id="chat-resolve-btn" class="btn btn-ghost btn-sm" type="button">✓ Resolver</button>
+                                </div>
+                            </div>
+
+                            <!-- Mensajes -->
+                            <div id="chat-messages" style="flex:1;overflow-y:auto;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:0.6rem;"></div>
+
+                            <!-- Input respuesta -->
+                            <div style="padding:0.75rem 1rem;border-top:1px solid var(--border);display:flex;gap:0.5rem;align-items:flex-end;flex-shrink:0;">
+                                <textarea id="chat-reply-input" rows="2" placeholder="Escribe tu respuesta como asesor..." aria-label="Responder al cliente"
+                                    style="flex:1;resize:none;border:1px solid var(--border);border-radius:10px;padding:0.6rem 0.85rem;font-family:var(--sans);font-size:0.88rem;color:var(--ink);background:var(--surface);outline:none;line-height:1.4;"></textarea>
+                                <button id="chat-send-btn" class="btn btn-primary" type="button" style="padding:0.6rem 1rem;flex-shrink:0;height:fit-content;">Enviar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
 </div>
@@ -663,6 +736,7 @@
             else if (id === 'gestionar-clientes') renderClients();
             else if (id === 'confirmar-pagos') renderPayments();
             else if (id === 'asignar-asientos') renderSeatMap();
+            else if (id === 'soporte-chat') { /* renderChatList called by listener */ }
         });
     });
 
@@ -1070,6 +1144,294 @@
             document.getElementById('add-client-form')?.classList.add('hidden');
         }
     });
+
+
+    // ── CHAT DE SOPORTE (ASESOR) ──
+    (function() {
+        const STORAGE_KEY = 'jetsky_chat_messages';
+        let activeChatId = null;
+        let chatFilter = 'all';
+
+        // Conversaciones iniciales de demostración
+        function getInitialConversations() {
+            return [
+                {
+                    id: 'conv_demo1',
+                    clientName: 'Juan Pérez',
+                    clientEmail: 'juan.perez@email.com',
+                    status: 'pending',
+                    lastTime: Date.now() - 1000 * 60 * 5,
+                    messages: [
+                        { role: 'client', text: 'Hola, quisiera saber el estado de mi vuelo JK101.', time: Date.now() - 1000 * 60 * 10 },
+                        { role: 'client', text: '¿Me pueden ayudar?', time: Date.now() - 1000 * 60 * 5 }
+                    ]
+                },
+                {
+                    id: 'conv_demo2',
+                    clientName: 'María García',
+                    clientEmail: 'maria.garcia@email.com',
+                    status: 'pending',
+                    lastTime: Date.now() - 1000 * 60 * 15,
+                    messages: [
+                        { role: 'client', text: 'Necesito cambiar mi asiento en el vuelo JK202.', time: Date.now() - 1000 * 60 * 15 }
+                    ]
+                },
+                {
+                    id: 'conv_demo3',
+                    clientName: 'Carlos Rodríguez',
+                    clientEmail: 'carlos.rodriguez@email.com',
+                    status: 'resolved',
+                    lastTime: Date.now() - 1000 * 60 * 60,
+                    messages: [
+                        { role: 'client', text: 'Quiero saber si puedo hacer check-in en línea.', time: Date.now() - 1000 * 60 * 70 },
+                        { role: 'asesor', text: 'Hola Carlos, sí puedes hacer check-in en línea desde 24 horas antes del vuelo.', time: Date.now() - 1000 * 60 * 65 },
+                        { role: 'client', text: 'Perfecto, muchas gracias.', time: Date.now() - 1000 * 60 * 60 }
+                    ]
+                }
+            ];
+        }
+
+        function loadConversations() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) return JSON.parse(raw);
+            } catch(e) {}
+            const initial = getInitialConversations();
+            saveConversations(initial);
+            return initial;
+        }
+
+        function saveConversations(convs) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(convs));
+        }
+
+        function timeAgo(ts) {
+            const diff = Date.now() - ts;
+            const m = Math.floor(diff / 60000);
+            if (m < 1) return 'ahora';
+            if (m < 60) return `hace ${m}m`;
+            const h = Math.floor(m / 60);
+            if (h < 24) return `hace ${h}h`;
+            return `hace ${Math.floor(h/24)}d`;
+        }
+
+        function formatTime(ts) {
+            return new Date(ts).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function initials(name) {
+            return name.split(' ').slice(0,2).map(w => w[0]).join('').toUpperCase();
+        }
+
+        function getUnreadCount(conv) {
+            if (conv.status === 'resolved') return 0;
+            const lastAsesor = conv.messages.map((m,i) => m.role === 'asesor' ? i : -1).filter(i => i >= 0);
+            const lastAsesorIdx = lastAsesor.length ? Math.max(...lastAsesor) : -1;
+            return conv.messages.filter((m, i) => m.role === 'client' && i > lastAsesorIdx).length;
+        }
+
+        function renderChatList() {
+            const convs = loadConversations();
+            const searchVal = (document.getElementById('chat-search')?.value || '').toLowerCase();
+            const list = document.getElementById('chat-list');
+            if (!list) return;
+
+            let filtered = convs.filter(c => {
+                if (chatFilter === 'pending' && c.status !== 'pending') return false;
+                if (chatFilter === 'resolved' && c.status !== 'resolved') return false;
+                if (searchVal && !c.clientName.toLowerCase().includes(searchVal) && !c.clientEmail.toLowerCase().includes(searchVal)) return false;
+                return true;
+            });
+
+            filtered.sort((a,b) => b.lastTime - a.lastTime);
+
+            const pending = convs.filter(c => c.status === 'pending').length;
+            const activeCountEl = document.getElementById('chat-active-count');
+            if (activeCountEl) activeCountEl.textContent = `${pending} pendiente${pending !== 1 ? 's' : ''}`;
+
+            const badge = document.getElementById('chat-badge');
+            const totalUnread = convs.reduce((s, c) => s + getUnreadCount(c), 0);
+            if (badge) {
+                badge.textContent = totalUnread;
+                badge.style.display = totalUnread > 0 ? 'inline-block' : 'none';
+            }
+
+            if (!filtered.length) {
+                list.innerHTML = '<div style="text-align:center;padding:2rem 1rem;color:var(--ink-soft);font-size:0.82rem;">Sin conversaciones</div>';
+                return;
+            }
+
+            list.innerHTML = filtered.map(c => {
+                const lastMsg = c.messages[c.messages.length - 1];
+                const unread = getUnreadCount(c);
+                const isActive = c.id === activeChatId;
+                const statusColor = c.status === 'pending' ? '#f59e0b' : '#22c55e';
+                return `<button type="button" onclick="window.__openChat('${c.id}')"
+                    style="width:100%;text-align:left;padding:0.7rem 0.75rem;border-radius:10px;border:none;cursor:pointer;display:flex;gap:0.65rem;align-items:flex-start;margin-bottom:0.2rem;
+                    background:${isActive ? 'var(--sky-pale, #e0f2fe)' : 'transparent'};transition:background 0.15s;"
+                    onmouseenter="if('${c.id}'!==window.__activeChatId)this.style.background='var(--surface-hover,#f1f5f9)'"
+                    onmouseleave="if('${c.id}'!==window.__activeChatId)this.style.background='transparent'">
+                    <div style="width:36px;height:36px;border-radius:50%;background:var(--sky);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:0.8rem;flex-shrink:0;">
+                        ${initials(c.clientName)}
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">
+                            <span style="font-weight:${unread>0?'700':'600'};font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.clientName}</span>
+                            <span style="font-size:0.68rem;color:var(--ink-soft);flex-shrink:0;">${timeAgo(c.lastTime)}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:0.4rem;margin-top:0.1rem;">
+                            <span style="font-size:0.76rem;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;">${lastMsg ? lastMsg.text.substring(0,45)+(lastMsg.text.length>45?'…':'') : ''}</span>
+                            ${unread > 0 ? `<span style="background:#ef4444;color:#fff;font-size:0.65rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:9999px;flex-shrink:0;">${unread}</span>` : ''}
+                        </div>
+                        <div style="margin-top:0.2rem;display:flex;align-items:center;gap:0.3rem;">
+                            <span style="width:6px;height:6px;border-radius:50%;background:${statusColor};display:inline-block;"></span>
+                            <span style="font-size:0.68rem;color:${statusColor};font-weight:600;">${c.status === 'pending' ? 'Pendiente' : 'Resuelto'}</span>
+                        </div>
+                    </div>
+                </button>`;
+            }).join('');
+        }
+
+        function openChat(convId) {
+            activeChatId = convId;
+            window.__activeChatId = convId;
+            const convs = loadConversations();
+            const conv = convs.find(c => c.id === convId);
+            if (!conv) return;
+
+            document.getElementById('chat-empty-state').style.display = 'none';
+            const activeEl = document.getElementById('chat-active');
+            activeEl.style.display = 'flex';
+
+            document.getElementById('chat-header-avatar').textContent = initials(conv.clientName);
+            document.getElementById('chat-header-name').textContent = conv.clientName;
+            document.getElementById('chat-header-info').textContent = conv.clientEmail;
+
+            const statusEl = document.getElementById('chat-header-status');
+            if (conv.status === 'pending') {
+                statusEl.textContent = 'Pendiente';
+                statusEl.style.cssText = 'font-size:0.72rem;font-weight:600;padding:0.2rem 0.6rem;border-radius:9999px;background:#fef3c7;color:#92400e;';
+            } else {
+                statusEl.textContent = 'Resuelto';
+                statusEl.style.cssText = 'font-size:0.72rem;font-weight:600;padding:0.2rem 0.6rem;border-radius:9999px;background:#dcfce7;color:#166534;';
+            }
+
+            document.getElementById('chat-resolve-btn').style.display = conv.status === 'pending' ? 'inline-flex' : 'none';
+
+            renderMessages(conv.messages);
+            renderChatList();
+        }
+
+        function renderMessages(messages) {
+            const container = document.getElementById('chat-messages');
+            if (!container) return;
+            container.innerHTML = messages.map(m => {
+                const isAsesor = m.role === 'asesor';
+                return `<div style="display:flex;flex-direction:column;align-items:${isAsesor ? 'flex-end' : 'flex-start'};">
+                    <div style="max-width:72%;padding:0.55rem 0.85rem;border-radius:${isAsesor ? '14px 14px 4px 14px' : '14px 14px 14px 4px'};
+                        background:${isAsesor ? 'var(--sky)' : 'var(--surface)'};
+                        color:${isAsesor ? '#fff' : 'var(--ink)'};
+                        border:${isAsesor ? 'none' : '1px solid var(--border)'};
+                        font-size:0.85rem;line-height:1.45;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+                        ${m.text}
+                    </div>
+                    <span style="font-size:0.68rem;color:var(--ink-soft);margin-top:0.2rem;padding:0 0.25rem;">${isAsesor ? 'Asesor · ' : ''}${formatTime(m.time)}</span>
+                </div>`;
+            }).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendReply() {
+            const input = document.getElementById('chat-reply-input');
+            const text = input?.value.trim();
+            if (!text || !activeChatId) return;
+
+            const convs = loadConversations();
+            const conv = convs.find(c => c.id === activeChatId);
+            if (!conv) return;
+
+            conv.messages.push({ role: 'asesor', text, time: Date.now() });
+            conv.lastTime = Date.now();
+            saveConversations(convs);
+
+            input.value = '';
+            renderMessages(conv.messages);
+            renderChatList();
+            toast('Respuesta enviada', 'success');
+        }
+
+        function resolveChat() {
+            if (!activeChatId) return;
+            const convs = loadConversations();
+            const conv = convs.find(c => c.id === activeChatId);
+            if (!conv) return;
+            conv.status = 'resolved';
+            saveConversations(convs);
+            openChat(activeChatId);
+            renderChatList();
+            toast('Conversación marcada como resuelta', 'success');
+        }
+
+        // Filtros
+        document.querySelectorAll('.chat-filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                chatFilter = this.dataset.filter;
+                document.querySelectorAll('.chat-filter-btn').forEach(b => {
+                    b.style.background = 'transparent';
+                    b.style.color = 'var(--ink-soft)';
+                });
+                this.style.background = 'var(--sky)';
+                this.style.color = '#fff';
+                renderChatList();
+            });
+        });
+
+        document.getElementById('chat-search')?.addEventListener('input', renderChatList);
+        document.getElementById('chat-send-btn')?.addEventListener('click', sendReply);
+        document.getElementById('chat-resolve-btn')?.addEventListener('click', resolveChat);
+        document.getElementById('chat-reply-input')?.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendReply(); }
+        });
+
+        // Escuchar mensajes nuevos del cliente (vía localStorage events)
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'jetsky_chat_messages') {
+                renderChatList();
+                if (activeChatId) {
+                    const convs = loadConversations();
+                    const conv = convs.find(c => c.id === activeChatId);
+                    if (conv) renderMessages(conv.messages);
+                }
+            }
+        });
+
+        // Exponer funciones globales
+        window.__openChat = openChat;
+        window.__activeChatId = null;
+
+        // Agregar soporte-chat a navegación
+        const origNavigateTo = window.navigateTo || (() => {});
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            if (btn.dataset.section === 'soporte-chat') {
+                btn.addEventListener('click', function() {
+                    renderChatList();
+                });
+            }
+        });
+
+        // Polling para simular mensajes en tiempo real
+        setInterval(() => {
+            renderChatList();
+            if (activeChatId) {
+                const convs = loadConversations();
+                const conv = convs.find(c => c.id === activeChatId);
+                if (conv) renderMessages(conv.messages);
+            }
+        }, 3000);
+
+        // Init
+        renderChatList();
+    })();
 
     // ── INIT ──
     renderFlightCards();
