@@ -31,8 +31,6 @@
 
   <div class="header-spacer"></div>
 
-  <!-- Estado en línea (igual que antes) -->
-  <div class="header-badge">🟢 En línea</div>
 
   <!-- NUEVO: rol + botón cerrar sesión -->
   <div class="header-spacer"></div>
@@ -83,9 +81,14 @@
                 <span class="nav-icon" aria-hidden="true"></span>
                 <span>Asientos</span>
             </button>
+            <div class="nav-group-label">Operaciones</div>
+            <button class="nav-btn" data-section="checkin-vuelo">
+                <span class="nav-icon" aria-hidden="true"></span>
+                <span>Check-in</span>
+            </button>
             <div class="nav-group-label">Soporte</div>
             <button class="nav-btn" data-section="soporte-chat" id="nav-chat-btn">
-                <span class="nav-icon" aria-hidden="true">💬</span>
+                <span class="nav-icon" aria-hidden="true"></span>
                 <span>Mensajes</span>
                 <span id="chat-badge" style="display:none;background:#ef4444;color:#fff;font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:9999px;margin-left:auto;">0</span>
             </button>
@@ -460,6 +463,94 @@
             </div>
 
 
+            <!-- ── CHECK-IN ── -->
+            <div id="checkin-vuelo" class="content-section">
+
+                <!-- Selector de vuelo -->
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="page-title">Gestión de Check-in</div>
+                            <div class="page-subtitle">Control de embarque por vuelo</div>
+                        </div>
+                        <button id="checkin-close-btn" class="btn btn-danger btn-sm" type="button" style="display:none;">
+                            🔒 Cerrar Check-in
+                        </button>
+                        <button id="checkin-reopen-btn" class="btn btn-ghost btn-sm" type="button" style="display:none;">
+                            🔓 Reabrir Check-in
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-field selector-field">
+                            <label for="checkin-flight-selector">Seleccionar Vuelo</label>
+                            <select id="checkin-flight-selector" title="Seleccionar vuelo para check-in" aria-label="Seleccionar vuelo"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats del vuelo seleccionado -->
+                <div id="checkin-stats-row" class="stats-grid" style="display:none;">
+                    <div class="stat-card success">
+                        <div class="stat-label">Check-in completado</div>
+                        <div class="stat-value" id="ci-done">0</div>
+                    </div>
+                    <div class="stat-card warn">
+                        <div class="stat-label">Pendientes</div>
+                        <div class="stat-value" id="ci-pending">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total pasajeros</div>
+                        <div class="stat-value" id="ci-total">0</div>
+                    </div>
+                    <div class="stat-card" id="ci-status-card">
+                        <div class="stat-label">Estado</div>
+                        <div class="stat-value" id="ci-status-val" style="font-size:1rem;">Abierto</div>
+                    </div>
+                </div>
+
+                <!-- Barra de progreso -->
+                <div id="checkin-progress-wrap" class="card" style="display:none;">
+                    <div class="card-body" style="padding:1rem 1.25rem;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+                            <span style="font-size:0.85rem;font-weight:600;color:var(--ink);">Progreso de embarque</span>
+                            <span id="ci-percent" style="font-size:0.85rem;font-weight:700;color:var(--sky-dark);">0%</span>
+                        </div>
+                        <div style="height:10px;background:var(--border);border-radius:9999px;overflow:hidden;">
+                            <div id="ci-progress-bar" style="height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);border-radius:9999px;width:0%;transition:width 0.4s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de pasajeros -->
+                <div id="checkin-passengers-wrap" class="card" style="display:none;">
+                    <div class="card-header">
+                        <div>
+                            <div class="page-title" style="font-size:1rem;">Pasajeros</div>
+                        </div>
+                        <div class="search-box" style="width:260px;">
+                            <span class="icon" aria-hidden="true">🔍</span>
+                            <input id="checkin-search" type="text" placeholder="Buscar pasajero..." aria-label="Buscar pasajero">
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Pasajero</th>
+                                    <th>Asiento</th>
+                                    <th>Documento</th>
+                                    <th>Estado</th>
+                                    <th>Hora check-in</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="checkin-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
             <!-- ── SOPORTE CHAT ── -->
             <div id="soporte-chat" class="content-section">
                 <div style="display:grid;grid-template-columns:290px 1fr;gap:1rem;height:calc(100vh - 130px);min-height:500px;">
@@ -736,6 +827,7 @@
             else if (id === 'gestionar-clientes') renderClients();
             else if (id === 'confirmar-pagos') renderPayments();
             else if (id === 'asignar-asientos') renderSeatMap();
+            else if (id === 'checkin-vuelo') { /* populateCheckinFlightSelector called by listener */ }
             else if (id === 'soporte-chat') { /* renderChatList called by listener */ }
         });
     });
@@ -1145,6 +1237,277 @@
         }
     });
 
+
+
+    // ══════════════════════════════════════════
+    // ── CHECK-IN (ASESOR) ──
+    // ══════════════════════════════════════════
+    (function() {
+        const CHECKIN_KEY = 'jetsky_checkin_data';
+
+        // Pasajeros simulados por vuelo
+        const PASSENGERS_BY_FLIGHT = {
+            'JK101': [
+                { id: 'P101A', name: 'Juan Pérez',       seat: 'A12', doc: 'CC 1234567890' },
+                { id: 'P101B', name: 'Laura Gómez',      seat: 'A13', doc: 'CC 9876543210' },
+                { id: 'P101C', name: 'Carlos Ruiz',      seat: 'B4',  doc: 'CC 1122334455' },
+                { id: 'P101D', name: 'Ana Martínez',     seat: 'B5',  doc: 'PP AB123456'   },
+                { id: 'P101E', name: 'Pedro Sánchez',    seat: 'C8',  doc: 'CC 5566778899' },
+                { id: 'P101F', name: 'María Torres',     seat: 'C9',  doc: 'CC 4433221100' },
+            ],
+            'JK202': [
+                { id: 'P202A', name: 'María García',     seat: 'B5',  doc: 'CC 9876543210' },
+                { id: 'P202B', name: 'Luis Hernández',   seat: 'D3',  doc: 'CC 6677889900' },
+                { id: 'P202C', name: 'Sofía Jiménez',    seat: 'D4',  doc: 'TI 55667788'   },
+                { id: 'P202D', name: 'Andrés Castro',    seat: 'E10', doc: 'CC 1020304050' },
+            ],
+            'JK303': [
+                { id: 'P303A', name: 'Carlos Rodríguez', seat: 'C8',  doc: 'PP AB1234567'  },
+                { id: 'P303B', name: 'Valentina López',  seat: 'A1',  doc: 'CC 3344556677' },
+                { id: 'P303C', name: 'Mateo Vargas',     seat: 'F15', doc: 'CC 7788990011' },
+            ],
+            'JK404': [
+                { id: 'P404A', name: 'Ana Martínez',     seat: 'D15', doc: 'CC 5555555555' },
+                { id: 'P404B', name: 'Jorge Mora',       seat: 'A7',  doc: 'CC 2233445566' },
+                { id: 'P404C', name: 'Camila Ríos',      seat: 'B11', doc: 'CC 9900112233' },
+                { id: 'P404D', name: 'Ricardo Peña',     seat: 'E6',  doc: 'PP CD987654'   },
+                { id: 'P404E', name: 'Diana Suárez',     seat: 'C2',  doc: 'CC 1231231231' },
+            ],
+            'JK505': [
+                { id: 'P505A', name: 'Fernando Díaz',    seat: 'A3',  doc: 'PP FD123456'   },
+                { id: 'P505B', name: 'Isabella Rojas',   seat: 'B7',  doc: 'CC 4567891230' },
+                { id: 'P505C', name: 'Sebastián Gil',    seat: 'C12', doc: 'CC 3216549870' },
+            ],
+        };
+
+        // Defaults: todos pendientes
+        function getDefaultPassengers(flightNumber) {
+            const base = PASSENGERS_BY_FLIGHT[flightNumber] || generatePassengers(flightNumber, 8);
+            return base.map(p => ({ ...p, checkin: false, checkinTime: null }));
+        }
+
+        function generatePassengers(flightNumber, count) {
+            const names = ['Andrés López','Camila Torres','Felipe Vargas','Natalia Ruiz',
+                           'Julián Mora','Daniela Castro','Santiago Gil','Valentina Díaz'];
+            const docs  = ['CC 1111111111','CC 2222222222','PP XY123456','TI 33333333',
+                           'CC 4444444444','CC 5555555555','PP AB654321','CC 6666666666'];
+            const cols = ['A','B','C','D','E','F'];
+            return names.slice(0, count).map((name, i) => ({
+                id: `${flightNumber}_${i}`,
+                name,
+                seat: `${cols[i % 6]}${i + 1}`,
+                doc: docs[i]
+            }));
+        }
+
+        function loadCheckinData(flightNumber) {
+            try {
+                const raw = localStorage.getItem(CHECKIN_KEY);
+                const all = raw ? JSON.parse(raw) : {};
+                if (!all[flightNumber]) {
+                    all[flightNumber] = { passengers: getDefaultPassengers(flightNumber), closed: false };
+                    localStorage.setItem(CHECKIN_KEY, JSON.stringify(all));
+                }
+                return all[flightNumber];
+            } catch(e) {
+                return { passengers: getDefaultPassengers(flightNumber), closed: false };
+            }
+        }
+
+        function saveCheckinData(flightNumber, data) {
+            try {
+                const raw = localStorage.getItem(CHECKIN_KEY);
+                const all = raw ? JSON.parse(raw) : {};
+                all[flightNumber] = data;
+                localStorage.setItem(CHECKIN_KEY, JSON.stringify(all));
+            } catch(e) {}
+        }
+
+        function populateCheckinFlightSelector() {
+            const sel = document.getElementById('checkin-flight-selector');
+            if (!sel) return;
+            sel.innerHTML = '<option value="">— Seleccionar vuelo —</option>' +
+                Object.values(flights).map(f =>
+                    `<option value="${f.number}">${f.number} · ${f.origin} → ${f.destination} · ${f.date}</option>`
+                ).join('');
+        }
+
+        function updateCheckinStats(flightNumber, data) {
+            const done    = data.passengers.filter(p => p.checkin).length;
+            const total   = data.passengers.length;
+            const pending = total - done;
+            const pct     = total > 0 ? Math.round((done / total) * 100) : 0;
+
+            document.getElementById('ci-done').textContent    = done;
+            document.getElementById('ci-pending').textContent = pending;
+            document.getElementById('ci-total').textContent   = total;
+            document.getElementById('ci-percent').textContent = `${pct}%`;
+            document.getElementById('ci-progress-bar').style.width = `${pct}%`;
+
+            const statusEl   = document.getElementById('ci-status-val');
+            const statusCard = document.getElementById('ci-status-card');
+            const closeBtn   = document.getElementById('checkin-close-btn');
+
+            const reopenBtn = document.getElementById('checkin-reopen-btn');
+            if (data.closed) {
+                statusEl.textContent         = '🔒 Cerrado';
+                statusCard.className         = 'stat-card danger';
+                closeBtn.style.display       = 'none';
+                if (reopenBtn) reopenBtn.style.display = 'inline-flex';
+            } else {
+                statusEl.textContent         = '🟢 Abierto';
+                statusCard.className         = 'stat-card success';
+                closeBtn.style.display       = 'inline-flex';
+                if (reopenBtn) reopenBtn.style.display = 'none';
+            }
+
+            // Show/hide sections
+            document.getElementById('checkin-stats-row').style.display      = 'grid';
+            document.getElementById('checkin-progress-wrap').style.display  = 'block';
+            document.getElementById('checkin-passengers-wrap').style.display = 'block';
+        }
+
+        function formatTime(ts) {
+            if (!ts) return '—';
+            return new Date(ts).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        function renderCheckinTable(flightNumber, filter = '') {
+            const data   = loadCheckinData(flightNumber);
+            const tbody  = document.getElementById('checkin-tbody');
+            if (!tbody) return;
+
+            let passengers = data.passengers;
+            if (filter.trim()) {
+                passengers = passengers.filter(p =>
+                    p.name.toLowerCase().includes(filter.toLowerCase()) ||
+                    p.seat.toLowerCase().includes(filter.toLowerCase()) ||
+                    p.doc.toLowerCase().includes(filter.toLowerCase())
+                );
+            }
+
+            if (!passengers.length) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--ink-soft);">Sin pasajeros</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = passengers.map(p => {
+                const done = p.checkin;
+                const statusPillHtml = done
+                    ? '<span class="pill pill-confirmado">✅ Check-in</span>'
+                    : '<span class="pill pill-pendiente">⏳ Pendiente</span>';
+
+                const actionBtn = data.closed
+                    ? '<span style="font-size:0.75rem;color:var(--ink-soft);">Check-in cerrado</span>'
+                    : done
+                        ? `<button class="btn btn-ghost btn-sm" onclick="window.__undoCheckin('${flightNumber}','${p.id}')" title="Deshacer check-in">↩ Deshacer</button>`
+                        : `<button class="btn btn-primary btn-sm" onclick="window.__doCheckin('${flightNumber}','${p.id}')">Check-in ✓</button>`;
+
+                return `<tr>
+                    <td style="font-weight:600;">${p.name}</td>
+                    <td style="font-family:var(--mono);font-weight:600;color:var(--sky-dark);">${p.seat}</td>
+                    <td style="font-size:0.8rem;color:var(--ink-soft);">${p.doc}</td>
+                    <td>${statusPillHtml}</td>
+                    <td style="font-family:var(--mono);font-size:0.8rem;color:var(--ink-soft);">${formatTime(p.checkinTime)}</td>
+                    <td>${actionBtn}</td>
+                </tr>`;
+            }).join('');
+
+            updateCheckinStats(flightNumber, data);
+        }
+
+        function doCheckin(flightNumber, passengerId) {
+            const data = loadCheckinData(flightNumber);
+            if (data.closed) { toast('El check-in de este vuelo está cerrado', 'error'); return; }
+            const p = data.passengers.find(x => x.id === passengerId);
+            if (!p) return;
+            p.checkin     = true;
+            p.checkinTime = Date.now();
+            saveCheckinData(flightNumber, data);
+            renderCheckinTable(flightNumber, document.getElementById('checkin-search')?.value || '');
+            toast(`Check-in registrado: ${p.name} · Asiento ${p.seat}`, 'success');
+        }
+
+        function undoCheckin(flightNumber, passengerId) {
+            const data = loadCheckinData(flightNumber);
+            const p = data.passengers.find(x => x.id === passengerId);
+            if (!p) return;
+            p.checkin     = false;
+            p.checkinTime = null;
+            saveCheckinData(flightNumber, data);
+            renderCheckinTable(flightNumber, document.getElementById('checkin-search')?.value || '');
+            toast(`Check-in revertido: ${p.name}`, 'info');
+        }
+
+        function closeCheckin(flightNumber) {
+            const data = loadCheckinData(flightNumber);
+            const done  = data.passengers.filter(p => p.checkin).length;
+            const total = data.passengers.length;
+            if (!confirm(`¿Cerrar check-in del vuelo ${flightNumber}?\n${done}/${total} pasajeros registrados.\nEsta acción no se puede deshacer.`)) return;
+            data.closed = true;
+            saveCheckinData(flightNumber, data);
+            renderCheckinTable(flightNumber);
+            toast(`Check-in cerrado para vuelo ${flightNumber}`, 'success');
+        }
+
+        // Event listeners
+        document.getElementById('checkin-flight-selector')?.addEventListener('change', function() {
+            const fn = this.value;
+            if (!fn) {
+                document.getElementById('checkin-stats-row').style.display       = 'none';
+                document.getElementById('checkin-progress-wrap').style.display   = 'none';
+                document.getElementById('checkin-passengers-wrap').style.display = 'none';
+                document.getElementById('checkin-close-btn').style.display       = 'none';
+                return;
+            }
+            renderCheckinTable(fn);
+        });
+
+        document.getElementById('checkin-search')?.addEventListener('input', function() {
+            const fn = document.getElementById('checkin-flight-selector')?.value;
+            if (fn) renderCheckinTable(fn, this.value);
+        });
+
+        document.getElementById('checkin-close-btn')?.addEventListener('click', function() {
+            const fn = document.getElementById('checkin-flight-selector')?.value;
+            if (fn) closeCheckin(fn);
+        });
+
+        document.getElementById('checkin-reopen-btn')?.addEventListener('click', function() {
+            const fn = document.getElementById('checkin-flight-selector')?.value;
+            if (!fn) return;
+            if (!confirm(`¿Reabrir check-in del vuelo ${fn}?
+Se permitirá registrar más pasajeros.`)) return;
+            const data = loadCheckinData(fn);
+            data.closed = false;
+            saveCheckinData(fn, data);
+            renderCheckinTable(fn);
+            toast(`Check-in reabierto para vuelo ${fn}`, 'success');
+        });
+
+        // Expose globals
+        window.__doCheckin   = doCheckin;
+        window.__undoCheckin = undoCheckin;
+
+        // Init selector when section is opened
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            if (btn.dataset.section === 'checkin-vuelo') {
+                btn.addEventListener('click', function() {
+                    populateCheckinFlightSelector();
+                    // reset view
+                    document.getElementById('checkin-stats-row').style.display       = 'none';
+                    document.getElementById('checkin-progress-wrap').style.display   = 'none';
+                    document.getElementById('checkin-passengers-wrap').style.display = 'none';
+                    document.getElementById('checkin-close-btn').style.display       = 'none';
+                });
+            }
+        });
+
+        // Also patch navigateTo
+        const _orig = window.navigateTo;
+        populateCheckinFlightSelector();
+
+    })();
 
     // ── CHAT DE SOPORTE (ASESOR) ──
     (function() {

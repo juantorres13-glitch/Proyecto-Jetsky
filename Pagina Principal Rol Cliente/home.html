@@ -1173,7 +1173,7 @@ logoutButton.addEventListener('click', () => {
     };
 
     // Abrir/cerrar menú roles y accesibilidad por teclado
-    profileToggle.addEventListener('click', () => {
+    profileToggle?.addEventListener('click', () => {
         const isOpen = !roleDropdown.classList.contains('hidden');
         roleDropdown.classList.toggle('hidden', isOpen);
         profileToggle.setAttribute('aria-expanded', String(!isOpen));
@@ -1183,7 +1183,7 @@ logoutButton.addEventListener('click', () => {
         }
     });
 
-    profileToggle.addEventListener('keydown', (e) => {
+    profileToggle?.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown') {
             e.preventDefault();
             if (roleDropdown.classList.contains('hidden')) {
@@ -1609,9 +1609,11 @@ logoutButton.addEventListener('click', () => {
     window.__clientSendMsg = clientSendMsg;
     window.__clientSendQuick = function(txt) { clientSendMsg(txt); };
 
-    // Enter para enviar
-    document.getElementById('client-chat-input')?.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); clientSendMsg(); }
+    // Enter para enviar - usar delegación de eventos para evitar null
+    document.addEventListener('keydown', function(e) {
+        if (e.target && e.target.id === 'client-chat-input') {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); clientSendMsg(); }
+        }
     });
 })();
 </script>
