@@ -1,54 +1,92 @@
 <div class="section-header">
   <div>
-    <h1 class="page-title">Reportes y Análisis</h1>
-    <p class="page-subtitle">Visualiza las métricas y estadísticas del negocio</p>
-  </div>
-  <button class="btn btn-primary" onclick="alert('Generando PDF...')">
-    Exportar PDF
-  </button>
-</div>
-
-<div class="stats-grid" style="margin-bottom: 1.5rem;">
-  <div class="stat-card">
-    <p class="stat-label text-muted">Clientes Totales</p>
-    <p class="stat-value" style="color: #2563eb;">1,234</p>
-  </div>
-  <div class="stat-card">
-    <p class="stat-label text-muted">Reservas Activas</p>
-    <p class="stat-value" style="color: #16a34a;">156</p>
-  </div>
-  <div class="stat-card">
-    <p class="stat-label text-muted">Ingresos del Mes</p>
-    <p class="stat-value" style="color: #ea580c;">$55M</p>
-  </div>
-  <div class="stat-card">
-    <p class="stat-label text-muted">Paquetes Vendidos</p>
-    <p class="stat-value" style="color: #9333ea;">89</p>
+    <h1 class="page-title">Reportes</h1>
+    <p class="page-subtitle">Indicadores comerciales, cobertura y operación</p>
   </div>
 </div>
 
-<div class="cards-grid" style="margin-bottom: 1.5rem;">
-  <div class="stat-card" style="padding: 1.5rem;">
-    <h3 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">Ventas Mensuales</h3>
-    <p class="text-muted" style="font-size: 0.875rem; margin-bottom: 1.5rem;">Número de reservas por mes</p>
-    <div style="position: relative; height: 300px; width: 100%;">
-      <canvas id="ventasChart"></canvas>
+<div class="stats-grid">
+  <div class="stat-card stat-blue">
+    <p class="stat-label text-white-opacity">Ingresos Totales</p>
+    <p class="stat-value text-white" id="kpi-ingresos-totales">$0</p>
+  </div>
+
+  <div class="stat-card">
+    <p class="stat-label text-muted">Reservas Totales</p>
+    <p class="stat-value" id="kpi-reservas-totales">0</p>
+  </div>
+
+  <div class="stat-card stat-border-blue">
+    <p class="stat-label text-blue">Clientes Frecuentes</p>
+    <p class="stat-value text-blue" id="kpi-clientes-frecuentes">0</p>
+  </div>
+
+  <div class="stat-card stat-gradient">
+    <p class="stat-label text-white-opacity">Canceladas</p>
+    <p class="stat-value text-white" id="kpi-canceladas">0</p>
+  </div>
+</div>
+
+<div class="cards-grid" style="margin-top: 1.5rem;">
+  <div class="customer-card" style="grid-column: span 2;">
+    <div class="card-body">
+      <h3 class="customer-name" style="margin-bottom: 1rem;">Ingresos mensuales por destino</h3>
+      <div style="height: 320px;">
+        <canvas id="chart-ingresos-destino"></canvas>
+      </div>
     </div>
   </div>
 
-  <div class="stat-card" style="padding: 1.5rem;">
-    <h3 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">Ingresos Mensuales</h3>
-    <p class="text-muted" style="font-size: 0.875rem; margin-bottom: 1.5rem;">Ingresos en millones de COP</p>
-    <div style="position: relative; height: 300px; width: 100%;">
-      <canvas id="ingresosChart"></canvas>
+  <div class="customer-card" style="grid-column: span 2;">
+    <div class="card-body">
+      <h3 class="customer-name" style="margin-bottom: 1rem;">Reservas por vuelo y por mes</h3>
+      <div style="height: 320px;">
+        <canvas id="chart-reservas-vuelo-mes"></canvas>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="stat-card" style="padding: 1.5rem;">
-  <h3 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">Destinos Más Populares</h3>
-  <p class="text-muted" style="font-size: 0.875rem; margin-bottom: 1.5rem;">Distribución de ventas por destino</p>
-  <div style="position: relative; height: 300px; width: 100%; max-width: 500px; margin: 0 auto;">
-    <canvas id="destinosChart"></canvas>
+  <div class="customer-card" style="grid-column: span 2;">
+    <div class="card-body">
+      <h3 class="customer-name" style="margin-bottom: 1rem;">Destinos más vendidos por sector geográfico</h3>
+      <div style="height: 320px;">
+        <canvas id="chart-sector-geografico"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="customer-card" style="grid-column: span 2;">
+    <div class="card-body">
+      <h3 class="customer-name" style="margin-bottom: 1rem;">Clientes frecuentes</h3>
+      <div id="tabla-clientes-frecuentes"></div>
+    </div>
+  </div>
+
+  <div class="customer-card" style="grid-column: span 2;">
+    <div class="card-body">
+      <h3 class="customer-name" style="margin-bottom: 1rem;">Vuelos por país, departamento y ciudad</h3>
+      <div id="tabla-cobertura-destinos"></div>
+    </div>
+  </div>
+
+  <div class="customer-card" style="grid-column: span 2;">
+    <div class="card-body">
+      <h3 class="customer-name" style="margin-bottom: 1rem;">Historial de reservas por cliente</h3>
+      <div id="tabla-historial-clientes"></div>
+    </div>
+  </div>
+
+  <div class="customer-card" style="grid-column: span 2;">
+    <div class="card-body">
+      <h3 class="customer-name" style="margin-bottom: 1rem;">Reservas canceladas y su causa</h3>
+      <div id="tabla-canceladas"></div>
+    </div>
+  </div>
+
+  <div class="customer-card" style="grid-column: span 2;">
+    <div class="card-body">
+      <h3 class="customer-name" style="margin-bottom: 1rem;">Tiempo promedio entre reserva y confirmación</h3>
+      <div id="tabla-tiempo-confirmacion"></div>
+    </div>
   </div>
 </div>

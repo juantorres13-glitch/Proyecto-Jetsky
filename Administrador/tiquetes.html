@@ -1,10 +1,9 @@
 <div class="section-header">
   <div>
     <h1 class="page-title">Gestión de Tiquetes</h1>
-    <p class="page-subtitle">Administra los tiquetes aéreos</p>
+    <p class="page-subtitle">Administra los tiquetes de tus clientes</p>
   </div>
-  <button class="btn btn-primary" onclick="abrirModalTiquete()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+  <button type="button" class="btn btn-primary" id="btn-nuevo-tiquete">
     Nuevo Tiquete
   </button>
 </div>
@@ -12,95 +11,107 @@
 <div class="stats-grid">
   <div class="stat-card stat-blue">
     <p class="stat-label text-white-opacity">Total Tiquetes</p>
-    <p class="stat-value text-white" id="stat-tiq-total">0</p>
+    <p class="stat-value text-white" id="stat-total-tiquetes">0</p>
   </div>
-  <div class="stat-card" style="border-color: #bfdbfe;">
-    <p class="stat-label text-blue">Económica</p>
-    <p class="stat-value text-blue" id="stat-tiq-eco">0</p>
+
+  <div class="stat-card">
+    <p class="stat-label text-muted">Económica</p>
+    <p class="stat-value" id="stat-economica">0</p>
   </div>
-  <div class="stat-card" style="border-color: #e9d5ff;">
-    <p class="stat-label" style="color: #9333ea;">Ejecutiva</p>
-    <p class="stat-value" style="color: #9333ea;" id="stat-tiq-eje">0</p>
+
+  <div class="stat-card stat-border-blue">
+    <p class="stat-label text-blue">Ejecutiva</p>
+    <p class="stat-value text-blue" id="stat-ejecutiva">0</p>
   </div>
+
   <div class="stat-card stat-gradient">
-    <p class="stat-label text-white-opacity">Primera Clase</p>
-    <p class="stat-value text-white" id="stat-tiq-pri">0</p>
+    <p class="stat-label text-white-opacity">Primera</p>
+    <p class="stat-value text-white" id="stat-primera">0</p>
   </div>
 </div>
 
 <div class="search-container">
-  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-  <input type="text" class="search-input" id="search-tiquetes" placeholder="Buscar por número, cliente o destino..." onkeyup="filtrarTiquetes()">
+  <input
+    type="text"
+    class="search-input"
+    id="search-tiquetes"
+    placeholder="Buscar por cliente, origen o destino..."
+  >
 </div>
 
 <div id="tiquetes-grid" class="cards-grid"></div>
 
 <div id="modal-tiquete" class="modal-overlay">
-  <div class="modal-content" style="max-width: 650px;">
+  <div class="modal-content">
     <div class="modal-header">
-      <h2 id="modal-tiq-titulo" class="page-title" style="font-size: 1.25rem;">Nuevo Tiquete</h2>
-      <button class="btn-icon" onclick="cerrarModalTiquete()" style="background:none; border:none; cursor:pointer;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      <h2 id="modal-tiquete-titulo" class="page-title" style="font-size: 1.25rem;">Nuevo Tiquete</h2>
+      <button type="button" class="btn btn-outline" id="btn-cerrar-modal-tiquete">
+        Cerrar
       </button>
     </div>
-    
-    <form id="form-tiquete" onsubmit="guardarTiquete(event)">
-      <input type="hidden" id="tiq-id">
-      
+
+    <form id="form-tiquete">
+      <input type="hidden" id="tiquete-id">
+
       <div class="form-grid">
         <div class="form-group" style="grid-column: span 2;">
-          <label class="form-label">Número de Tiquete *</label>
-          <input type="text" id="tiq-numero" class="form-input" required placeholder="BOG-CTG-2024-001">
+          <label for="tiquete-numero" class="form-label">Número de Tiquete *</label>
+          <input type="text" id="tiquete-numero" class="form-input" required>
         </div>
+
         <div class="form-group" style="grid-column: span 2;">
-          <label class="form-label">Cliente *</label>
-          <input type="text" id="tiq-cliente" class="form-input" required placeholder="Nombre del pasajero">
+          <label for="tiquete-cliente" class="form-label">Cliente *</label>
+          <input type="text" id="tiquete-cliente" class="form-input" required>
         </div>
+
         <div class="form-group">
-          <label class="form-label">Origen *</label>
-          <input type="text" id="tiq-origen" class="form-input" required placeholder="Bogotá (BOG)">
+          <label for="tiquete-origen" class="form-label">Origen *</label>
+          <input type="text" id="tiquete-origen" class="form-input" required>
         </div>
+
         <div class="form-group">
-          <label class="form-label">Destino *</label>
-          <input type="text" id="tiq-destino" class="form-input" required placeholder="Cartagena (CTG)">
+          <label for="tiquete-destino" class="form-label">Destino *</label>
+          <input type="text" id="tiquete-destino" class="form-input" required>
         </div>
+
         <div class="form-group">
-          <label class="form-label">Fecha de Vuelo</label>
-          <input type="date" id="tiq-fecha" class="form-input" required>
+          <label for="tiquete-fecha" class="form-label">Fecha de Vuelo *</label>
+          <input type="date" id="tiquete-fecha" class="form-input" required>
         </div>
+
         <div class="form-group">
-          <label class="form-label">Hora de Vuelo</label>
-          <input type="time" id="tiq-hora" class="form-input" required>
+          <label for="tiquete-hora" class="form-label">Hora de Vuelo *</label>
+          <input type="time" id="tiquete-hora" class="form-input" required>
         </div>
+
         <div class="form-group">
-          <label class="form-label">Aerolínea</label>
-          <input type="text" id="tiq-aerolinea" class="form-input" required placeholder="Ej: Avianca, LATAM">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Clase</label>
-          <select id="tiq-clase" class="form-input">
+          <label for="tiquete-clase" class="form-label">Clase</label>
+          <select id="tiquete-clase" class="form-input">
             <option value="economica">Económica</option>
             <option value="ejecutiva">Ejecutiva</option>
-            <option value="primera">Primera Clase</option>
+            <option value="primera">Primera</option>
           </select>
         </div>
+
         <div class="form-group">
-          <label class="form-label">Puerta</label>
-          <input type="text" id="tiq-puerta" class="form-input" placeholder="A12">
+          <label for="tiquete-precio" class="form-label">Precio *</label>
+          <input type="number" id="tiquete-precio" class="form-input" min="0" required>
         </div>
+
         <div class="form-group">
-          <label class="form-label">Asiento</label>
-          <input type="text" id="tiq-asiento" class="form-input" placeholder="15A">
+          <label for="tiquete-puerta" class="form-label">Puerta *</label>
+          <input type="text" id="tiquete-puerta" class="form-input" required>
         </div>
-        <div class="form-group" style="grid-column: span 2;">
-          <label class="form-label">Precio (COP) *</label>
-          <input type="number" id="tiq-precio" class="form-input" required placeholder="450000">
+
+        <div class="form-group">
+          <label for="tiquete-asiento" class="form-label">Asiento *</label>
+          <input type="text" id="tiquete-asiento" class="form-input" required>
         </div>
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline" onclick="cerrarModalTiquete()">Cancelar</button>
-        <button type="submit" class="btn btn-primary" id="btn-tiq-guardar">Crear</button>
+        <button type="button" class="btn btn-outline" id="btn-cancelar-modal-tiquete">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-guardar-tiquete">Guardar Tiquete</button>
       </div>
     </form>
   </div>
