@@ -1004,463 +1004,463 @@
         </div>
     </footer>
 
-    <script>
-        // ── Panel habitaciones/huéspedes ──
-        const btn = document.getElementById("btnPersonas");
-        const panel = document.getElementById("panelPersonas");
-        const texto = document.getElementById("textoPersonas");
-        let habitaciones = 1, huespedes = 2;
+        <script>
+            // ── Panel habitaciones/huéspedes ──
+            const btn = document.getElementById("btnPersonas");
+            const panel = document.getElementById("panelPersonas");
+            const texto = document.getElementById("textoPersonas");
+            let habitaciones = 1, huespedes = 2;
 
-        btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            panel.classList.toggle("hidden");
-        });
-        document.addEventListener("click", () => panel.classList.add("hidden"));
-        panel.addEventListener("click", (e) => e.stopPropagation());
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                panel.classList.toggle("hidden");
+            });
+            document.addEventListener("click", () => panel.classList.add("hidden"));
+            panel.addEventListener("click", (e) => e.stopPropagation());
 
-        function cambiar(tipo, valor) {
-            if (tipo === "habitaciones") {
-                habitaciones = Math.max(1, habitaciones + valor);
-                document.getElementById("habitaciones").innerText = habitaciones;
-            } else {
-                huespedes = Math.max(1, huespedes + valor);
-                document.getElementById("huespedes").innerText = huespedes;
-            }
-            texto.innerText = `${habitaciones} hab · ${huespedes} huésped${huespedes > 1 ? 'es' : ''}`;
-        }
-
-        // ── Lógica de filtrado ──
-        function aplicarFiltros() {
-            const destino = document.getElementById("destino").value;
-            const estrellasSeleccionadas = [...document.querySelectorAll(".estrellas-check:checked")].map(c => parseInt(c.value));
-            const serviciosSeleccionados = [...document.querySelectorAll(".servicio-check:checked")].map(c => c.value);
-            const estilosSeleccionados = [...document.querySelectorAll(".estilo-check:checked")].map(c => c.value);
-            const preciosSeleccionados = [...document.querySelectorAll(".precio-check:checked")];
-
-            const cards = document.querySelectorAll(".hotel-card");
-            let visibles = 0;
-
-            cards.forEach(card => {
-                const cardDestino = card.dataset.destino;
-                const cardPrecio = parseInt(card.dataset.precio);
-                const cardEstrellas = parseInt(card.dataset.estrellas);
-                const cardServicios = card.dataset.servicios.split(" ");
-                const cardEstilo = card.dataset.estilo;
-                if (destino && cardDestino !== destino) { card.style.display = "none"; return; }
-                if (estrellasSeleccionadas.length > 0 && !estrellasSeleccionadas.includes(cardEstrellas)) { card.style.display = "none"; return; }
-                if (serviciosSeleccionados.length > 0 && !serviciosSeleccionados.every(s => cardServicios.includes(s))) { card.style.display = "none"; return; }
-                if (estilosSeleccionados.length > 0 && !estilosSeleccionados.includes(cardEstilo)) { card.style.display = "none"; return; }
-                if (preciosSeleccionados.length > 0) {
-                    const enRango = preciosSeleccionados.some(cb =>
-                        cardPrecio >= parseInt(cb.dataset.min) && cardPrecio <= parseInt(cb.dataset.max));
-                    if (!enRango) { card.style.display = "none"; return; }
+            function cambiar(tipo, valor) {
+                if (tipo === "habitaciones") {
+                    habitaciones = Math.max(1, habitaciones + valor);
+                    document.getElementById("habitaciones").innerText = habitaciones;
+                } else {
+                    huespedes = Math.max(1, huespedes + valor);
+                    document.getElementById("huespedes").innerText = huespedes;
                 }
+                texto.innerText = `${habitaciones} hab · ${huespedes} huésped${huespedes > 1 ? 'es' : ''}`;
+            }
 
-                card.style.display = "flex";
-                visibles++;
-            });
+            // ── Lógica de filtrado ──
+            function aplicarFiltros() {
+                const destino = document.getElementById("destino").value;
+                const estrellasSeleccionadas = [...document.querySelectorAll(".estrellas-check:checked")].map(c => parseInt(c.value));
+                const serviciosSeleccionados = [...document.querySelectorAll(".servicio-check:checked")].map(c => c.value);
+                const estilosSeleccionados = [...document.querySelectorAll(".estilo-check:checked")].map(c => c.value);
+                const preciosSeleccionados = [...document.querySelectorAll(".precio-check:checked")];
 
-            document.getElementById("contadorResultados").textContent =
-                visibles === 0 ? "" : `${visibles} resultado${visibles !== 1 ? 's' : ''}`;
-            document.getElementById("sinResultados").classList.toggle("hidden", visibles > 0);
-        }
+                const cards = document.querySelectorAll(".hotel-card");
+                let visibles = 0;
 
+                cards.forEach(card => {
+                    const cardDestino = card.dataset.destino;
+                    const cardPrecio = parseInt(card.dataset.precio);
+                    const cardEstrellas = parseInt(card.dataset.estrellas);
+                    const cardServicios = card.dataset.servicios.split(" ");
+                    const cardEstilo = card.dataset.estilo;
+                    if (destino && cardDestino !== destino) { card.style.display = "none"; return; }
+                    if (estrellasSeleccionadas.length > 0 && !estrellasSeleccionadas.includes(cardEstrellas)) { card.style.display = "none"; return; }
+                    if (serviciosSeleccionados.length > 0 && !serviciosSeleccionados.every(s => cardServicios.includes(s))) { card.style.display = "none"; return; }
+                    if (estilosSeleccionados.length > 0 && !estilosSeleccionados.includes(cardEstilo)) { card.style.display = "none"; return; }
+                    if (preciosSeleccionados.length > 0) {
+                        const enRango = preciosSeleccionados.some(cb =>
+                            cardPrecio >= parseInt(cb.dataset.min) && cardPrecio <= parseInt(cb.dataset.max));
+                        if (!enRango) { card.style.display = "none"; return; }
+                    }
 
-
-        // Escuchar todos los filtros en tiempo real
-        document.querySelectorAll(".estrellas-check, .servicio-check, .estilo-check, .precio-check")
-            .forEach(el => el.addEventListener("change", aplicarFiltros));
-        document.getElementById("destino").addEventListener("change", aplicarFiltros);
-        document.getElementById("buscarHotel").addEventListener("click", aplicarFiltros);
-
-        // Limpiar
-        document.getElementById("btnLimpiar").addEventListener("click", () => {
-            document.querySelectorAll(".estrellas-check, .servicio-check, .estilo-check, .precio-check")
-                .forEach(el => el.checked = false);
-            document.getElementById("destino").value = "";
-            aplicarFiltros();
-        });
-
-        aplicarFiltros();
-
-        // ════════════════════════════════
-        // MODAL DETALLES + RESERVA
-        // ════════════════════════════════
-        let hotelActual = {};
-        const servicioIconos = {
-            wifi: '<i class="fas fa-wifi mr-1"></i>Wi-Fi',
-            piscina: '<i class="fas fa-swimming-pool mr-1"></i>Piscina',
-            desayuno: '<i class="fas fa-coffee mr-1"></i>Desayuno',
-            parqueadero: '<i class="fas fa-car mr-1"></i>Parqueadero'
-        };
-        const estiloColores = {
-            lujo: 'text-purple-500', familiar: 'text-cyan-600', economico: 'text-green-500'
-        };
-
-        function abrirDetalle(btn) {
-            const card = btn.closest('.hotel-card');
-            hotelActual = {
-                nombre: card.dataset.nombre, ubicacion: card.dataset.ubicacion,
-                rating: card.dataset.rating, img: card.dataset.img,
-                desc: card.dataset.desc, comodidades: card.dataset.comodidades,
-                servicios: card.dataset.servicios.split(' '),
-                precio: parseInt(card.dataset.precio),
-                estrellas: parseInt(card.dataset.estrellas),
-                estilo: card.dataset.estilo,
-            };
-            document.getElementById('mImg').src = hotelActual.img;
-            document.getElementById('mNombre').textContent = hotelActual.nombre;
-            document.getElementById('mUbicacion').innerHTML = '<i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>' + hotelActual.ubicacion;
-            document.getElementById('mRating').innerHTML = '<i class="fas fa-star mr-1"></i>' + hotelActual.rating;
-            document.getElementById('mDesc').textContent = hotelActual.desc;
-            document.getElementById('mComodidades').textContent = hotelActual.comodidades;
-            document.getElementById('mPrecio').textContent = '$' + hotelActual.precio.toLocaleString('es-CO');
-            const estiloEl = document.getElementById('mEstilo');
-            estiloEl.textContent = hotelActual.estilo.charAt(0).toUpperCase() + hotelActual.estilo.slice(1);
-            estiloEl.className = 'text-[10px] font-bold uppercase tracking-widest ' + (estiloColores[hotelActual.estilo] || 'text-gray-400');
-            let stars = '';
-            for (let i = 0; i < 5; i++) stars += i < hotelActual.estrellas ? '<i class="fas fa-star"></i>' : '<i class="far fa-star text-gray-300"></i>';
-            document.getElementById('mEstrellas').innerHTML = stars;
-            document.getElementById('mServicios').innerHTML = hotelActual.servicios
-                .map(s => `<span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-3 py-1">${servicioIconos[s] || s}</span>`).join('');
-            document.getElementById('vistaDetalles').classList.remove('hidden');
-            document.getElementById('vistaReservar').classList.add('hidden');
-            document.getElementById('modalOverlay').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function cerrarModal() {
-            document.getElementById('modalOverlay').classList.add('hidden');
-            document.body.style.overflow = '';
-        }
-
-        const modal = document.getElementById('modalOverlay');
-            if (modal) { // Solo si existe, añade el evento
-                modal.addEventListener('click', function(e) {
-                    if (e.target === this) cerrarModal();
+                    card.style.display = "flex";
+                    visibles++;
                 });
-             }    
 
-        function irAReservar() {
-            document.getElementById('vistaDetalles').classList.add('hidden');
-            document.getElementById('vistaReservar').classList.remove('hidden');
-            document.getElementById('rImg').src = hotelActual.img;
-            document.getElementById('rNombre').textContent = hotelActual.nombre;
-            document.getElementById('rUbicacion').textContent = hotelActual.ubicacion;
-            document.getElementById('rPrecio').textContent = '$' + hotelActual.precio.toLocaleString('es-CO') + ' / noche';
-            const iva = Math.round(hotelActual.precio * 0.19);
-            const total = hotelActual.precio + iva;
-            document.getElementById('resumenPrecioNoche').textContent = '$' + hotelActual.precio.toLocaleString('es-CO');
-            document.getElementById('resumenIva').textContent = '$' + iva.toLocaleString('es-CO');
-            document.getElementById('resumenTotal').textContent = '$' + total.toLocaleString('es-CO');
-            irPaso(1);
-        }
+                document.getElementById("contadorResultados").textContent =
+                    visibles === 0 ? "" : `${visibles} resultado${visibles !== 1 ? 's' : ''}`;
+                document.getElementById("sinResultados").classList.toggle("hidden", visibles > 0);
+            }
 
-        function irADetalles() {
-            document.getElementById('vistaDetalles').classList.remove('hidden');
-            document.getElementById('vistaReservar').classList.add('hidden');
-        }
 
-        function irPaso(n) {
-            ['paso1','paso2','paso3'].forEach((id, i) => {
-                document.getElementById(id).classList.toggle('hidden', i + 1 !== n);
+
+            // Escuchar todos los filtros en tiempo real
+            document.querySelectorAll(".estrellas-check, .servicio-check, .estilo-check, .precio-check")
+                .forEach(el => el.addEventListener("change", aplicarFiltros));
+            document.getElementById("destino").addEventListener("change", aplicarFiltros);
+            document.getElementById("buscarHotel").addEventListener("click", aplicarFiltros);
+
+            // Limpiar
+            document.getElementById("btnLimpiar").addEventListener("click", () => {
+                document.querySelectorAll(".estrellas-check, .servicio-check, .estilo-check, .precio-check")
+                    .forEach(el => el.checked = false);
+                document.getElementById("destino").value = "";
+                aplicarFiltros();
             });
-            ['p2circle','p3circle'].forEach((id, i) => {
-                const el = document.getElementById(id);
-                const activo = n >= i + 2;
-                el.className = 'w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center ' +
-                    (activo ? 'bg-[#f97316] text-white' : 'bg-gray-200 text-gray-400');
-            });
-            if (n === 3) {
-                const nombre = (document.getElementById('rNombreInput').value || 'Huésped') + ' ' + (document.getElementById('rApellido').value || '');
+
+            aplicarFiltros();
+
+            // ════════════════════════════════
+            // MODAL DETALLES + RESERVA
+            // ════════════════════════════════
+            let hotelActual = {};
+            const servicioIconos = {
+                wifi: '<i class="fas fa-wifi mr-1"></i>Wi-Fi',
+                piscina: '<i class="fas fa-swimming-pool mr-1"></i>Piscina',
+                desayuno: '<i class="fas fa-coffee mr-1"></i>Desayuno',
+                parqueadero: '<i class="fas fa-car mr-1"></i>Parqueadero'
+            };
+            const estiloColores = {
+                lujo: 'text-purple-500', familiar: 'text-cyan-600', economico: 'text-green-500'
+            };
+
+            function abrirDetalle(btn) {
+                const card = btn.closest('.hotel-card');
+                hotelActual = {
+                    nombre: card.dataset.nombre, ubicacion: card.dataset.ubicacion,
+                    rating: card.dataset.rating, img: card.dataset.img,
+                    desc: card.dataset.desc, comodidades: card.dataset.comodidades,
+                    servicios: card.dataset.servicios.split(' '),
+                    precio: parseInt(card.dataset.precio),
+                    estrellas: parseInt(card.dataset.estrellas),
+                    estilo: card.dataset.estilo,
+                };
+                document.getElementById('mImg').src = hotelActual.img;
+                document.getElementById('mNombre').textContent = hotelActual.nombre;
+                document.getElementById('mUbicacion').innerHTML = '<i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i>' + hotelActual.ubicacion;
+                document.getElementById('mRating').innerHTML = '<i class="fas fa-star mr-1"></i>' + hotelActual.rating;
+                document.getElementById('mDesc').textContent = hotelActual.desc;
+                document.getElementById('mComodidades').textContent = hotelActual.comodidades;
+                document.getElementById('mPrecio').textContent = '$' + hotelActual.precio.toLocaleString('es-CO');
+                const estiloEl = document.getElementById('mEstilo');
+                estiloEl.textContent = hotelActual.estilo.charAt(0).toUpperCase() + hotelActual.estilo.slice(1);
+                estiloEl.className = 'text-[10px] font-bold uppercase tracking-widest ' + (estiloColores[hotelActual.estilo] || 'text-gray-400');
+                let stars = '';
+                for (let i = 0; i < 5; i++) stars += i < hotelActual.estrellas ? '<i class="fas fa-star"></i>' : '<i class="far fa-star text-gray-300"></i>';
+                document.getElementById('mEstrellas').innerHTML = stars;
+                document.getElementById('mServicios').innerHTML = hotelActual.servicios
+                    .map(s => `<span class="text-[10px] bg-gray-100 text-gray-500 rounded-full px-3 py-1">${servicioIconos[s] || s}</span>`).join('');
+                document.getElementById('vistaDetalles').classList.remove('hidden');
+                document.getElementById('vistaReservar').classList.add('hidden');
+                document.getElementById('modalOverlay').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function cerrarModal() {
+                document.getElementById('modalOverlay').classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            const modal = document.getElementById('modalOverlay');
+                if (modal) { // Solo si existe, añade el evento
+                    modal.addEventListener('click', function(e) {
+                        if (e.target === this) cerrarModal();
+                    });
+                }    
+
+            function irAReservar() {
+                document.getElementById('vistaDetalles').classList.add('hidden');
+                document.getElementById('vistaReservar').classList.remove('hidden');
+                document.getElementById('rImg').src = hotelActual.img;
+                document.getElementById('rNombre').textContent = hotelActual.nombre;
+                document.getElementById('rUbicacion').textContent = hotelActual.ubicacion;
+                document.getElementById('rPrecio').textContent = '$' + hotelActual.precio.toLocaleString('es-CO') + ' / noche';
                 const iva = Math.round(hotelActual.precio * 0.19);
-                document.getElementById('confNombre').textContent = hotelActual.nombre;
-                document.getElementById('confHuesped').textContent = nombre.trim();
-                document.getElementById('confTotal').textContent = '$' + (hotelActual.precio + iva).toLocaleString('es-CO');
-                document.getElementById('confCodigo').textContent = 'JS-' + Math.random().toString(36).substring(2,8).toUpperCase();
+                const total = hotelActual.precio + iva;
+                document.getElementById('resumenPrecioNoche').textContent = '$' + hotelActual.precio.toLocaleString('es-CO');
+                document.getElementById('resumenIva').textContent = '$' + iva.toLocaleString('es-CO');
+                document.getElementById('resumenTotal').textContent = '$' + total.toLocaleString('es-CO');
+                irPaso(1);
             }
-            document.getElementById('modalBox').scrollTop = 0;
-        }
 
-        function setMetodo(m) {
-            ['tarjeta','nequi','pse'].forEach(t => {
-                const btn = document.getElementById('btn' + t.charAt(0).toUpperCase() + t.slice(1));
-                const form = document.getElementById('form' + t.charAt(0).toUpperCase() + t.slice(1));
-                const activo = t === m;
-                btn.className = 'flex-1 border-2 rounded-xl py-2.5 text-sm font-semibold flex items-center justify-center gap-2 transition ' +
-                    (activo ? 'border-[#f97316] text-[#f97316]' : 'border-gray-200 text-gray-400');
-                if (form) form.classList.toggle('hidden', !activo);
-            });
-        }
+            function irADetalles() {
+                document.getElementById('vistaDetalles').classList.remove('hidden');
+                document.getElementById('vistaReservar').classList.add('hidden');
+            }
 
-        function formatCard(input) {
-            let v = input.value.replace(/\D/g,'').substring(0,16);
-            input.value = v.replace(/(\d{4})/g,'$1 ').trim();
-        }
+            function irPaso(n) {
+                ['paso1','paso2','paso3'].forEach((id, i) => {
+                    document.getElementById(id).classList.toggle('hidden', i + 1 !== n);
+                });
+                ['p2circle','p3circle'].forEach((id, i) => {
+                    const el = document.getElementById(id);
+                    const activo = n >= i + 2;
+                    el.className = 'w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center ' +
+                        (activo ? 'bg-[#f97316] text-white' : 'bg-gray-200 text-gray-400');
+                });
+                if (n === 3) {
+                    const nombre = (document.getElementById('rNombreInput').value || 'Huésped') + ' ' + (document.getElementById('rApellido').value || '');
+                    const iva = Math.round(hotelActual.precio * 0.19);
+                    document.getElementById('confNombre').textContent = hotelActual.nombre;
+                    document.getElementById('confHuesped').textContent = nombre.trim();
+                    document.getElementById('confTotal').textContent = '$' + (hotelActual.precio + iva).toLocaleString('es-CO');
+                    document.getElementById('confCodigo').textContent = 'JS-' + Math.random().toString(36).substring(2,8).toUpperCase();
+                }
+                document.getElementById('modalBox').scrollTop = 0;
+            }
+
+            function setMetodo(m) {
+                ['tarjeta','nequi','pse'].forEach(t => {
+                    const btn = document.getElementById('btn' + t.charAt(0).toUpperCase() + t.slice(1));
+                    const form = document.getElementById('form' + t.charAt(0).toUpperCase() + t.slice(1));
+                    const activo = t === m;
+                    btn.className = 'flex-1 border-2 rounded-xl py-2.5 text-sm font-semibold flex items-center justify-center gap-2 transition ' +
+                        (activo ? 'border-[#f97316] text-[#f97316]' : 'border-gray-200 text-gray-400');
+                    if (form) form.classList.toggle('hidden', !activo);
+                });
+            }
+
+            function formatCard(input) {
+                let v = input.value.replace(/\D/g,'').substring(0,16);
+                input.value = v.replace(/(\d{4})/g,'$1 ').trim();
+            }
 
 
 
-        document.addEventListener('DOMContentLoaded', function() {
-    const hotelId = localStorage.getItem('hotelSeleccionadoId');
-    
-    if (hotelId) {
-        // Buscamos la tarjeta del hotel que tenga ese data-id
-        const hotelCard = document.querySelector(`.hotel-card[data-id="${hotelId}"]`);
+            document.addEventListener('DOMContentLoaded', function() {
+        const hotelId = localStorage.getItem('hotelSeleccionadoId');
         
-        if (hotelCard) {
-
-            hotelCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (hotelId) {
+            // Buscamos la tarjeta del hotel que tenga ese data-id
+            const hotelCard = document.querySelector(`.hotel-card[data-id="${hotelId}"]`);
             
-            // Buscamos el botón de detalles dentro de esa tarjeta y lo activamos
-            const btnDetalles = hotelCard.querySelector('button[onclick="abrirDetalle(this)"]');
-            if (btnDetalles) {
-                // Pequeño delay para asegurar que la página cargó bien los estilos
-                setTimeout(() => {
-                    btnDetalles.click();
-                }, 500);
+            if (hotelCard) {
+
+                hotelCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Buscamos el botón de detalles dentro de esa tarjeta y lo activamos
+                const btnDetalles = hotelCard.querySelector('button[onclick="abrirDetalle(this)"]');
+                if (btnDetalles) {
+                    // Pequeño delay para asegurar que la página cargó bien los estilos
+                    setTimeout(() => {
+                        btnDetalles.click();
+                    }, 500);
+                }
             }
+            // Limpiamos el localStorage para que no se abra siempre al entrar directo
+            localStorage.removeItem('hotelSeleccionadoId');
         }
-        // Limpiamos el localStorage para que no se abra siempre al entrar directo
-        localStorage.removeItem('hotelSeleccionadoId');
-    }
-});
+    });
 
 
-    </script>
+        </script>
 
 
-    <!-- ═══════════════════════════════════════════════════════
-         MODAL DETALLES + RESERVA
-    ═══════════════════════════════════════════════════════ -->
-    <div id="modalOverlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4"
-        style="background:rgba(15,23,42,0.7); backdrop-filter:blur(6px);">
-        <div id="modalBox" class="bg-white rounded-[2rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative"
-            style="scrollbar-width:thin;">
+        <!-- ═══════════════════════════════════════════════════════
+            MODAL DETALLES + RESERVA
+        ═══════════════════════════════════════════════════════ -->
+        <div id="modalOverlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4"
+            style="background:rgba(15,23,42,0.7); backdrop-filter:blur(6px);">
+            <div id="modalBox" class="bg-white rounded-[2rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative"
+                style="scrollbar-width:thin;">
 
-            <!-- Botón cerrar -->
-            <button onclick="cerrarModal()"
-                class="absolute top-5 right-5 z-10 w-9 h-9 bg-white/90 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 shadow transition">
-                <i class="fas fa-times"></i>
-            </button>
+                <!-- Botón cerrar -->
+                <button onclick="cerrarModal()"
+                    class="absolute top-5 right-5 z-10 w-9 h-9 bg-white/90 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 shadow transition">
+                    <i class="fas fa-times"></i>
+                </button>
 
-            <!-- ── VISTA DETALLES ── -->
-            <div id="vistaDetalles">
-                <!-- Imagen hero -->
-                <div class="h-64 overflow-hidden rounded-t-[2rem]">
-                    <img id="mImg" src="" class="w-full h-full object-cover">
-                </div>
-                <div class="p-8">
-                    <div class="flex justify-between items-start mb-1">
-                        <span id="mEstilo" class="text-[10px] font-bold uppercase tracking-widest"></span>
-                        <span id="mRating" class="text-cyan-600 text-sm font-bold"><i class="fas fa-star mr-1"></i></span>
+                <!-- ── VISTA DETALLES ── -->
+                <div id="vistaDetalles">
+                    <!-- Imagen hero -->
+                    <div class="h-64 overflow-hidden rounded-t-[2rem]">
+                        <img id="mImg" src="" class="w-full h-full object-cover">
                     </div>
-                    <h2 id="mNombre" class="text-2xl font-bold text-gray-900 mt-1"></h2>
-                    <p id="mUbicacion" class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i></p>
-
-                    <!-- Estrellas visuales -->
-                    <div id="mEstrellas" class="flex gap-1 mt-3 text-amber-400 text-sm"></div>
-
-                    <!-- Descripción -->
-                    <p id="mDesc" class="text-gray-600 text-sm mt-5 leading-relaxed"></p>
-
-                    <!-- Servicios -->
-                    <div id="mServicios" class="flex gap-2 mt-5 flex-wrap"></div>
-
-                    <!-- Comodidades -->
-                    <div class="mt-6">
-                        <h4 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Lo que incluye</h4>
-                        <p id="mComodidades" class="text-sm text-gray-600 leading-relaxed"></p>
-                    </div>
-
-                    <!-- Precio y CTA -->
-                    <div class="mt-8 flex justify-between items-center border-t border-gray-100 pt-6">
-                        <div>
-                            <p class="text-xs text-gray-400">Precio por noche</p>
-                            <p id="mPrecio" class="text-3xl font-bold text-gray-900"></p>
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-1">
+                            <span id="mEstilo" class="text-[10px] font-bold uppercase tracking-widest"></span>
+                            <span id="mRating" class="text-cyan-600 text-sm font-bold"><i class="fas fa-star mr-1"></i></span>
                         </div>
-                        <button onclick="irAReservar()"
-                            class="bg-[#f97316] hover:bg-[#ea580c] text-white px-8 py-3 rounded-2xl font-bold transition text-sm">
-                            Reservar ahora
-                        </button>
-                    </div>
-                </div>
-            </div>
+                        <h2 id="mNombre" class="text-2xl font-bold text-gray-900 mt-1"></h2>
+                        <p id="mUbicacion" class="text-gray-500 text-sm mt-1"><i class="fas fa-map-marker-alt mr-2 text-cyan-500"></i></p>
 
-            <!-- ── VISTA RESERVAR (3 pasos) ── -->
-            <div id="vistaReservar" class="hidden p-8">
+                        <!-- Estrellas visuales -->
+                        <div id="mEstrellas" class="flex gap-1 mt-3 text-amber-400 text-sm"></div>
 
-                <!-- Indicador de pasos -->
-                <div class="flex items-center gap-2 mb-8">
-                    <div id="paso1ind" class="flex items-center gap-2">
-                        <div class="w-7 h-7 rounded-full bg-[#f97316] text-white text-xs font-bold flex items-center justify-center">1</div>
-                        <span class="text-xs font-semibold text-gray-700">Tus datos</span>
-                    </div>
-                    <div class="flex-1 h-px bg-gray-200"></div>
-                    <div id="paso2ind" class="flex items-center gap-2">
-                        <div id="p2circle" class="w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">2</div>
-                        <span class="text-xs font-semibold text-gray-400">Pago</span>
-                    </div>
-                    <div class="flex-1 h-px bg-gray-200"></div>
-                    <div id="paso3ind" class="flex items-center gap-2">
-                        <div id="p3circle" class="w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">3</div>
-                        <span class="text-xs font-semibold text-gray-400">Confirmación</span>
+                        <!-- Descripción -->
+                        <p id="mDesc" class="text-gray-600 text-sm mt-5 leading-relaxed"></p>
+
+                        <!-- Servicios -->
+                        <div id="mServicios" class="flex gap-2 mt-5 flex-wrap"></div>
+
+                        <!-- Comodidades -->
+                        <div class="mt-6">
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Lo que incluye</h4>
+                            <p id="mComodidades" class="text-sm text-gray-600 leading-relaxed"></p>
+                        </div>
+
+                        <!-- Precio y CTA -->
+                        <div class="mt-8 flex justify-between items-center border-t border-gray-100 pt-6">
+                            <div>
+                                <p class="text-xs text-gray-400">Precio por noche</p>
+                                <p id="mPrecio" class="text-3xl font-bold text-gray-900"></p>
+                            </div>
+                            <button onclick="irAReservar()"
+                                class="bg-[#f97316] hover:bg-[#ea580c] text-white px-8 py-3 rounded-2xl font-bold transition text-sm">
+                                Reservar ahora
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Mini resumen hotel -->
-                <div class="bg-slate-50 rounded-2xl p-4 flex gap-4 mb-8">
-                    <img id="rImg" src="" class="w-20 h-16 object-cover rounded-xl shrink-0">
-                    <div>
-                        <p id="rNombre" class="font-bold text-gray-900 text-sm"></p>
-                        <p id="rUbicacion" class="text-gray-500 text-xs mt-0.5"></p>
-                        <p id="rPrecio" class="text-[#f97316] font-bold text-sm mt-1"></p>
-                    </div>
-                </div>
+                <!-- ── VISTA RESERVAR (3 pasos) ── -->
+                <div id="vistaReservar" class="hidden p-8">
 
-                <!-- PASO 1: Datos personales -->
-                <div id="paso1">
-                    <h3 class="text-lg font-bold text-gray-900 mb-5">Datos del huésped</h3>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Nombre</label>
-                            <input id="rNombreInput" type="text" placeholder="Juan" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition">
+                    <!-- Indicador de pasos -->
+                    <div class="flex items-center gap-2 mb-8">
+                        <div id="paso1ind" class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-full bg-[#f97316] text-white text-xs font-bold flex items-center justify-center">1</div>
+                            <span class="text-xs font-semibold text-gray-700">Tus datos</span>
                         </div>
-                        <div>
-                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Apellido</label>
-                            <input id="rApellido" type="text" placeholder="Pérez" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition">
+                        <div class="flex-1 h-px bg-gray-200"></div>
+                        <div id="paso2ind" class="flex items-center gap-2">
+                            <div id="p2circle" class="w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">2</div>
+                            <span class="text-xs font-semibold text-gray-400">Pago</span>
+                        </div>
+                        <div class="flex-1 h-px bg-gray-200"></div>
+                        <div id="paso3ind" class="flex items-center gap-2">
+                            <div id="p3circle" class="w-7 h-7 rounded-full bg-gray-200 text-gray-400 text-xs font-bold flex items-center justify-center">3</div>
+                            <span class="text-xs font-semibold text-gray-400">Confirmación</span>
                         </div>
                     </div>
-                    <div class="mb-4">
-                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Correo electrónico</label>
-                        <input id="rEmail" type="email" placeholder="juan@correo.com" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
+
+                    <!-- Mini resumen hotel -->
+                    <div class="bg-slate-50 rounded-2xl p-4 flex gap-4 mb-8">
+                        <img id="rImg" src="" class="w-20 h-16 object-cover rounded-xl shrink-0">
                         <div>
-                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Check-in</label>
-                            <input id="rCheckin" type="date" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition">
-                        </div>
-                        <div>
-                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Check-out</label>
-                            <input id="rCheckout" type="date" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition">
+                            <p id="rNombre" class="font-bold text-gray-900 text-sm"></p>
+                            <p id="rUbicacion" class="text-gray-500 text-xs mt-0.5"></p>
+                            <p id="rPrecio" class="text-[#f97316] font-bold text-sm mt-1"></p>
                         </div>
                     </div>
-                    <div class="mb-6">
-                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Solicitudes especiales</label>
-                        <textarea placeholder="Cama extra, piso alto, alergias..." rows="2"
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition resize-none"></textarea>
-                    </div>
-                    <div class="flex gap-3">
-                        <button onclick="irADetalles()" class="flex-1 border border-gray-200 text-gray-600 py-3 rounded-2xl font-bold hover:border-gray-400 transition text-sm">
-                            ← Volver
-                        </button>
-                        <button onclick="irPaso(2)" class="flex-1 bg-[#f97316] hover:bg-[#ea580c] text-white py-3 rounded-2xl font-bold transition text-sm">
-                            Continuar →
-                        </button>
-                    </div>
-                </div>
 
-                <!-- PASO 2: Pago -->
-                <div id="paso2" class="hidden">
-                    <h3 class="text-lg font-bold text-gray-900 mb-5">Método de pago</h3>
-
-                    <!-- Selector tipo pago -->
-                    <div class="flex gap-3 mb-6">
-                        <button onclick="setMetodo('tarjeta')" id="btnTarjeta"
-                            class="flex-1 border-2 border-[#f97316] rounded-xl py-2.5 text-sm font-semibold text-[#f97316] flex items-center justify-center gap-2 transition">
-                            <i class="fas fa-credit-card"></i> Tarjeta
-                        </button>
-                    </div>
-
-                    <!-- Formulario tarjeta -->
-                    <div id="formTarjeta">
+                    <!-- PASO 1: Datos personales -->
+                    <div id="paso1">
+                        <h3 class="text-lg font-bold text-gray-900 mb-5">Datos del huésped</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Nombre</label>
+                                <input id="rNombreInput" type="text" placeholder="Juan" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition">
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Apellido</label>
+                                <input id="rApellido" type="text" placeholder="Pérez" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition">
+                            </div>
+                        </div>
                         <div class="mb-4">
-                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Número de tarjeta</label>
-                            <input type="text" placeholder="1234 5678 9012 3456" maxlength="19"
-                                oninput="formatCard(this)"
-                                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition font-mono">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Correo electrónico</label>
+                            <input id="rEmail" type="email" placeholder="juan@correo.com" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition">
                         </div>
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Vencimiento</label>
-                                <input type="text" placeholder="MM/AA" maxlength="5"
-                                    class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition font-mono">
+                                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Check-in</label>
+                                <input id="rCheckin" type="date" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition">
                             </div>
                             <div>
-                                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">CVV</label>
-                                <input type="password" placeholder="•••" maxlength="4"
-                                    class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition font-mono">
+                                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Check-out</label>
+                                <input id="rCheckout" type="date" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition">
                             </div>
                         </div>
                         <div class="mb-6">
-                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Nombre en la tarjeta</label>
-                            <input type="text" placeholder="JUAN PÉREZ"
-                                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition uppercase">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Solicitudes especiales</label>
+                            <textarea placeholder="Cama extra, piso alto, alergias..." rows="2"
+                                class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition resize-none"></textarea>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="irADetalles()" class="flex-1 border border-gray-200 text-gray-600 py-3 rounded-2xl font-bold hover:border-gray-400 transition text-sm">
+                                ← Volver
+                            </button>
+                            <button onclick="irPaso(2)" class="flex-1 bg-[#f97316] hover:bg-[#ea580c] text-white py-3 rounded-2xl font-bold transition text-sm">
+                                Continuar →
+                            </button>
                         </div>
                     </div>
 
+                    <!-- PASO 2: Pago -->
+                    <div id="paso2" class="hidden">
+                        <h3 class="text-lg font-bold text-gray-900 mb-5">Método de pago</h3>
 
-                    <!-- Resumen precio -->
-                    <div class="bg-slate-50 rounded-2xl p-4 mb-6 space-y-2">
-                        <div class="flex justify-between text-sm text-gray-600">
-                            <span>Precio por noche</span>
-                            <span id="resumenPrecioNoche"></span>
+                        <!-- Selector tipo pago -->
+                        <div class="flex gap-3 mb-6">
+                            <button onclick="setMetodo('tarjeta')" id="btnTarjeta"
+                                class="flex-1 border-2 border-[#f97316] rounded-xl py-2.5 text-sm font-semibold text-[#f97316] flex items-center justify-center gap-2 transition">
+                                <i class="fas fa-credit-card"></i> Tarjeta
+                            </button>
                         </div>
-                        <div class="flex justify-between text-sm text-gray-600">
-                            <span>Impuestos (19% IVA)</span>
-                            <span id="resumenIva"></span>
+
+                        <!-- Formulario tarjeta -->
+                        <div id="formTarjeta">
+                            <div class="mb-4">
+                                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Número de tarjeta</label>
+                                <input type="text" placeholder="1234 5678 9012 3456" maxlength="19"
+                                    oninput="formatCard(this)"
+                                    class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition font-mono">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Vencimiento</label>
+                                    <input type="text" placeholder="MM/AA" maxlength="5"
+                                        class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition font-mono">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">CVV</label>
+                                    <input type="password" placeholder="•••" maxlength="4"
+                                        class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition font-mono">
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Nombre en la tarjeta</label>
+                                <input type="text" placeholder="JUAN PÉREZ"
+                                    class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#f97316] transition uppercase">
+                            </div>
                         </div>
-                        <div class="border-t border-gray-200 pt-2 flex justify-between font-bold text-gray-900">
-                            <span>Total</span>
-                            <span id="resumenTotal"></span>
+
+
+                        <!-- Resumen precio -->
+                        <div class="bg-slate-50 rounded-2xl p-4 mb-6 space-y-2">
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>Precio por noche</span>
+                                <span id="resumenPrecioNoche"></span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>Impuestos (19% IVA)</span>
+                                <span id="resumenIva"></span>
+                            </div>
+                            <div class="border-t border-gray-200 pt-2 flex justify-between font-bold text-gray-900">
+                                <span>Total</span>
+                                <span id="resumenTotal"></span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button onclick="irPaso(1)" class="flex-1 border border-gray-200 text-gray-600 py-3 rounded-2xl font-bold hover:border-gray-400 transition text-sm">
+                                ← Volver
+                            </button>
+                            <button onclick="irPaso(3)" class="flex-1 bg-[#f97316] hover:bg-[#ea580c] text-white py-3 rounded-2xl font-bold transition text-sm">
+                                Confirmar pago →
+                            </button>
                         </div>
                     </div>
 
-                    <div class="flex gap-3">
-                        <button onclick="irPaso(1)" class="flex-1 border border-gray-200 text-gray-600 py-3 rounded-2xl font-bold hover:border-gray-400 transition text-sm">
-                            ← Volver
+                    <!-- PASO 3: Confirmación -->
+                    <div id="paso3" class="hidden text-center py-4">
+                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-check text-green-500 text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">¡Reserva confirmada!</h3>
+                        <p class="text-gray-500 text-sm mb-6">Hemos enviado los detalles a tu correo electrónico.</p>
+
+                        <div class="bg-slate-50 rounded-2xl p-5 text-left mb-6 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Hotel</span>
+                                <span id="confNombre" class="font-semibold text-gray-900"></span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Huésped</span>
+                                <span id="confHuesped" class="font-semibold text-gray-900"></span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Total pagado</span>
+                                <span id="confTotal" class="font-bold text-[#f97316]"></span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Código reserva</span>
+                                <span id="confCodigo" class="font-mono font-bold text-gray-900"></span>
+                            </div>
+                        </div>
+
+                        <button onclick="cerrarModal()"
+                            class="w-full bg-gray-900 text-white py-3 rounded-2xl font-bold hover:bg-cyan-600 transition text-sm">
+                            Cerrar
                         </button>
-                        <button onclick="irPaso(3)" class="flex-1 bg-[#f97316] hover:bg-[#ea580c] text-white py-3 rounded-2xl font-bold transition text-sm">
-                            Confirmar pago →
-                        </button>
-                    </div>
-                </div>
-
-                <!-- PASO 3: Confirmación -->
-                <div id="paso3" class="hidden text-center py-4">
-                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-check text-green-500 text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">¡Reserva confirmada!</h3>
-                    <p class="text-gray-500 text-sm mb-6">Hemos enviado los detalles a tu correo electrónico.</p>
-
-                    <div class="bg-slate-50 rounded-2xl p-5 text-left mb-6 space-y-3">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-500">Hotel</span>
-                            <span id="confNombre" class="font-semibold text-gray-900"></span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-500">Huésped</span>
-                            <span id="confHuesped" class="font-semibold text-gray-900"></span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-500">Total pagado</span>
-                            <span id="confTotal" class="font-bold text-[#f97316]"></span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-500">Código reserva</span>
-                            <span id="confCodigo" class="font-mono font-bold text-gray-900"></span>
-                        </div>
                     </div>
 
-                    <button onclick="cerrarModal()"
-                        class="w-full bg-gray-900 text-white py-3 rounded-2xl font-bold hover:bg-cyan-600 transition text-sm">
-                        Cerrar
-                    </button>
-                </div>
-
-            </div><!-- fin vistaReservar -->
+                </div><!-- fin vistaReservar -->
+            </div>
         </div>
-    </div>
 
-</body>
-</html>
+    </body>
+    </html>
